@@ -516,8 +516,7 @@ public class OpeningUtilityController {
 						}
 
 					}
-				}
-				System.err.println("indRes " + indRes.toString());
+				} 
 			}
 
 		} catch (Exception e) {
@@ -526,8 +525,7 @@ public class OpeningUtilityController {
 			e.getCause();
 			e.printStackTrace();
 		}
-		System.err.println("Inside last Saveindent");
-
+		  
 		return "redirect:/AddOPeningstockutility";
 	}
 }
