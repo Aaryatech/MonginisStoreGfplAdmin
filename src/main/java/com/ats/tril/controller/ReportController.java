@@ -84,8 +84,19 @@ public class ReportController {
 			HttpServletResponse response) {
 		try {
 
-			GetItem[] item = rest.getForObject(Constants.url + "/getAllItems", GetItem[].class);
-			getItemList = new ArrayList<GetItem>(Arrays.asList(item));
+			int catId = Integer.parseInt(request.getParameter("catId"));
+			if (catId == 0) {
+				GetItem[] item = rest.getForObject(Constants.url + "/getAllItems", GetItem[].class);
+				getItemList = new ArrayList<GetItem>(Arrays.asList(item));
+
+			} else {
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("catId", catId);
+				GetItem[] GetItem = rest.postForObject(Constants.url + "itemListByCatId", map, GetItem[].class);
+				getItemList = new ArrayList<>(Arrays.asList(GetItem));
+
+			}
 
 			System.out.println("getItemList" + getItemList.toString());
 
@@ -110,7 +121,7 @@ public class ReportController {
 				rowData = new ArrayList<String>();
 				cnt = cnt + i;
 				rowData.add("" + (cnt));
-				rowData.add("" + getItemList.get(i).getItemCode()+" - "+ getItemList.get(i).getItemDesc());
+				rowData.add("" + getItemList.get(i).getItemCode() + " - " + getItemList.get(i).getItemDesc());
 				rowData.add("" + getItemList.get(i).getItemDate());
 				rowData.add("" + getItemList.get(i).getItemWt());
 				rowData.add("" + getItemList.get(i).getItemUom());
@@ -295,13 +306,24 @@ public class ReportController {
 
 	}
 
-	@RequestMapping(value = "/itemListPdf", method = RequestMethod.GET)
-	public void itemListPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+	@RequestMapping(value = "/itemListPdf/{catId}", method = RequestMethod.GET)
+	public void itemListPdf(HttpServletRequest request, HttpServletResponse response, @PathVariable int catId)
+			throws FileNotFoundException {
 		BufferedOutputStream outStream = null;
 		System.out.println("Inside Pdf showBillwisePurchasePdf");
 
-		GetItem[] getItem = rest.getForObject(Constants.url + "/getAllItems", GetItem[].class); 
-		List<GetItem> itemList = new ArrayList<GetItem>(Arrays.asList(getItem));;
+		if (catId == 0) {
+			GetItem[] item = rest.getForObject(Constants.url + "/getAllItems", GetItem[].class);
+			getItemList = new ArrayList<GetItem>(Arrays.asList(item));
+
+		} else {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("catId", catId);
+			GetItem[] GetItem = rest.postForObject(Constants.url + "itemListByCatId", map, GetItem[].class);
+			getItemList = new ArrayList<>(Arrays.asList(GetItem));
+
+		}
 
 		// moneyOutList = prodPlanDetailList;
 		Document document = new Document(PageSize.A4);
@@ -369,7 +391,7 @@ public class ReportController {
 			table.addCell(hcell);
 
 			int index = 0;
-			for (GetItem item : itemList) {
+			for (GetItem item : getItemList) {
 				index++;
 				PdfPCell cell;
 
@@ -379,7 +401,7 @@ public class ReportController {
 				cell.setPadding(3);
 				table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(item.getItemCode()+" - "+ item.getItemDesc(), headFont));
+				cell = new PdfPCell(new Phrase(item.getItemCode() + " - " + item.getItemDesc(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
@@ -1394,11 +1416,11 @@ public class ReportController {
 			List<Vendor> vendorList = new ArrayList<Vendor>(Arrays.asList(vendorRes));
 
 			model.addObject("vendorList", vendorList);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1426,7 +1448,7 @@ public class ReportController {
 			System.out.println("resList" + resList);
 
 			model.addObject("newDate", DateConvertor.convertToDMY(resList.getFromDate()));
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -1437,16 +1459,14 @@ public class ReportController {
 
 		return model;
 	}
-	
-	
+
 	@RequestMapping(value = "/getTypeListForPendingPo", method = RequestMethod.GET)
 	@ResponseBody
 	public List<Type> getTypeListForPendingPo(HttpServletRequest request, HttpServletResponse response) {
 
 		Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 		List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
-	 
-	 
+
 		return typeList;
 	}
 

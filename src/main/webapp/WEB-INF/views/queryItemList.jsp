@@ -508,12 +508,11 @@
 																value="${count.index+1}" /></td>
 														<td class="col-md-1"><c:out value="${itemList.date}" /></td>
 
-														<td class="col-md-1"><c:out
-																value="${itemList.qty}" /></td>
+														<td class="col-md-1"><c:out value="${itemList.qty}" /></td>
 
 														<td class="col-md-1"><c:out
 																value="${itemList.reason}" /></td>
-														
+
 													</tr>
 												</c:forEach>
 											</tbody>
@@ -529,7 +528,7 @@
 
 
 
-						
+
 
 						</div>
 
@@ -619,7 +618,7 @@
 		function exportToExcel() {
 
 			$.getJSON('${getItemListExportToExcel}', {
-
+				catId : "0",
 				ajax : 'true',
 
 			}, function(data) {
@@ -647,39 +646,41 @@
 
 	<script type="text/javascript">
 		function genPdf() {
-			window.open('${pageContext.request.contextPath}/itemListPdf/');
+			window
+					.open('${pageContext.request.contextPath}/itemListPdf/'
+							+ "0");
 
 		}
 	</script>
 	<script>
-function myFunction() {
-  var input, filter, table, tr, td,td1, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("table1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    td1 = tr[i].getElementsByTagName("td")[2];
-    if (td || td1) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }  
-    
-   /*  if (td1) {
-        if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }   */
-  }
-}
-</script>
+		function myFunction() {
+			var input, filter, table, tr, td, td1, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("table1");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1];
+				td1 = tr[i].getElementsByTagName("td")[2];
+				if (td || td1) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+
+				/*  if (td1) {
+				     if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				       tr[i].style.display = "";
+				     } else {
+				       tr[i].style.display = "none";
+				     }
+				   }   */
+			}
+		}
+	</script>
 </body>
 </html>

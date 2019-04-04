@@ -36,7 +36,8 @@
 
 					</h1>
 				</div>
-			</div> --><br>
+			</div> -->
+			<br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -54,150 +55,163 @@
 							</div>
 
 						</div>
-						
-						<c:set value="0" var="isEdit"></c:set>
-								<c:set value="0" var="isDelete"></c:set>
-									<c:forEach items="${sessionScope.newModuleList}" var="allModuleList" >
-															<c:choose>
-																<c:when test="${allModuleList.moduleId==sessionScope.sessionModuleId}">
-																	  <c:forEach items="${allModuleList.subModuleJsonList}" var="subModuleJsonList" >
-																	  		<c:choose>
-																			  	<c:when test="${subModuleJsonList.subModuleId==sessionScope.sessionSubModuleId}">
-																			  		  <c:choose>
-																			  		  
-																			  				<c:when test="${subModuleJsonList.editReject eq 'visible'}">
-																			  				<c:set value="1" var="isEdit"></c:set>
-																			  				</c:when>
-																			  			</c:choose>
-																			  			<c:choose>
-																			  				<c:when test="${subModuleJsonList.deleteRejectApprove eq 'visible'}">
-																			  				<c:set value="1" var="isDelete"></c:set>
-																			  				</c:when> 
-																			  			</c:choose>
-																			  	</c:when>
-																		  	</c:choose>
-																	  </c:forEach>
-																</c:when> 
-															</c:choose>
-														 
-														</c:forEach> 
- 		<form id="submitPurchaseOrder" action="${pageContext.request.contextPath}/getItemList" method="get">
-						<div class="box-content">
-						
-						<div class="box-content">
 
-									 
+						<c:set value="0" var="isEdit"></c:set>
+						<c:set value="0" var="isDelete"></c:set>
+						<c:forEach items="${sessionScope.newModuleList}"
+							var="allModuleList">
+							<c:choose>
+								<c:when
+									test="${allModuleList.moduleId==sessionScope.sessionModuleId}">
+									<c:forEach items="${allModuleList.subModuleJsonList}"
+										var="subModuleJsonList">
+										<c:choose>
+											<c:when
+												test="${subModuleJsonList.subModuleId==sessionScope.sessionSubModuleId}">
+												<c:choose>
+
+													<c:when test="${subModuleJsonList.editReject eq 'visible'}">
+														<c:set value="1" var="isEdit"></c:set>
+													</c:when>
+												</c:choose>
+												<c:choose>
+													<c:when
+														test="${subModuleJsonList.deleteRejectApprove eq 'visible'}">
+														<c:set value="1" var="isDelete"></c:set>
+													</c:when>
+												</c:choose>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+								</c:when>
+							</c:choose>
+
+						</c:forEach>
+						<form id="submitPurchaseOrder"
+							action="${pageContext.request.contextPath}/getItemList"
+							method="get">
+							<div class="box-content">
+
+								<div class="box-content">
+
+
 									<div class="col-md-2">Select Category*</div>
 									<div class="col-md-3">
 										<select class="form-control chosen" name="catId" id="catId"
 											required>
 											<option value="0">All</option>
 											<c:forEach items="${categoryList}" var="categoryList">
-											<c:choose>
-												<c:when test="${categoryList.catId==catId}">
-												<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option> 
-												</c:when>
-												<c:otherwise>
-												<option value="${categoryList.catId}">${categoryList.catDesc}</option> 
-												</c:otherwise>
-											</c:choose> 
-													 
+												<c:choose>
+													<c:when test="${categoryList.catId==catId}">
+														<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${categoryList.catId}">${categoryList.catDesc}</option>
+													</c:otherwise>
+												</c:choose>
+
 											</c:forEach>
 										</select>
 
 									</div>
-								</div><br> <br> 
-								
+								</div>
+								<br> <br>
+
 								<div class="row">
-							<div class="col-md-12" style="text-align: center">
-								<input type="submit" class="btn btn-info"   value="Search">
-								  
-							</div>
-							
-						</div> <br>
-						
-						
-							<div class="col-md-9"></div>
+									<div class="col-md-12" style="text-align: center">
+										<input type="submit" class="btn btn-info" value="Search">
+
+									</div>
+
+								</div>
+								<br>
+
+
+								<div class="col-md-9"></div>
 								<label for="search" class="col-md-3" id="search"> <i
 									class="fa fa-search" style="font-size: 20px"></i> <input
 									type="text" id="myInput" onkeyup="myFunction()"
 									placeholder="Search.." title="Type in a name">
-								</label>
-								
-							<br /> <br />
-							<div class="clearfix"></div>
-							<div class="table-responsive" style="border: 0">
-								<table class="table table-advance" id="table1">
-									<thead>
-										<tr class="bgpink">
-											<th style="width:2%;">Sr No</th>
-											<th class="col-md-1">Item Code</th>
-											<th class="col-md-5">Item Description</th>  
-											<th class="col-md-1">Item UOM</th>
-											<th class="col-md-1">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<c:forEach items="${itemList}" var="itemList"
-											varStatus="count">
-											<tr>
-												<td style="width:2%;"><c:out value="${count.index+1}" /></td>
-												<td class="col-md-1"><c:out
-														value="${itemList.itemCode}" /></td>
-												 <td class="col-md-5"><c:out
-														value="${itemList.itemDesc}" /></td> 
-												<td class="col-md-1"><c:out value="${itemList.itemUom}" /></td>
-												<td><c:choose>
-																<c:when test="${isEdit==1}"><a
-													href="${pageContext.request.contextPath}/editItem/${itemList.itemId}"
-													data-toggle="tooltip" title="Edit"><span
-														class="glyphicon glyphicon-edit"></span></a></c:when></c:choose>
-														<c:choose>
-											 					<c:when test="${isDelete==1}"> <a
-													href="${pageContext.request.contextPath}/deleteItem/${itemList.itemId}"
-													onClick="return confirm('Are you sure want to delete this record');"
-													data-toggle="tooltip" title="Delete"><span
-														class="glyphicon glyphicon-remove"></span></a></c:when></c:choose></td>
+								</label> <br /> <br />
+								<div class="clearfix"></div>
+								<div class="table-responsive" style="border: 0">
+									<table class="table table-advance" id="table1">
+										<thead>
+											<tr class="bgpink">
+												<th style="width: 2%;">Sr No</th>
+												<th class="col-md-1">Item Code</th>
+												<th class="col-md-5">Item Description</th>
+												<th class="col-md-1">Item UOM</th>
+												<th class="col-md-1">Action</th>
 											</tr>
-										</c:forEach>
-									</tbody>
+										</thead>
+										<tbody>
 
-								</table>
+											<c:forEach items="${itemList}" var="itemList"
+												varStatus="count">
+												<tr>
+													<td style="width: 2%;"><c:out value="${count.index+1}" /></td>
+													<td class="col-md-1"><c:out
+															value="${itemList.itemCode}" /></td>
+													<td class="col-md-5"><c:out
+															value="${itemList.itemDesc}" /></td>
+													<td class="col-md-1"><c:out
+															value="${itemList.itemUom}" /></td>
+													<td><c:choose>
+															<c:when test="${isEdit==1}">
+																<a
+																	href="${pageContext.request.contextPath}/editItem/${itemList.itemId}"
+																	data-toggle="tooltip" title="Edit"><span
+																	class="glyphicon glyphicon-edit"></span></a>
+															</c:when>
+														</c:choose> <c:choose>
+															<c:when test="${isDelete==1}">
+																<a
+																	href="${pageContext.request.contextPath}/deleteItem/${itemList.itemId}"
+																	onClick="return confirm('Are you sure want to delete this record');"
+																	data-toggle="tooltip" title="Delete"><span
+																	class="glyphicon glyphicon-remove"></span></a>
+															</c:when>
+														</c:choose></td>
+												</tr>
+											</c:forEach>
+										</tbody>
 
-							</div>
-							
-							
-							<div class=" box-content">
+									</table>
+
+								</div>
+
+
+								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
 
-								<input type="button" id="expExcel" class="btn btn-primary"
-							value="EXPORT TO Excel" onclick="exportToExcel();">
-							<button class="btn btn-primary" value="PDF" id="PDFButton"
-					  onclick="genPdf()">PDF</button>
+										<input type="button" id="expExcel" class="btn btn-primary"
+											value="EXPORT TO Excel" onclick="exportToExcel();">
+										<button class="btn btn-primary" value="PDF" id="PDFButton"
+											onclick="genPdf()">PDF</button>
 
 									</div>
 								</div>
-							
-							
-						</div>
-</form>
+
+
+							</div>
+						</form>
 					</div>
 				</div>
- 
+
 			</div>
 			<footer>
-			<p>2019 © MONGINIS</p>
-		</footer>
+				<p>2019 © MONGINIS</p>
+			</footer>
 		</div>
 
- 
+
 		<!-- END Main Content -->
-		
- 
+
+
 	</div>
 	<!-- END Content -->
-	 
+
 	<!-- END Container -->
 
 	<!--basic scripts-->
@@ -266,9 +280,10 @@
 
 	<script type="text/javascript">
 		function exportToExcel() {
+			var catId = document.getElementById("catId").value;
 
 			$.getJSON('${getItemListExportToExcel}', {
-
+				catId : catId,
 				ajax : 'true',
 
 			}, function(data) {
@@ -280,7 +295,7 @@
 					document.getElementById("PDFButton").disabled = true;
 				}
 				document.getElementById("PDFButton").disabled = false;
-				 
+
 				exportExcel();
 			}
 
@@ -296,39 +311,41 @@
 
 	<script type="text/javascript">
 		function genPdf() {
-			window.open('${pageContext.request.contextPath}/itemListPdf/');
+			var catId = document.getElementById("catId").value;
+			window.open('${pageContext.request.contextPath}/itemListPdf/'
+					+ catId);
 
 		}
 	</script>
 	<script>
-function myFunction() {
-  var input, filter, table, tr, td,td1, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("table1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[1];
-    td1 = tr[i].getElementsByTagName("td")[2];
-    if (td || td1) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      } else {
-        tr[i].style.display = "none";
-      }
-    }  
-    
-   /*  if (td1) {
-        if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-          tr[i].style.display = "";
-        } else {
-          tr[i].style.display = "none";
-        }
-      }   */
-  }
-}
-</script>
+		function myFunction() {
+			var input, filter, table, tr, td, td1, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("table1");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1];
+				td1 = tr[i].getElementsByTagName("td")[2];
+				if (td || td1) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+
+				/*  if (td1) {
+				     if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+				       tr[i].style.display = "";
+				     } else {
+				       tr[i].style.display = "none";
+				     }
+				   }   */
+			}
+		}
+	</script>
 </body>
 </html>
