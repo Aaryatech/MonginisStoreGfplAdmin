@@ -40,7 +40,7 @@
 					<div class="box" id="todayslist">
 						 <div class="box-title">
 							<h3>
-								<i class="fa fa-list"></i>Mrn Inspection List
+								<i class="fa fa-list"></i>MRN Inspection List
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/">
@@ -62,7 +62,7 @@
 										<option value="0" selected>ALL</option>
 											 <c:forEach items="${vendorList}" var="vendorList"
 							varStatus="count">
-							<c:choose>
+							<%-- <c:choose>
 							<c:when test="${vendorId==vendorList.vendorId}">
 							 <option value="${vendorList.vendorId}" selected><c:out value="${vendorList.vendorName}"/></option>
 							
@@ -71,7 +71,7 @@
 							 <option value="${vendorList.vendorId}" ><c:out value="${vendorList.vendorName}"/></option>
 							
 							</c:otherwise>
-							</c:choose>
+							</c:choose> --%>
  													 
 												</c:forEach>
 						
@@ -157,7 +157,6 @@
 													<th class="col-md-1">MRN No.</th> 
 													<th class="col-md-1">Date</th>
 													<th class="col-md-2">MRN Type</th>
-													<th class="col-md-4">Vendor</th>
 													<th class="col-md-1">Status</th>
 													<th class="col-md-1">Action</th>
 												</tr>
@@ -176,7 +175,7 @@
 									</c:forEach>
 									     
 									     </td> 
-										 <td class="col-md-4"><c:out value="${getMrnHeaderList.vendorName}" /></td> 
+										 
 									     <td class="col-md-1"><c:choose><c:when test="${getMrnHeaderList.mrnStatus==0}"><c:out value="Inspection Pending" /></c:when><c:when test="${getMrnHeaderList.mrnStatus==2}"><c:out value="Inspection Complete" /></c:when><c:when test="${getMrnHeaderList.mrnStatus==2}"><c:out value="1st Approved Complete" /></c:when><c:when test="${getMrnHeaderList.mrnStatus==3}"><c:out value="1st Approved Complete" /></c:when>
 									     <c:when test="${getMrnHeaderList.mrnStatus==4}"><c:out value="2st Approved Complete" /></c:when><c:when test="${getMrnHeaderList.mrnStatus==1}"><c:out value="Partially Inspection " /></c:when></c:choose></td> 
 									     <td class="col-md-1">

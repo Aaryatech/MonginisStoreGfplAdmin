@@ -161,13 +161,13 @@ body {
 				<div class="col-md-2">MRN Date</div> 
 				<div class="col-md-3">${getMrnHeader.mrnDate}</div>
 				</div><br/>
-				<div class="box-content">
+				<%-- <div class="box-content">
 				<div class="col-md-2" >Vendor Name</div>
 									<div class="col-md-3">
 										${getMrnHeader.vendorName}
 									</div>
 					 
-			</div><br/>
+			</div><br/> --%>
 			
 			<div class="box-content">
 				 
@@ -217,10 +217,10 @@ body {
 										<th>Sr.No.</th>
 										<th>Item Code</th>
 										<th>Item Name </th>
-										<th>PO Qty</th>
+										<!-- <th>PO Qty</th> -->
 										<th>MRN Qty</th> 
-										<th>Approve QTY</th>
-										<th>Reject QTY</th>
+										<!-- <th>Approve QTY</th> -->
+										<!-- <th>Reject QTY</th> -->
 									
 									</tr>
 										</thead>
@@ -235,10 +235,10 @@ body {
   
 																<td align="left"><c:out value="${getMrnDetail.itemCode}" /></td>
 																<td align="left"><c:out value="${getMrnDetail.itemName}" /></td>
-																<td align="right"><c:out value="${getMrnDetail.poQty}" /></td>
-																<td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td>
+																<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
+																<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
 													  			<td align="right"><c:out value="${getMrnDetail.approveQty}" /></td>
-													  			<td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td>
+													  			<%-- <td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td> --%>
 													  			</tr>
 												</c:forEach>
 										</tbody>
@@ -285,10 +285,10 @@ body {
 											<th>Sr.No.</th>
 										<th>Item Code</th>
 										<th>Item Name </th>
-										<th>PO Qty</th>
-										<th>MRN Qty</th> 
+										<!-- <th>PO Qty</th> -->
+									<!-- 	<th>MRN Qty</th>  -->
 										<th>Approve QTY</th>
-										<th>Reject QTY</th>
+										<!-- <th>Reject QTY</th> -->
 
 									</tr>
 										</thead>
@@ -304,10 +304,10 @@ body {
   
 																<td align="left"><c:out value="${getMrnDetail.itemCode}" /></td>
 																<td align="left"><c:out value="${getMrnDetail.itemName}" /></td>
-																<td align="right"><c:out value="${getMrnDetail.poQty}" /></td>
-																<td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td>
+																<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
+																<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
 													  			<td align="right"><input style="text-align:right; width:100px" type="text" id="approveQty${getMrnDetail.mrnDetailId}"  name="approveQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.mrnQty}" min="0"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})" max="${getMrnDetail.mrnQty}" required></td>
-													  			<td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td>
+													  			<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
 													  			</tr>
 												</c:forEach>
 										</tbody>

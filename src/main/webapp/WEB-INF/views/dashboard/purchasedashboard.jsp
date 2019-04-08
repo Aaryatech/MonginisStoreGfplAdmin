@@ -300,7 +300,10 @@ h6{
 										       </c:otherwise>
 										        </c:choose>
 										      </td> --%>
-											<td><a href="${pageContext.request.contextPath}/addPurchaseOrderFromDashboard/${indent.indMId}/${indent.indMType}">PO </a> </td>
+											<td><a href="${pageContext.request.contextPath}/addPurchaseOrderFromDashboard/${indent.indMId}/${indent.indMType}">PO </a> &nbsp;&nbsp;&nbsp;
+											<a href="${pageContext.request.contextPath}/editIndent/${indent.indMId}" title="View/Edit"><span	class="glyphicon glyphicon-info-sign"></span></a> 
+											
+											</td>
 										
 											</tr>
 										</c:forEach>
@@ -377,8 +380,9 @@ h6{
  												<c:choose><c:when test="${indent.indIsmonthly==1}">YES</c:when><c:when test="${indent.indIsmonthly==0}">NO</c:when></c:choose></td>
  												<td class="col-md-1"><c:out value="Pending" /></td>
 										       
-											<td><a href="${pageContext.request.contextPath}/addPurchaseOrderFromDashboard/${indent.indMId}/${indent.indMType}">PO </a> </td>
-											</tr>
+											<td><a href="${pageContext.request.contextPath}/addPurchaseOrderFromDashboard/${indent.indMId}/${indent.indMType}">PO </a> &nbsp;&nbsp;&nbsp;
+											<a href="${pageContext.request.contextPath}/editIndent/${indent.indMId}" title="View/Edit"><span	class="glyphicon glyphicon-info-sign"></span></a> 
+											</td></tr>
 										</c:forEach>
 										</tbody>
 

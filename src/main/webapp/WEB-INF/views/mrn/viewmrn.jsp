@@ -169,7 +169,6 @@
 														value="0" />All</th>
 													<th class="col-md-1" >Mrn No</th>
 													<th class="col-md-1">Date</th>
-													<th class="col-md-5">Vendor</th>
 													<th class="col-md-1">Type</th>
 													<th class="col-md-1">Action</th>
 												</tr>
@@ -193,7 +192,6 @@
 															name="name1" value="${mrn.mrnId}" /></td>
 														<td ><c:out value="${mrn.mrnNo}" /></td>
 														<td ><c:out value="${mrn.mrnDate}" /></td>
-														<td ><c:out value="${mrn.vendorName}" /></td>
 														<c:set var="mrnType" value="o"></c:set>
 														<c:forEach items="${typeList}" var="typeList">  
 														<c:choose>

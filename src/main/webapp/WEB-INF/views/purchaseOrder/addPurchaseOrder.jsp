@@ -297,7 +297,9 @@ body {
 										
 									</div>	
 									<div class="col-md-2"></div>
-									<div class="col-md-2"><input type="button" class="btn btn-info" value="Get Item From Indend "  id="myBtn"></div>
+									<div class="col-md-4"><input type="button" class="btn btn-info" value="Get Item From Indend "  id="myBtn">&nbsp;&nbsp;&nbsp;
+									<a href="${pageContext.request.contextPath}/editIndent/${indId}" title="View/Edit"><span class="glyphicon glyphicon-info-sign"></span></a>
+									</div>
 									<input type="hidden"  value="${indentDate}"  id="indentDateText" name="indentDateText">
 									 
 					</div>

@@ -370,16 +370,16 @@ body {
 																		
 																			<th class="col-md-1" >Item
 																				</th>
-																			<th class="col-md-1" >PO
-																				QTY</th>
+																			<!-- <th class="col-md-1" >PO
+																				QTY</th> -->
 																			<!-- <th class="col-md-1" >Challan
 																				QTY</th> -->
 																			<th class="col-md-1" >Rec
 																				QTY</th>
-																			<th class="col-md-1" >Pend
-																				QTY</th>
-																			<th class="col-md-1" >PO
-																				No</th>
+																			<!-- <th class="col-md-1" >Pend
+																				QTY</th> -->
+																			<!-- <th class="col-md-1" >PO
+																				No</th> -->
 																			<th class="col-md-1" >Status</th>
 																		</tr>
 																	</thead>
@@ -428,14 +428,10 @@ body {
 																	<th  style="text-align: center; width: 2%;">Sr</th>
 																	<th class="col-md-1" >Item
 																		</th>
-																	<th class="col-md-1" >PO
-																		QTY</th>
+																
 																	<th class="col-md-1" >Rec
 																		QTY</th>
-																	<th class="col-md-1" >Pend
-																		QTY</th>
-																	<th class="col-md-1" >PO
-																		No</th>
+																	
 																	<th class="col-md-1" >Status</th>
 																</tr>
 															</thead>
@@ -828,11 +824,11 @@ body {
 																		'<td class="col-md-4" style="text-align: left;"></td>')
 																		.html(
 																				itemList.itemName)); */
-														tr
+													/* 	tr
 																.append($(
 																		'<td class="col-md-1" align="right" ></td>')
 																		.html(
-																				itemList.itemQty));
+																				itemList.itemQty)); */
 
 														/* tr
 																.append($(
@@ -913,16 +909,16 @@ body {
 														} else {
 															status = "Completed";
 														}
-														tr
+														/* tr
 																.append($(
 																		'<td class="col-md-1" align="right" ></td>')
 																		.html(
-																				pendQty));
-														tr
+																				pendQty)); */
+														/* tr
 																.append($(
 																		'<td class="col-md-1"  ></td>')
 																		.html(
-																				itemList.poNo));
+																				itemList.poNo)); */
 														tr
 																.append($(
 																		'<td class="col-md-1"  ></td>')
@@ -935,7 +931,7 @@ body {
 			}
 		</script>
 		<!--  akshay call -->
-
+ 
 		<script>
 			function myFunction() {
 				var input, filter, table, tr, td, i;
@@ -1035,11 +1031,11 @@ body {
 																			'<td class="col-md-4" style="text-align: left;"></td>')
 																			.html(
 																					itemList.itemName)); */
-															tr
+														/* 	tr
 																	.append($(
 																			'<td class="col-md-1" align="right"></td>')
 																			.html(
-																					itemList.itemQty));
+																					itemList.itemQty)); */
 
 															tr
 																	.append($(
@@ -1082,16 +1078,16 @@ body {
 															} else {
 																status = "Completed";
 															}
-															tr
+															/* tr
 																	.append($(
 																			'<td class="col-md-1" align="right"></td>')
 																			.html(
-																					pendQty));
-															tr
+																					pendQty)); */
+															/* tr
 																	.append($(
 																			'<td class="col-md-1" ></td>')
 																			.html(
-																					itemList.poNo));
+																					itemList.poNo)); */
 															tr
 																	.append($(
 																			'<td class="col-md-1" ></td>')
