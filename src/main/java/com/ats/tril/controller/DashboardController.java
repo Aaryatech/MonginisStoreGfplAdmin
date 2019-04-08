@@ -1007,7 +1007,7 @@ public class DashboardController {
 					if(Integer.parseInt(checkbox[j])==getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId()) 
 					{
 						 getMrnHeader.getGetMrnDetailList().get(i).setApproveQty(Float.parseFloat(request.getParameter("approveQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
-						 getMrnHeader.getGetMrnDetailList().get(i).setRejectQty(Float.parseFloat(request.getParameter("rejectQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
+						// getMrnHeader.getGetMrnDetailList().get(i).setRejectQty(Float.parseFloat(request.getParameter("rejectQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
 						 getMrnHeader.getGetMrnDetailList().get(i).setRemainingQty(Float.parseFloat(request.getParameter("approveQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
 						 getMrnDetailList.add(getMrnHeader.getGetMrnDetailList().get(i));
 					}
@@ -1038,7 +1038,7 @@ public class DashboardController {
             	 for(int i=0;i<getMrnDetailList.size();i++)
             	 {
 
-            		 getMrnDetailList.get(i).setMrnDetailStatus(1);
+            		 getMrnDetailList.get(i).setMrnDetailStatus(2);
             	 }
 			getMrnHeader.setGetMrnDetailList(getMrnDetailList);
              }

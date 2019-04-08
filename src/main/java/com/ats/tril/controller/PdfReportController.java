@@ -722,7 +722,7 @@ public class PdfReportController {
 		// String url="/showEditViewIndentDetail/1";
 		System.out.println("URL " + url);
 
-		File f = new File("/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/uploads/Report1.pdf");
 		//File f = new File("C:/pdf/report.pdf");
 		//File f =new File("/home/lenovo/Documents/pdf/Report.pdf");
 		try {
@@ -737,7 +737,7 @@ public class PdfReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filePath = "/report.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/uploads/Report1.pdf";
 
 		//String filePath ="C:/pdf/report.pdf";
 		//String filePath ="/home/lenovo/Documents/pdf/Report.pdf";

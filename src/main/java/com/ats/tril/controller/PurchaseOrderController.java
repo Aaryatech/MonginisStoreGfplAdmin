@@ -1902,16 +1902,16 @@ public class PurchaseOrderController {
 			
 			if(approve==1) {
 				
-				poHeaderForApprove.setPoStatus(7);
+				poHeaderForApprove.setPoStatus(0);
 				poId=poHeaderForApprove.getPoId();
 				String[] checkbox = request.getParameterValues("select_to_approve");
-				status=7;
+				status=0;
 				for(int i=0 ; i<checkbox.length ;i++) {
 					
 					for(int j=0 ; j<poHeaderForApprove.getPoDetailList().size() ; j++) {
 						
 						if(Integer.parseInt(checkbox[i])==poHeaderForApprove.getPoDetailList().get(j).getPoDetailId()) {
-							poHeaderForApprove.getPoDetailList().get(j).setStatus(7);
+							poHeaderForApprove.getPoDetailList().get(j).setStatus(0);
 							poDetalId=poDetalId+","+poHeaderForApprove.getPoDetailList().get(j).getPoDetailId();
 							break;
 						}

@@ -447,7 +447,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			mrnHeader.setLrNo(lrNo);
 			mrnHeader.setMrnDate(DateConvertor.convertToYMD(grnDate));
 		
-			mrnHeader.setMrnStatus(4);
+			mrnHeader.setMrnStatus(0);
 			mrnHeader.setMrnType(grnType);
 			mrnHeader.setRemark1(lorryRemark);
 			mrnHeader.setRemark2("def");
@@ -473,7 +473,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 					mrnDetail.setPoNo(detail.getPoNo());
 
-					mrnDetail.setMrnDetailStatus(4);
+					mrnDetail.setMrnDetailStatus(0);
 
 					mrnDetail.setBatchNo("Default Batch KKKK-00456");
 					mrnDetail.setDelStatus(Constants.delStatus);

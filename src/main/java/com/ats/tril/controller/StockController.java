@@ -35,6 +35,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
+import com.ats.tril.model.AccountHead;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Company;
 import com.ats.tril.model.ExportToExcel;
@@ -43,6 +44,7 @@ import com.ats.tril.model.MinAndRolLevelReport;
 import com.ats.tril.model.StockDetail;
 import com.ats.tril.model.StockHeader;
 import com.ats.tril.model.StockValuationCategoryWise;
+import com.ats.tril.model.Type;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -955,5 +957,7 @@ public class StockController {
 
 		return model;
 	}
+	
+	
 
 }

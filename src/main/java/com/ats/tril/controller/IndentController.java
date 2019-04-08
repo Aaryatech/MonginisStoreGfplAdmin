@@ -975,7 +975,7 @@ public class IndentController {
 			indent.setIndIsmonthly(isMonthly);
 			indent.setIndMDate(DateConvertor.convertToYMD(indDate));
 
-			indent.setIndMStatus(9);
+			indent.setIndMStatus(0);
 			indent.setIndMType(indType);
 			indent.setIndRemark("-");
 
@@ -992,7 +992,7 @@ public class IndentController {
 				IndentTrans transDetail = new IndentTrans();
 				TempIndentDetail detail = tempIndentList.get(i);
 
-				transDetail.setIndDStatus(9);
+				transDetail.setIndDStatus(0);
 
 				transDetail.setIndItemCurstk(detail.getCurStock());
 				transDetail.setIndItemDesc(detail.getItemName());
