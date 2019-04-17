@@ -1311,7 +1311,7 @@ function requiredField(key)
   	var indQty = parseFloat($("#indQty"+key).val());  
 	 var poQty = parseFloat($("#poQty"+key).val());  
 	  
-	    if(poQty>indQty)
+	    /* if(poQty>indQty)
 		  {
 		 	 document.getElementById("poQty"+key).value = 0;
 		 	document.getElementById("balanceQty"+key).value = indQty;
@@ -1320,11 +1320,11 @@ function requiredField(key)
 			  requiredField(key);
 		  }
 	  else
-		  {  
+		  { */  
 		  document.getElementById("balanceQty"+key).value = indQty-poQty;
 		  document.getElementById("select_to_approve"+key).checked=true; 
 		  requiredField(key);
-		   }  
+		   //}  
   	
   	 
   } 

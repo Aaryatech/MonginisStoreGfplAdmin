@@ -306,7 +306,7 @@ body {
 																<td align="left"><c:out value="${getMrnDetail.itemName}" /></td>
 																<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
 																<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
-													  			<td align="right"><input style="text-align:right; width:100px" type="text" id="approveQty${getMrnDetail.mrnDetailId}"  name="approveQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.mrnQty}" min="0"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})" max="${getMrnDetail.mrnQty}" required></td>
+													  			<td align="right"><input style="text-align:right; width:100px" type="text" id="approveQty${getMrnDetail.mrnDetailId}"  name="approveQty${getMrnDetail.mrnDetailId}" value="" min="0"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})" max="${getMrnDetail.mrnQty}" required></td>
 													  			<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
 													  			</tr>
 												</c:forEach>

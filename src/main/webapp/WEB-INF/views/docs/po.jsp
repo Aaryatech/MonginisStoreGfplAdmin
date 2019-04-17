@@ -116,10 +116,10 @@ hr {
 
 		<!--  -->
 
-		<p style="text-align: left; font-weight: normal;">
+		<%-- <p style="text-align: left; font-weight: normal;">
 			Original / Duplicate(Acnt)/Triplicate(Purch)/Stroes <span
 				style="float: right;">${documentBean.docIsoSerialNumber}</span>
-		</p>
+		</p> --%>
 		<!-- p -->
  
 		 
@@ -138,8 +138,7 @@ hr {
  													<h4 align="center" style=" font-size: 16px;">${company.companyName}</h4> 
 								<h6 style="font-weight: bold; margin: 0px;font-size: 10px;" align="center">Delivery
 									& Billing Addr.: ${company.factoryAdd}</h6>
-								<h6 style="font-weight: normal; margin: 0px;font-size: 10px;" align="center">CIN
-									NO : ${company.cinNumber}</h6>
+								
 								</td>
 								
 								<td width="22.33%" valign="top"  style="font-weight: bold; margin: 0px;" align="right"> 
@@ -358,7 +357,7 @@ hr {
 					<p
 						style="color: #000; font-size: 10px; text-align: left; margin: 0px; font-weight: normal;">
 						1) ITEMCODE, PARTY CODE & PO.NO ON YOUR D/C./Invoice <br> 2) PL.
-						PROVIDE YOUR TEST & INSP.CERTIFICATE -YES/NO<br> 3)
+						PROVIDE YOUR COA/ANALYSIS CERTIFICATE WITH PRODUCT<br> 3)
 						INSPECTION SUBJECT TO OUR / YOUR END.<br> 4) EXPIRY DATE OF
 						EACH ITEM.<br> 5) IF MTRL.REJECTED, PLS.ARRANGE TO COLLECT
 						FROM OUR FACTORY SITE &nbsp;&nbsp;&nbsp;&nbsp;WITHIN 8 DAYS
@@ -373,7 +372,7 @@ hr {
 					<p
 						style="color: #000; font-size: 10px; vertical-align: top; text-align: center; margin: 0px; font-weight: normal;">
 						For ${company.companyName}<br> <br> <br> <br>
-						Purchase Order authorised Shabbir Fatehnagri/Shabbir Kanorewala 
+						Galdhar Foods Purchase Department 
 				</td>
 			</tr>
 
@@ -691,7 +690,7 @@ hr {
 				<p
 					style="color: #000; font-size: 10px; text-align: left; margin: 0px; font-weight: normal;">
 					1) ITEMCODE, PARTY CODE & PO.NO ON YOUR D/C./Invoice<br> 2) PL.
-					PROVIDE YOUR TEST & INSP.CERTIFICATE -YES/NO<br> 3) INSPECTION
+					PROVIDE COA/ANALYSIS.CERTIFICATE WITH PRODUCTS<br> 3) INSPECTION
 					SUBJECT TO OUR / YOUR END.<br> 4) EXPIRY DATE OF EACH ITEM.<br>
 					5) IF MTRL.REJECTED, PLS.ARRANGE TO COLLECT FROM OUR FACTORY SITE
 					&nbsp;&nbsp;&nbsp;&nbsp;WITHIN 8 DAYS OTHERWISE WE WILL NOT
@@ -705,7 +704,7 @@ hr {
 				<p
 					style="color: #000; font-size: 10px; vertical-align: top; text-align: center; margin: 0px; font-weight: normal;">
 					For ${company.companyName} <br> <br> <br> <br>
-					Authorised By <br> Shabbir Fatehnagri/Shabbir Kanorewala
+					Authorised By <br> Galdhar Foods Purchase Department
 			</td>
 		</tr>
 
@@ -721,7 +720,7 @@ hr {
 		</c:otherwise>
 	</c:choose>
 	 
-	<h5 style="font-weight: normal; margin: 0px;" align="left">PUNE
+	<h5 style="font-weight: normal; margin: 0px;" align="left">
 			OFFICE : ${company.officeAdd}</h5>
 
 	<h5 style="font-weight: normal; margin: 0px;" align="left">PHONE:${company.officePhoneNumber}, FAX : ${company.officeFaxNumber}, Email : ${company.purchaseEmail}</h5>

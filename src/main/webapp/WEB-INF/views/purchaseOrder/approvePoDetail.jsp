@@ -148,6 +148,7 @@
 																	<th  style="width:2%;"><input type="checkbox" id="allCheckTable1"   onClick="selectAll(this)"  />All</th>
 																		<th style="width:2%;">Sr.No.</th>
 																		<th>Item Name</th>
+																		<th>Item UOM</th>
 																		<th class="col-md-2">PO Qty</th>
 																		<th class="col-md-2">Rate  </th>
 				 
@@ -177,7 +178,7 @@
 				 
 																			<td  ><c:out
 																					value="${poDetailList.itemCode}" /></td>
-				
+																			<td  ><c:out	value="${poDetailList.itemUom}" /></td>
 																			<td  >${poDetailList.itemQty}</td>
 				
 																			<td  >${poDetailList.itemRate}</td>
@@ -206,6 +207,7 @@
 																	<th  style="width:2%;"><input type="checkbox"   id="allCheckTable1" onClick="selectAll(this)"  />All</th>
 																		<th style="width:2%;">Sr.No.</th>
 																		<th>Item Name</th>
+																		<th>Item UOM</th>
 																		<th class="col-md-2">PO Qty</th>
 																		<th class="col-md-2">Rate  </th>
 				 
@@ -234,6 +236,8 @@
 				 
 																			<td  ><c:out
 																					value="${poDetailList.itemCode}" /></td>
+																					<td  ><c:out
+																					value="${poDetailList.itemUom}" /></td>
 				
 																			<td  >${poDetailList.itemQty}</td>
 				

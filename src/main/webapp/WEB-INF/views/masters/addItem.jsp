@@ -805,7 +805,7 @@
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
 					html += '<option value="' + data[i].grpId + '">'
-							+ data[i].grpCode + '&nbsp;&nbsp;&nbsp;'+data[i].grpDesc+'</option>';
+							+data[i].grpDesc+'</option>';
 				}
 				html += '</option>';
 				$('#grpId').html(html);

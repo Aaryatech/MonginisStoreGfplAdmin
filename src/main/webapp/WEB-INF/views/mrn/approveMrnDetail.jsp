@@ -92,8 +92,16 @@
 								<div class="box-content">
 
 									<div class="col-md-2">Vendor Name :</div>
-									<div class="col-md-10">
+									<div class="col-md-3">
 									${mrnFroApprove.vendorName}
+
+										 
+
+									</div>
+									
+									<div class="col-md-2">Bill Number :</div>
+									<div class="col-md-3">
+									${mrnFroApprove.billNo}
 
 										 
 
@@ -110,6 +118,11 @@
  
 									</div>
  
+ 								<div class="col-md-2">Bill Date:</div>
+									<div class="col-md-3">
+									${mrnFroApprove.billDate}
+ 
+									</div>
 										<%-- <div class="col-md-2">Indent No:</div>
 									<div class="col-md-3">
 									${poHeaderForApprove.indNo}

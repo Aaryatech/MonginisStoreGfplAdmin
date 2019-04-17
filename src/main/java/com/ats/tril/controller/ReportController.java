@@ -38,6 +38,7 @@ import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Dept;
+import com.ats.tril.model.ERPHeader;
 import com.ats.tril.model.ExportToExcel;
 import com.ats.tril.model.GatepassReport;
 import com.ats.tril.model.GetItem;
@@ -70,6 +71,7 @@ public class ReportController {
 
 	RestTemplate rest = new RestTemplate();
 	List<GetItem> getItemList = null;
+	List<ERPHeader> getErpHeaderList = null;
 	List<Vendor> vendorList = null;
 	List<Dept> deparmentList = null;
 	List<GetSubDept> getSubDeptList = null;
@@ -121,7 +123,7 @@ public class ReportController {
 				rowData = new ArrayList<String>();
 				cnt = cnt + i;
 				rowData.add("" + (cnt));
-				rowData.add("" + getItemList.get(i).getItemCode() + " - " + getItemList.get(i).getItemDesc());
+				rowData.add("" + getItemList.get(i).getItemDesc());
 				rowData.add("" + getItemList.get(i).getItemDate());
 				rowData.add("" + getItemList.get(i).getItemWt());
 				rowData.add("" + getItemList.get(i).getItemUom());
@@ -140,6 +142,32 @@ public class ReportController {
 		}
 
 		return getItemList;
+
+	}
+	
+	
+	@RequestMapping(value = "/ERPlistMRN", method = RequestMethod.GET)
+	public ModelAndView ERPExportToExcel(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("report/indentReport");
+				try {
+
+			String from_date = request.getParameter("from_date");
+			String to_date = request.getParameter("to_date");
+			from_date="2019-04-01";
+			from_date="2019-04-10";
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("from_date", from_date);
+				map.add("to_date", to_date);
+				ERPHeader[] objErpHeader = rest.postForObject(Constants.url + "ERPlistMRN", map, ERPHeader[].class);
+				getErpHeaderList = new ArrayList<>(Arrays.asList(objErpHeader));
+				System.out.println("getErpHeaderList" + getErpHeaderList.toString());
+
+			} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
+		return model;
 
 	}
 
@@ -261,7 +289,7 @@ public class ReportController {
 			List<String> rowData = new ArrayList<String>();
 
 			rowData.add("Sr. No");
-			rowData.add("Item Code");
+			
 			rowData.add("Name");
 			rowData.add("City");
 			rowData.add("State");
@@ -279,7 +307,7 @@ public class ReportController {
 				rowData = new ArrayList<String>();
 				cnt = cnt + i;
 				rowData.add("" + (cnt));
-				rowData.add("" + vendorList.get(i).getVendorCode());
+				
 				rowData.add("" + vendorList.get(i).getVendorName());
 				rowData.add("" + vendorList.get(i).getVendorCity());
 				rowData.add("" + vendorList.get(i).getVendorState());
@@ -401,7 +429,7 @@ public class ReportController {
 				cell.setPadding(3);
 				table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(item.getItemCode() + " - " + item.getItemDesc(), headFont));
+				cell = new PdfPCell(new Phrase(item.getItemDesc(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
@@ -2444,7 +2472,7 @@ public class ReportController {
 
 			}
 			document.open();
-			Paragraph name = new Paragraph("Trimbak Rubber\n", f);
+			Paragraph name = new Paragraph("GFPL \n", f);
 			name.setAlignment(Element.ALIGN_CENTER);
 			document.add(name);
 			document.add(new Paragraph(" "));

@@ -384,9 +384,9 @@ body {
 													<tr>
 														<th   style="  width: 2%;">Sr</th>
 														<th  class="col-md-1"  >Item </th>
-														<th  class="col-md-1"  >PO QTY</th>
+														<!-- <th  class="col-md-1"  >PO QTY</th> -->
 														<th  class="col-md-1"  >Mrn QTY</th>
-														<th  class="col-md-1"  >PO No</th>
+														<!-- <th  class="col-md-1"  >PO No</th> -->
 														<th  class="col-md-1"  >Status</th>
 														<th  class="col-md-1"  >Action</th>
 													</tr>
@@ -420,21 +420,21 @@ body {
 																</c:otherwise>
 															</c:choose>
 
-															<td class="col-md-1"  style="text-align: right;"><c:out
-																	value="${mrnDetail.poQty}" /></td>
+															<%-- <td class="col-md-1"  style="text-align: right;"><c:out
+																	value="${mrnDetail.poQty}" /></td> --%>
 
 															<td class="col-md-1"  >
 															<input type="text" style="text-align: right;"  class="form-control" id="mrnRecQty${mrnDetail.mrnDetailId}" onchange="updateMrnQty(this.value,${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})" name="mrnRecQty${mrnDetail.mrnDetailId}" value="${mrnDetail.mrnQty}">
 															</td>
 
-															<td class="col-md-1"  ><c:out
-																	value="${mrnDetail.poNo}" /></td>
+															<%-- <td class="col-md-1"  ><c:out
+																	value="${mrnDetail.poNo}" /></td> --%>
 
 															<td class="col-md-1"  ><c:out
 																	value="${status}" /></td>
 															<td class="col-md-1"  >		
 															<c:choose>
-																<c:when test="${(mrnDetail.chalanQty==0) && (mrnHeader.mrnStatus==4)}">
+																<c:when test="${(mrnDetail.chalanQty==0) && (mrnHeader.mrnStatus<3)}">
 																	<a
 															href="${pageContext.request.contextPath}/deleteMrnDetail/${mrnDetail.mrnDetailId}" title="Delete"><span
 																class="fa fa-trash-o"></span></a>
@@ -513,7 +513,7 @@ body {
 					<div class="col-md-3" align= center>
 					
 						<c:choose>
-								<c:when test="${mrnHeader.mrnStatus==4}">
+								<c:when test="${mrnHeader.mrnStatus<3}">
 								<input type="button" onclick="editMrn()" class="btn btn-info" value="Submit">
 																</c:when> 
 															</c:choose>
@@ -645,7 +645,7 @@ body {
 						.append($(
 								'<td class="col-md-2" ></td>')
 								.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' '+itemList.itemName+'</div>'))
-						tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.itemQty));
+						/* tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.itemQty)); */
 						
 						tr
 						.append($(
@@ -664,7 +664,7 @@ body {
 
 
 	tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQty));
-						tr.append($('<td class="col-md-1"  ></td>').html(itemList.poNo));
+						/* tr.append($('<td class="col-md-1"  ></td>').html(itemList.poNo)); */
 						var status;
 						if(itemList.status==0){
 							status="Pending";

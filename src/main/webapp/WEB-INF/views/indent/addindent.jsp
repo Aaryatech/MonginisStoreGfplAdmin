@@ -990,7 +990,7 @@ $(document).ready(function() {
                          if(data[i].itemIsCons==0){    
                         $("#item_name").append(
                                 $("<option></option>").attr(
-                                    "value", data[i].itemId).text(data[i].itemCode+' '+data[i].itemDesc)
+                                    "value", data[i].itemId).text(data[i].itemDesc)
                             );
                          }   
                     }

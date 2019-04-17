@@ -105,20 +105,20 @@
 								
 								<div class="row">
 							<div class="col-md-12" style="text-align: center">
-								 <c:choose>
-												<c:when test="${sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
+								<%-- <c:choose> --%>
+												<%-- <c:when test="${sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}"> --%>
 											 <input type="button" value="PDF" class="btn btn-primary"
 													onclick="genPdf()" />&nbsp;
 											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" >
-									</c:when>
-									<c:otherwise>
+									<%-- </c:when> --%>
+									<%-- <c:otherwise>
 									
 									<input type="button" value="PDF" class="btn btn-primary"
 													onclick="genPdf()" disabled/>&nbsp;
 											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled>
 									
-									</c:otherwise>
-									</c:choose>
+									</c:otherwise> --%>
+									<%-- </c:choose> --%>
 											   
 							</div>
 						</div> <br>

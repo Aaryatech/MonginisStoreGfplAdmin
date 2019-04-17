@@ -120,10 +120,10 @@
 												<c:set var="sts" value="-"></c:set> 
 												<c:choose>
 																<c:when test="${poList.poStatus==9}">
-																	<c:set var="sts" value="Pending First Approve"></c:set>
+																	<c:set var="sts" value="Pending From Director"></c:set>
 																</c:when>
 																<c:when test="${poList.poStatus==7}">
-																	<c:set var="sts" value="Pending Second Approve"></c:set>
+																	<c:set var="sts" value="Pending From Director"></c:set>
 																</c:when>
 																 
 															</c:choose> 

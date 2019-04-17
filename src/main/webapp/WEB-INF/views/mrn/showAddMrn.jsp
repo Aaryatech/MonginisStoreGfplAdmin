@@ -370,8 +370,8 @@ body {
 																		
 																			<th class="col-md-1" >Item
 																				</th>
-																			<!-- <th class="col-md-1" >PO
-																				QTY</th> -->
+																			 <th class="col-md-1" >Item 
+																				UOM</th> 
 																			<!-- <th class="col-md-1" >Challan
 																				QTY</th> -->
 																			<th class="col-md-1" >Rec
@@ -428,7 +428,8 @@ body {
 																	<th  style="text-align: center; width: 2%;">Sr</th>
 																	<th class="col-md-1" >Item
 																		</th>
-																
+																<th class="col-md-1" >Item UOM
+																		</th>
 																	<th class="col-md-1" >Rec
 																		QTY</th>
 																	
@@ -815,15 +816,15 @@ body {
 																				
 																				tr
 																				.append($(
-																						'<td class="col-md-1"  ></td>')
+																						'<td class="col-md-4"  ></td>')
 																						.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' ' +itemList.itemName+ '</div>'))
 				
-													/* 							
+													 							
 														tr
 																.append($(
-																		'<td class="col-md-4" style="text-align: left;"></td>')
+																		'<td class="col-md-1" style="text-align: left;"></td>')
 																		.html(
-																				itemList.itemName)); */
+																				itemList.itemUom)); 
 													/* 	tr
 																.append($(
 																		'<td class="col-md-1" align="right" ></td>')
@@ -1023,14 +1024,14 @@ body {
 
 															tr
 															.append($(
-																	'<td class="col-md-2" ></td>')
+																	'<td class="col-md-4" ></td>')
 																	.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' '+itemList.itemName+'</div>'))
 
-														/* 	tr
+														 	tr
 																	.append($(
-																			'<td class="col-md-4" style="text-align: left;"></td>')
+																			'<td class="col-md-1" style="text-align: left;"></td>')
 																			.html(
-																					itemList.itemName)); */
+																					itemList.itemUom)); 
 														/* 	tr
 																	.append($(
 																			'<td class="col-md-1" align="right"></td>')
@@ -1336,19 +1337,19 @@ body {
 
 																						tr
 																						.append($(
-																								'<td class="col-md-1" ></td>')
+																								'<td class="col-md-2" ></td>')
 																								.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' '+itemList.itemName+'</div>'))
 						
-														/* tr
+														 tr
 																.append($(
-																		'<td class="col-md-4" style="text-align: center;"></td>')
+																		'<td class="col-md-1" style="text-align: center;"></td>')
 																		.html(
-																				itemList.itemName)); */
-														tr
+																				itemList.itemUom)); 
+														/* tr
 																.append($(
 																		'<td class="col-md-1" align="right"></td>')
 																		.html(
-																				itemList.itemQty));
+																				itemList.itemQty)); */
 
 														/* tr
 																.append($(
@@ -1429,16 +1430,16 @@ body {
 														} else {
 															status = "Completed";
 														}
-														tr
+														/* tr
 																.append($(
 																		'<td class="col-md-1" align="right"></td>')
 																		.html(
-																				pendQty));
-														tr
+																				pendQty)); */
+														/* tr
 																.append($(
 																		'<td class="col-md-1" ></td>')
 																		.html(
-																				itemList.poNo));
+																				itemList.poNo)); */
 														tr
 																.append($(
 																		'<td class="col-md-1" ></td>')

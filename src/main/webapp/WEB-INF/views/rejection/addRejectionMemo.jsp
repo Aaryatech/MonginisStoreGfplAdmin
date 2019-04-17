@@ -504,7 +504,7 @@
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
 					html += '<option value="' + data[i].itemId + '">'
-							+ data[i].itemCode + ' &nbsp; '+data[i].itemDesc+'</option>';
+							+data[i].itemDesc+'</option>';
 				}
 				html += '</option>';
 				$('#itemId').html(html);

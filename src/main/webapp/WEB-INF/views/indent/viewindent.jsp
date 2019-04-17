@@ -238,10 +238,10 @@
 																	<c:set var="sts" value="Indet Pending"></c:set>
 																</c:when>
 																<c:when test="${indent.indMStatus==1}">
-																	<c:set var="sts" value="Partially Indent"></c:set>
+																	<c:set var="sts" value="Partially PO Raised"></c:set>
 																</c:when>
 																<c:when test="${indent.indMStatus==2}">
-																	<c:set var="sts" value="Indent Complete"></c:set>
+																	<c:set var="sts" value="PO Raised"></c:set>
 																</c:when>
 															</c:choose>
 																
@@ -256,7 +256,7 @@
 																class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;</c:when></c:choose>
 																<c:choose>
 											 					<c:when test="${isDelete==1}">
-																<c:if test="${indent.indMStatus==7 || indent.indMStatus==9}">
+																<c:if test="${indent.indMStatus==7 || indent.indMStatus==9||indent.indMStatus==0}">
 																	 <a
 															href="${pageContext.request.contextPath}/deleteIndent/${indent.indMId}" title="Delete" onClick="return confirm('Are you sure want to delete this record');"><span
 																class="glyphicon glyphicon-trash"></span></a>

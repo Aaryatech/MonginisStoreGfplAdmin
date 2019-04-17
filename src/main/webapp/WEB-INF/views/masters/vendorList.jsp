@@ -102,7 +102,7 @@
 									<thead>
 										<tr class="bgpink">
 											<th >Sr No.</th>
-											<th class="col-md-1">Code</th>
+											
 											<th class="col-md-2">Name</th>
 											<th class="col-md-1">City</th>
 											<th class="col-md-1">State</th>
@@ -120,9 +120,7 @@
 												<td ><c:out value="${count.index+1}" /></td>
 
 
-												<td class="col-md-1"><c:out
-														value="${vendorList.vendorCode}" /></td>
-
+											
 												<td class="col-md-1"><c:out
 														value="${vendorList.vendorName}" /></td>
 

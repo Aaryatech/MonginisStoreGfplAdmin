@@ -1087,13 +1087,13 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 				mrnFroApprove.setMrnStatus(3);
 				mrnId=mrnFroApprove.getMrnId();
 				String[] checkbox = request.getParameterValues("select_to_approve");
-				status=3;
+				status=4;
 				for(int i=0 ; i<checkbox.length ;i++) {
 					
 					for(int j=0 ; j<mrnFroApprove.getGetMrnDetailList().size() ; j++) {
 						
 						if(Integer.parseInt(checkbox[i])==mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId()) {
-							mrnFroApprove.getGetMrnDetailList().get(j).setMrnDetailStatus(3);
+							mrnFroApprove.getGetMrnDetailList().get(j).setMrnDetailStatus(4);
 							mrnDetalId=mrnDetalId+","+mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId();
 							break;
 						}

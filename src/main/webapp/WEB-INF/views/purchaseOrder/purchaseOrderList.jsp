@@ -233,28 +233,30 @@
 												<c:set var="poStatus" value=""></c:set>
 												<c:choose>
 													<c:when test="${poList.poStatus==9}">
-													<c:set var="poStatus" value="1st Approve Pending "></c:set>
+													<c:set var="poStatus" value="Pending For Director Approval"></c:set>
 													</c:when>
 													<c:when test="${poList.poStatus==7}">
-													<c:set var="poStatus" value="2st Approve Pending "></c:set>
+													<c:set var="poStatus" value="Pending For Director Approval"></c:set>
 													</c:when>
 													<c:when test="${poList.poStatus==0}">
-													<c:set var="poStatus" value="Grn Pending"></c:set>
+													<c:set var="poStatus" value="GRN Pending"></c:set>
 													</c:when>
 													<c:when test="${poList.poStatus==1}">
-													<c:set var="poStatus" value="Partially Grn "></c:set>
+													<c:set var="poStatus" value="Partially GRN "></c:set>
 													</c:when>
 													<c:when test="${poList.poStatus==2}">
-													<c:set var="poStatus" value="Grn Completed"></c:set>
+													<c:set var="poStatus" value="GRN Completed"></c:set>
 													</c:when>
 													
 												</c:choose>
 												
 												<td class="col-md-1"><c:out
-														value="${poStatus}" /></td>
-
-												<td><a href="javascript:genPdf(${ poList.poId});"><abbr title="PDF"><i
+														value="${poStatus}" /></td><td>
+														<c:choose>
+													<c:when test="${poList.poStatus!=9 and poList.poStatus!=7}">
+												<a href="javascript:genPdf(${ poList.poId});"><abbr title="PDF"><i
 															class="glyphicon glyphicon glyphicon-file"></i></abbr></a>
+														</c:when></c:choose> 
 														<c:choose>
 																<c:when test="${isEdit==1}">	 
 													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${poList.poId}"><abbr

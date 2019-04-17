@@ -103,6 +103,10 @@
 						<table class="table table-advance" id="table1">  
 									<thead>
 									<tr class="bgpink">
+									<c:choose>
+												<c:when test="${sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
+									
+									
 										<th style="width:1%;">Sr no.</th>
 										<th class="col-md-2">Item Name</th>
 										<th class="col-md-1" style="text-align: right">OP QTY</th>
@@ -120,6 +124,18 @@
 										<th class="col-md-1" style="text-align: right">C/L QTY</th>
 										<th class="col-md-1" style="text-align: right">C/L VALUE</th> 
 										<th class="col-md-1" style="text-align: right">C/L LANDING VALUE</th>
+										</c:when>
+										<c:otherwise>
+										<th style="width:1%;">Sr no.</th>
+										<th class="col-md-2">Item Name</th>
+										<th class="col-md-1" style="text-align: right">OP QTY</th>
+										<th class="col-md-1" style="text-align: right">APPV QTY</th>
+										<th class="col-md-1" style="text-align: right">ISSUE QTY</th>
+										<th class="col-md-1" style="text-align: right">RETURN QTY</th>
+										<th class="col-md-1" style="text-align: right">C/L QTY</th>
+										</c:otherwise>
+										</c:choose>
+										
 									</tr>
 								</thead>
 								<tbody>
@@ -133,6 +149,12 @@
 												 	or stockList.issueQty>0 or stockList.issueQtyValue>0 or stockList.damageQty>0 or stockList.damagValue>0 
 												 	or stockList.openingStock>0 or stockList.opStockValue>0}">
 										<tr>
+										
+										<c:choose>
+												<c:when test="${sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
+										
+										
+										
 											<td  ><c:out value="${sr+1}" /></td> 
 												<c:set var="sr" value="${sr+1}" ></c:set>
  
@@ -157,6 +179,24 @@
 											<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${closingStock}"/></td>
 											 <td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${closingStockValue}"/></td>
 											<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${closingStockLandingValue}"/></td>
+											</c:when>
+										<c:otherwise>
+										<td  ><c:out value="${sr+1}" /></td> 
+												<c:set var="sr" value="${sr+1}" ></c:set>
+ 
+											<td class="col-md-2"><c:out
+													value="${stockList.itemCode}" /></td>
+										<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${stockList.openingStock}" /> </td> 
+										<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${stockList.approveQty}" /> </td>
+										<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${stockList.issueQty}" /> </td> 	
+										<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${stockList.damageQty}" /> </td> 
+										<c:set var="closingStock" value="${stockList.openingStock+stockList.approveQty-stockList.issueQty-stockList.damageQty}" ></c:set>
+											<c:set var="closingStockValue" value="${stockList.opStockValue+stockList.approvedQtyValue-stockList.issueQtyValue-stockList.damagValue}" ></c:set>
+											<c:set var="closingStockLandingValue" value="${stockList.opLandingValue+stockList.approvedLandingValue-stockList.issueLandingValue-stockList.damageLandingValue}" ></c:set>	
+										<td class="col-md-1" style="text-align: right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${closingStock}"/></td>	
+											</c:otherwise>
+										</c:choose>
+											
 										</tr>
 										</c:when>
 										</c:choose>

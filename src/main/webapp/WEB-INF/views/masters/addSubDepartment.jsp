@@ -100,10 +100,10 @@
 											<c:forEach items="${deparmentList}" var="deparmentList">
 												<c:choose>
 													<c:when test="${deparmentList.deptId==editSubDept.deptId}">
-														<option value="${deparmentList.deptId}" selected>${deparmentList.deptCode}&nbsp;&nbsp;${deparmentList.deptDesc}</option>
+														<option value="${deparmentList.deptId}" selected>${deparmentList.deptDesc}</option>
 													</c:when>
 													<c:otherwise>
-														<option value="${deparmentList.deptId}">${deparmentList.deptCode}&nbsp;&nbsp;${deparmentList.deptDesc}</option>
+														<option value="${deparmentList.deptId}">${deparmentList.deptDesc}</option>
 													</c:otherwise>
 												</c:choose>
 

@@ -61,6 +61,7 @@ import com.ats.tril.model.MrnMonthWiseList;
 import com.ats.tril.model.ShortItemReport;
 import com.ats.tril.model.StockValuationCategoryWise;
 import com.ats.tril.model.Type;
+import com.ats.tril.model.login.User;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -895,26 +896,43 @@ public class ValuationReport {
 			//----------------exel-------------------------
 				
 				DecimalFormat df = new DecimalFormat("####0.00");
-			
+				HttpSession session = request.getSession();
+				User Loginuser=(User) session.getAttribute("userInfo");
+				int deptid=Loginuser.getDeptId();
+				System.out.println("deptIdsession" +deptid);
+				
 
 				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 				ExportToExcel expoExcel = new ExportToExcel();
 				List<String> rowData = new ArrayList<String>();
 
-				rowData.add("SR. No");
+				rowData.add("SR. No1111");
 				rowData.add("ITEM NAME");
 				rowData.add("OP QTY");
+				if(deptid==1 ||deptid==2)
+				{
 				rowData.add("OP VALUE");
+				}
 				rowData.add("MRN QTY");
+				if(deptid==1 ||deptid==2)
+				{
 				rowData.add("MRN VALUE");
-				rowData.add("ISSUE QTY");
+				}
+				if(deptid==1 ||deptid==2)
+				{
 				rowData.add("ISSUE VALUE");
+				}
 				rowData.add("DAMAGE QTY");
+				if(deptid==1 ||deptid==2)
+				{
 				rowData.add("DAMAGE VALUE");
+				}
 				rowData.add("C\\L QTY");
+				if(deptid==1 ||deptid==2)
+				{
 				rowData.add("C\\L VALUE");
-				
+				}
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -931,14 +949,25 @@ public class ValuationReport {
 					rowData.add((k)+"");
 					rowData.add(getStockBetweenDate.get(i).getItemCode());
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getOpeningStock()));
+					if(deptid==1 ||deptid==2)
+					{
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getOpStockValue()));
+					}
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getApproveQty()));
+					if(deptid==1 ||deptid==2)
+					{
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getApprovedQtyValue()));
+					}
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getIssueQty()));
+					if(deptid==1 ||deptid==2)
+					{
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getIssueQtyValue()));
+					}
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getDamageQty()));
+					if(deptid==1 ||deptid==2)
+					{
 					rowData.add(""+df.format(getStockBetweenDate.get(i).getDamagValue()));
-					
+					}
 					float closingQty = getStockBetweenDate.get(i).getOpeningStock()+getStockBetweenDate.get(i).getApproveQty()-
 							getStockBetweenDate.get(i).getIssueQty()-getStockBetweenDate.get(i).getDamageQty();
 					
@@ -947,8 +976,10 @@ public class ValuationReport {
 					
 					
 					rowData.add(""+df.format(closingQty));
+					if(deptid==1 ||deptid==2)
+					{
 					rowData.add(""+df.format(closingValue));
-
+					}
 
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
@@ -956,7 +987,7 @@ public class ValuationReport {
 
 				}
 
-				HttpSession session = request.getSession();
+				//HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "ItemWiseStockValue");
 				
@@ -973,6 +1004,13 @@ public class ValuationReport {
 			throws FileNotFoundException {
 		BufferedOutputStream outStream = null;
 		try {
+			
+			HttpSession session = request.getSession();
+			User Loginuser=(User) session.getAttribute("userInfo");
+			int deptid=Loginuser.getDeptId();
+			System.out.println("deptIdsession" +deptid);
+		//int deptIdsession=Integer.parseInt((String) session.getAttribute("deptId")); 
+		//System.out.println("deptIdsession" +deptIdsession);
 		Document document = new Document(PageSize.A4.rotate(), 10f, 10f, 10f, 0f);
 		DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 		String reportDate = DF.format(new Date());
@@ -999,11 +1037,11 @@ public class ValuationReport {
 			e.printStackTrace();
 		}
 	
-		PdfPTable table = new PdfPTable(17);
+		PdfPTable table = new PdfPTable(7);
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] {0.7f, 2.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
+			table.setWidths(new float[] {0.7f, 2.7f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f});
 			Font headFont = new Font(FontFamily.TIMES_ROMAN, 9, Font.NORMAL, BaseColor.BLACK);
 			Font headFont1 = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.WHITE);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 11.0f, Font.UNDERLINE, BaseColor.BLUE);
@@ -1027,6 +1065,11 @@ public class ValuationReport {
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
+			
+			
+			
+			if(deptid==1 ||deptid==2)
+			{	
 			hcell = new PdfPCell(new Phrase("OP VALUE", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1036,12 +1079,13 @@ public class ValuationReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			}
 			hcell = new PdfPCell(new Phrase("MRN QTY", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			if(deptid==1 ||deptid==2)
+			{
 			hcell = new PdfPCell(new Phrase("MRN VALUE", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1051,12 +1095,13 @@ public class ValuationReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			}
 			hcell = new PdfPCell(new Phrase("ISSUE QTY", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			if(deptid==1 ||deptid==2)
+			{
 			hcell = new PdfPCell(new Phrase("ISSUE VALUE", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1066,12 +1111,13 @@ public class ValuationReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			}
 			hcell = new PdfPCell(new Phrase("DAMAGE QTY", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			if(deptid==1 ||deptid==2)
+			{
 			hcell = new PdfPCell(new Phrase("DAMAGE VALUE", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1081,12 +1127,13 @@ public class ValuationReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			}
 			hcell = new PdfPCell(new Phrase("C/L QTY", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			if(deptid==1 ||deptid==2)
+			{
 			hcell = new PdfPCell(new Phrase("C/L VALUE", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1096,7 +1143,7 @@ public class ValuationReport {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-
+			}
 			
 			int index = 0;
 			if(!itemWiseStockValuetionListForPDF.isEmpty()) {
@@ -1132,7 +1179,8 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							if(deptid==1 ||deptid==2)
+							{
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getOpStockValue()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1146,14 +1194,15 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							}
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getApproveQty()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							if(deptid==1 ||deptid==2)
+							{
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getApprovedQtyValue()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1167,14 +1216,15 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							}
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getIssueQty()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							if(deptid==1 ||deptid==2)
+							{
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getIssueQtyValue()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1188,14 +1238,15 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							}
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getDamageQty()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							if(deptid==1 ||deptid==2)
+							{
 							cell = new PdfPCell(new Phrase(""+df.format(itemWiseStockValuetionListForPDF.get(k).getDamagValue()), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1209,7 +1260,7 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							}
 							float closingQty = itemWiseStockValuetionListForPDF.get(k).getOpeningStock()+itemWiseStockValuetionListForPDF.get(k).getApproveQty()-
 									itemWiseStockValuetionListForPDF.get(k).getIssueQty()-itemWiseStockValuetionListForPDF.get(k).getDamageQty();
 							
@@ -1225,7 +1276,8 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
-							
+							if(deptid==1 ||deptid==2)
+							{
 							cell = new PdfPCell(new Phrase(""+df.format(closingValue), headFont));
 							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 							cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -1239,6 +1291,7 @@ public class ValuationReport {
 							cell.setPaddingRight(2);
 							cell.setPadding(3);
 							table.addCell(cell);
+							}
 						}
 					}
 			}

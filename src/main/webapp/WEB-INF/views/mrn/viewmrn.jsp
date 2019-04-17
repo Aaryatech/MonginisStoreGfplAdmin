@@ -169,7 +169,9 @@
 														value="0" />All</th>
 													<th class="col-md-1" >Mrn No</th>
 													<th class="col-md-1">Date</th>
+													<th class="col-md-1">Vendor Name</th>
 													<th class="col-md-1">Type</th>
+													<th class="col-md-1">MRN Status</th>
 													<th class="col-md-1">Action</th>
 												</tr>
 											</thead>
@@ -192,6 +194,8 @@
 															name="name1" value="${mrn.mrnId}" /></td>
 														<td ><c:out value="${mrn.mrnNo}" /></td>
 														<td ><c:out value="${mrn.mrnDate}" /></td>
+														<td ><c:out value="${mrn.vendorName}" /></td>
+														
 														<c:set var="mrnType" value="o"></c:set>
 														<c:forEach items="${typeList}" var="typeList">  
 														<c:choose>
@@ -202,7 +206,22 @@
 														</c:forEach>
 													
 														<td ><c:out value="${mrnType}" /></td>
-
+														
+														
+														<td >
+														<c:choose>
+															<c:when test="${mrn.mrnStatus==0}">
+																<c:set var="mrnStatus" value="Gate Inward Done /Stores MRN Pending"></c:set>
+															</c:when> 
+															<c:when test="${mrn.mrnStatus==1 or mrn.mrnStatus==2}">
+																<c:set var="mrnStatus" value="Stores MRN Done/Director Approval Pending"></c:set>
+															</c:when>
+															<c:when test="${mrn.mrnStatus==3 or mrn.mrnStatus==4}">
+																<c:set var="mrnStatus" value="Director Approved"></c:set>
+															</c:when>
+														</c:choose>
+														<c:out value="${mrnStatus}" />
+														</td>
 														<td   >
 														
 														<a href="javascript:genPdf(${ mrn.mrnId});" title="PDF"><i
@@ -219,7 +238,7 @@
 											 					<c:choose>
 											 					<c:when test="${isDelete==1}">
 											 					<c:choose>
-											 						<c:when test="${mrn.mrnStatus==4}">
+											 						<c:when test="${mrn.mrnStatus<3}">
 											 						<a href="${pageContext.request.contextPath}/deleteMrn/${mrn.mrnId}" title="Delete" onClick="return confirm('Are you sure want to delete this record');"><span
 																class="fa fa-trash-o"></span></a>
 											 						</c:when> 
@@ -301,10 +320,13 @@ function myFunction() {
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[3];
     td1 = tr[i].getElementsByTagName("td")[1];
-    if (td || td1) {
+    td2 = tr[i].getElementsByTagName("td")[5];
+    if (td || td1 ||td2 ) {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       }  else {
         tr[i].style.display = "none";
