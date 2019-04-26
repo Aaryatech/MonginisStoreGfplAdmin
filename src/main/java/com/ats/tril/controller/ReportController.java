@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,6 +49,7 @@ import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.GetSubDept;
 import com.ats.tril.model.GetpassDetail;
 import com.ats.tril.model.GetpassReturnVendor;
+import com.ats.tril.model.MrnExcelPuch;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.Vendor;
 import com.ats.tril.model.doc.DocumentBean;
@@ -2555,5 +2559,261 @@ public class ReportController {
 
 		return docList;
 	}
+	
 
+	public static float roundUp(float d) {
+		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	}
+	@RequestMapping(value = "/excelForMrnExcel", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MrnExcelPuch> excelForMrnExcel(HttpServletRequest request, HttpServletResponse response) {
+
+		List<MrnExcelPuch> mrnExcelListRes = null;
+		MrnExcelPuch[] mrnExcelList = null;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			String checkboxes = request.getParameter("checkboxes");
+			System.out.println("checkboxes " + checkboxes);
+
+			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			System.out.println("string " + checkboxes);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnIdList", checkboxes);
+			System.out.println("map " + map);
+
+			mrnExcelList = restTemplate.postForObject(Constants.url + "/getMrnHsnwiseExcelReport", map,
+					MrnExcelPuch[].class);
+			mrnExcelListRes = new ArrayList<MrnExcelPuch>(Arrays.asList(mrnExcelList));
+			System.out.println("mrnExcelList " + mrnExcelListRes.toString());
+			List<Integer> mrnIds = Stream.of(checkboxes.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			try {
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+
+				rowData.add("MRN Id");
+				rowData.add("MRN DTL ID");
+				rowData.add("MRN_TYPE_ID");
+				rowData.add("MRN_TYPE");
+				rowData.add("MRN NO");
+				rowData.add("Date");
+				rowData.add("Bill No");
+				rowData.add("Bill Date");
+				rowData.add("PO NO");
+				rowData.add("PO Date");
+				rowData.add("Type");
+				rowData.add("Supp_id");
+				rowData.add("SUPP Code");
+				rowData.add("Supp  ERP Code");
+				rowData.add("Supplier Name");
+				rowData.add("Gst No");
+				rowData.add("State");
+				rowData.add("Cat Id");
+				rowData.add("Item Id");
+				rowData.add("Vendor ERP Code");
+				rowData.add("Item Name");
+				rowData.add("Hsn Code");
+				rowData.add("Qty");
+				rowData.add("Uom");
+				rowData.add("Rate");
+				rowData.add("Amount");
+				rowData.add("Sgst Per");
+				rowData.add("Sgst Rs");
+				rowData.add("Cgst Per");
+				rowData.add("Cgst Rs");
+				rowData.add("Igst Per");
+				rowData.add("Igst Rs");
+				rowData.add("Cess Per");
+				rowData.add("Cess Rs");
+				rowData.add("Item Disc %");
+				rowData.add("Total Discount");
+			
+				rowData.add("Total Amt");
+				rowData.add("Total Taxable Amt");
+				rowData.add("Cgst sum");
+				rowData.add("Sgst sum");
+				rowData.add("Igst sum");
+				rowData.add("Tax Amt");
+				rowData.add("P&F");
+				rowData.add("Freight");
+				rowData.add("Insurance Amt");
+				rowData.add("Other Charges After");
+				rowData.add("Bill Total");
+				rowData.add("Bill Total R.Off");
+				rowData.add("Rount Off");
+				rowData.add("Remark");
+				rowData.add("Erp Link");
+				rowData.add("Bill No_C");
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				
+				for(int l=0;l<mrnIds.size();l++)
+				{
+					float roundOff=0.0f;
+					float totalAmount=0.0f;
+					float totalTaxableAmt=0.0f;
+					float cgstSum=0.0f;float sgstSum=0.0f;float igstSum=0.0f;
+					float taxAmt=0.0f;float pAndf=0.0f;float freight=0.0f;float otherCharges=0.0f;
+					float otherChargesAfter=0.0f; float billTotal=0.0f;
+					
+					for(int j=0;j<mrnExcelListRes.size();j++)
+					{
+						
+					
+						if(mrnIds.get(l)==mrnExcelListRes.get(j).getMrnId())
+						{
+							totalTaxableAmt=totalTaxableAmt+(mrnExcelListRes.get(j).getAmount()+mrnExcelListRes.get(j).getPackValue()+mrnExcelListRes.get(j).getFreightValue()+mrnExcelListRes.get(j).getOtherChargesBefor()+mrnExcelListRes.get(j).getInsu());
+							cgstSum=cgstSum+mrnExcelListRes.get(j).getCgstRs();
+							sgstSum=sgstSum+mrnExcelListRes.get(j).getSgstRs();
+							igstSum=igstSum+mrnExcelListRes.get(j).getIgstRs();
+							pAndf=pAndf+mrnExcelListRes.get(j).getPackValue();
+							freight=freight+mrnExcelListRes.get(j).getFreightValue();
+							otherCharges=otherCharges+(mrnExcelListRes.get(j).getOtherChargesBefor()+mrnExcelListRes.get(j).getInsu());
+							otherChargesAfter=otherChargesAfter+mrnExcelListRes.get(j).getOtherChargesAfter();
+						
+						}
+					}
+					billTotal=billTotal+(totalTaxableAmt+cgstSum+sgstSum+otherChargesAfter);
+				for(int i=0;i<mrnExcelListRes.size();i++)
+				{
+					if(mrnIds.get(l)==mrnExcelListRes.get(i).getMrnId())
+					{
+						
+						int billNo=0;
+						try{
+					       billNo=Integer.valueOf(mrnExcelListRes.get(i).getBillNo());
+					    } catch (NumberFormatException e) {
+					    	billNo=0;
+					    }
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + mrnExcelListRes.get(i).getMrnId());
+				rowData.add("" + mrnExcelListRes.get(i).getMrnDetailId());
+				rowData.add("" + mrnExcelListRes.get(i).getMrnTypeId());
+				rowData.add("" + mrnExcelListRes.get(i).getMrnType());
+				rowData.add("" + mrnExcelListRes.get(i).getMrnNo());
+				rowData.add("" + mrnExcelListRes.get(i).getMrnDate());
+				if(billNo==0)
+				rowData.add("");
+				else
+				rowData.add("" + mrnExcelListRes.get(i).getBillNo());
+				rowData.add("" + mrnExcelListRes.get(i).getBillDate());
+				rowData.add("" + mrnExcelListRes.get(i).getPoNo());
+				rowData.add("" + mrnExcelListRes.get(i).getPoDate());
+				rowData.add("" + mrnExcelListRes.get(i).getType());
+				rowData.add("" + mrnExcelListRes.get(i).getSupplierId());
+				rowData.add("" + mrnExcelListRes.get(i).getSupplierCode());
+				rowData.add("" + mrnExcelListRes.get(i).getSuppErpCode());
+				rowData.add("" + mrnExcelListRes.get(i).getSupplierName());
+				rowData.add("" + mrnExcelListRes.get(i).getGstNo());
+				rowData.add("" + mrnExcelListRes.get(i).getState());
+				rowData.add("" + mrnExcelListRes.get(i).getCatId());
+				rowData.add("" + mrnExcelListRes.get(i).getItemId());
+				rowData.add("" + mrnExcelListRes.get(i).getVendorErpCode());
+				rowData.add("" + mrnExcelListRes.get(i).getItemName());
+				rowData.add("" + mrnExcelListRes.get(i).getHsnCode());
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getQty()));
+				rowData.add("" + mrnExcelListRes.get(i).getUom());
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getRate()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getAmount()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getSgstPer()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getSgstRs()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getCgstPer()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getCgstRs()));
+				rowData.add("" +roundUp(mrnExcelListRes.get(i).getIgstPer()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getIgstRs()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getCessPer()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getCessRs()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getItemDiscount()));
+				rowData.add("" + roundUp(mrnExcelListRes.get(i).getTotalDiscount()));
+				
+				
+				rowData.add(roundUp(mrnExcelListRes.get(i).getAmount()+ mrnExcelListRes.get(i).getCgstRs()+mrnExcelListRes.get(i).getSgstRs())+"");//calc//calc
+				rowData.add("" + roundUp(totalTaxableAmt));//calc
+				rowData.add("" + roundUp(cgstSum));//calc
+				rowData.add("" + roundUp(sgstSum));//calc
+				rowData.add("" + roundUp(igstSum));//calc
+				rowData.add("" + roundUp(cgstSum+sgstSum));//calc
+				
+				rowData.add(""+roundUp(pAndf));//p&f
+				rowData.add(""+roundUp(freight));//Freight
+				rowData.add(""+roundUp(otherCharges));//Other Charges
+				rowData.add(""+roundUp(otherChargesAfter));//oth chrges after
+				rowData.add(""+roundUp(billTotal));//Bill Total
+				rowData.add(""+Math.round(billTotal));//Bill Total
+				rowData.add(roundUp(Math.round(billTotal)-roundUp(billTotal))+"");//calc
+				rowData.add("");//remark==blnk
+				rowData.add("");//Erp Link==blnk
+				if(billNo==0)
+					rowData.add(""+mrnExcelListRes.get(i).getBillNo());
+				else
+					rowData.add("");
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+					}
+				}
+				
+				/*for(int l=0;l<crnIds.size();l++)
+				{
+					float docAmt=0;
+					
+					for(int j=0;j<crnExcelListRes.size();j++)
+					{
+						if(crnIds.get(l)==crnExcelListRes.get(j).getCrnId())
+						{
+							docAmt=docAmt+roundUp(crnExcelListRes.get(j).getTaxableAmt() + crnExcelListRes.get(j).getCgstRs()
+									+ crnExcelListRes.get(j).getSgstRs());
+						}
+					}
+					for(int i=0;i<crnExcelListRes.size();i++)
+					{
+						if(crnIds.get(l)==crnExcelListRes.get(i).getCrnId())
+						{
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+					rowData.add("" + (i + 1));
+					rowData.add("" + crnExcelListRes.get(i).getSupplierInvoiceNo());
+					rowData.add("" + crnExcelListRes.get(i).getSupplierInvoiceDate());
+					rowData.add("" + crnExcelListRes.get(i).getInvoiceNo());
+					rowData.add("" + crnExcelListRes.get(i).getInvoiceDate());
+					rowData.add("" + crnExcelListRes.get(i).getFrName());
+					rowData.add("" + crnExcelListRes.get(i).getItemHsncd());
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getQty()));
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getTaxableAmt()));
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getCgstRs()));
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getSgstRs()));
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getIgstRs()));
+					rowData.add("" + roundUp(crnExcelListRes.get(i).getTaxRate()));
+					rowData.add(roundUp(crnExcelListRes.get(i).getTaxableAmt() + crnExcelListRes.get(i).getCgstRs()
+							+ crnExcelListRes.get(i).getSgstRs()) + "");
+					rowData.add("" + roundUp(docAmt));
+					rowData.add("" + crnExcelListRes.get(i).getFrGstNo());
+					rowData.add("" + crnExcelListRes.get(i).getCountry());
+					rowData.add("" + crnExcelListRes.get(i).getState());
+
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+						}
+					}
+				}*/
+				
+				}
+		
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "mrnExcel");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception to genrate excel ");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return mrnExcelListRes;
+
+	}
 }

@@ -576,7 +576,7 @@ body {
 			<div class="row">
 						<div class="col-md-12" style="text-align: center">
 						<c:choose>
-															<c:when test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7}">
+															<c:when test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7 or sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
 															<input type="submit" class="btn btn-info" value="Submit" onclick="check()" >
 															</c:when>
 															</c:choose>

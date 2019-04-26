@@ -312,7 +312,7 @@
 
 <script type="text/javascript">
 			function genPdf(id) {
-				alert(id);
+			
 		
 				window.open('/pdf/poPdf/'
 						+ id );

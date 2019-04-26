@@ -365,7 +365,7 @@
 <script type="text/javascript">
 			function genPdf(id) {
 			
-				window.open('pdfForReport?url=/pdf/nonReturnableGPDoc/'
+				window.open('pdfForReport?url=pdf/nonReturnableGPDoc/'
 						+ id );
 
 			}
@@ -379,7 +379,7 @@
 					list.push($(this).val());
 				});
 
-				window.open('pdfForReport?url=/pdf/nonReturnableGPDoc/' + list);
+				window.open('pdfForReport?url=pdf/nonReturnableGPDoc/' + list);
 
 			}
 			

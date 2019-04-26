@@ -470,7 +470,7 @@
 
 function genPdf(id) {
 
-	window.open('pdfForReport?url=/pdf/poPdf/' + id);
+	window.open('pdfForReport?url=pdf/poPdf/' + id);
 
 }
 			/* function genPdf(id) {
@@ -489,7 +489,7 @@ function genPdf(id) {
 					list.push($(this).val());
 				});
 
-				window.open('pdfForReport?url=/pdf/poPdf/' + list);
+				window.open('pdfForReport?url=pdf/poPdf/' + list);
 
 			}
 			

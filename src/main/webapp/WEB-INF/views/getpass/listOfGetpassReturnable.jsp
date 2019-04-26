@@ -442,7 +442,7 @@
 <script type="text/javascript">
 			function genPdf(id) {
 			
-				window.open('pdfForReport?url=/pdf/returnableGPDoc/'
+				window.open('pdfForReport?url=pdf/returnableGPDoc/'
 						+ id );
 
 			}
@@ -456,7 +456,7 @@
 					list.push($(this).val());
 				});
 
-				window.open('pdfForReport?url=/pdf/returnableGPDoc/' + list);
+				window.open('pdfForReport?url=pdf/returnableGPDoc/' + list);
 
 			}
 			

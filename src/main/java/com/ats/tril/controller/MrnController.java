@@ -37,6 +37,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
+import com.ats.tril.model.ErpHeader;
 import com.ats.tril.model.ErrorMessage;
 import com.ats.tril.model.GetItem;
 import com.ats.tril.model.GetPODetail;
@@ -589,7 +590,72 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 		return model;
 	}
+	@RequestMapping(value = "/getMrnHeadersForERP", method = RequestMethod.GET)
+	public ModelAndView getMrnHeadersForERP(HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView model = null;
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			model = new ModelAndView("mrn/viewerpmrn");
+			// String fromDate,toDate;
+
+			if (request.getParameter("from_date") == null || request.getParameter("to_date") == null) {
+				Date date = new Date();
+				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+				fromDate = df.format(date);
+				toDate = df.format(date);
+				System.out.println("From Date And :" + fromDate + "To DATE" + toDate);
+
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				map.add("status", -1);
+				model.addObject("status", -1);
+				System.out.println("inside if ");
+			} else {
+				fromDate = request.getParameter("from_date");
+				toDate = request.getParameter("to_date");
+				int status=Integer.parseInt(request.getParameter("status"));
+				String statusOfMrn="";
+				if(status==1)
+					statusOfMrn="0";
+				if(status==2)
+					statusOfMrn="1,2";
+			    if(status==3)
+			    	statusOfMrn="3,4";
+				System.out.println("inside Else ");
+
+				System.out.println("fromDate " + fromDate);
+
+				System.out.println("toDate " + toDate);
+
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				map.add("status", statusOfMrn);
+				model.addObject("status", status);
+			}
+			// map.add("status", 0);
+
+			
+			ErpHeader[] mrnHead = rest.postForObject(Constants.url + "/ERPlistMRN", map,
+					ErpHeader[].class);
+
+			List<ErpHeader>	erpMrnHeaderList = new ArrayList<ErpHeader>();
+
+			erpMrnHeaderList = new ArrayList<ErpHeader>(Arrays.asList(mrnHead));
+
+			model.addObject("mrnHeaderList", erpMrnHeaderList);
+			model.addObject("fromDate", fromDate);
+			model.addObject("toDate", toDate);
+		
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in getMrnHeader MRN" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
 	// showEditViewMrnDetail/
 
 	List<GetMrnDetail> mrnDetailList = new ArrayList<GetMrnDetail>();

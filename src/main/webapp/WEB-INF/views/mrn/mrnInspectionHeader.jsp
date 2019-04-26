@@ -310,7 +310,7 @@
 			function genPdf(id) {
 			
 		
-				window.open('pdfForReport?url=/pdf/grnInspectionPdf/'+id
+				window.open('pdfForReport?url=pdf/grnInspectionPdf/'+id
 						 );
 
 			}
@@ -324,7 +324,7 @@
 								list.push($(this).val());
 				});
 							
-							window.open('pdfForReport?url=/pdf/grnInspectionPdf/' + list);
+							window.open('pdfForReport?url=pdf/grnInspectionPdf/' + list);
 
 						}
 			

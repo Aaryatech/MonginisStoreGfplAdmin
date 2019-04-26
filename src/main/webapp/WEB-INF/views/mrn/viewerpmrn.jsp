@@ -10,6 +10,7 @@
 
 <body>
 	<div class="container" id="main-container">
+	<c:url value="/excelForMrnExcel" var="excelForMrnExcel" />
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -46,17 +47,17 @@
 							<h3>
 								<i class="fa fa-bars"></i>MRN List
 							</h3>
-							<div class="box-tool">
+							<%-- <div class="box-tool">
 								<a href="${pageContext.request.contextPath}/showAddMrn"> Add
 									MRN</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
-							</div>
+							</div> --%>
 							 
 						</div>
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/getMrnHeaders"
+							<form action="${pageContext.request.contextPath}/getMrnHeadersForERP"
 								class="form-horizontal" id="validation-form" method="get">
 
 
@@ -83,16 +84,39 @@
 											type="text" name="to_date" required value="${toDate}" />
 									</div>
 
-<div class="col-md-1">MRN
-										Type</div>
+									<div class="col-md-1">MRN Status</div>
 									<div class="col-md-2 ">
-										<select name="grn_type" id="grn_type"
-											class="form-control chosen" placeholder="Grn Type" onchange="getInvoiceNo()"
+										<select name="status" id="status"
+											class="form-control chosen" placeholder="Mrn status"
 											data-rule-required="true">
-												<option value="-1">Select MRN Type</option>
-											<c:forEach items="${typeList}" var="typeList"> 
-															<option value="${typeList.typeId}">${typeList.typeName}</option>
-														</c:forEach>
+											<c:choose>
+											<c:when test="${status==1}">
+											<option value="-1">Select MRN Type</option>
+											<option value="1" selected>Gate Inward Done /Stores MRN Pending</option>
+											<option value="2">Stores MRN Done/Director Approval Pending</option>
+											<option value="3">Director Approved</option>
+											</c:when>
+											<c:when test="${status==2}">
+											<option value="-1">Select MRN Type</option>
+											<option value="1">Gate Inward Done /Stores MRN Pending</option>
+											<option value="2" selected>Stores MRN Done/Director Approval Pending</option>
+											<option value="3">Director Approved</option>
+											</c:when>
+											<c:when test="${status==3}">
+											<option value="-1">Select MRN Type</option>
+											<option value="1">Gate Inward Done /Stores MRN Pending</option>
+											<option value="2" >Stores MRN Done/Director Approval Pending</option>
+											<option value="3" selected>Director Approved</option>
+											</c:when>
+											<c:otherwise>
+											<option value="-1">Select MRN Type</option>
+											<option value="1">Gate Inward Done /Stores MRN Pending</option>
+											<option value="2">Stores MRN Done/Director Approval Pending</option>
+											<option value="3">Director Approved</option>
+											</c:otherwise>
+											</c:choose>
+											
+											
 										</select>
 									</div>
 <div class="col-md-1">
@@ -169,10 +193,11 @@
 														value="0" />All</th>
 													<th class="col-md-1" >Mrn No</th>
 													<th class="col-md-1">Date</th>
+													<th class="col-md-1">Bill No</th>
+													<th class="col-md-1">Bill Date</th>
 													<th class="col-md-1">Vendor Name</th>
-													<th class="col-md-1">Type</th>
 													<th class="col-md-1">MRN Status</th>
-													<th class="col-md-1">Action</th>
+													<!-- <th class="col-md-1">Action</th> -->
 												</tr>
 											</thead>
 											<!-- 	<div class="table-responsive" style="border: 0">
@@ -190,25 +215,21 @@
 											<tbody>
 												<c:forEach items="${mrnHeaderList}" var="mrn">
 													<tr>
-													<td ><input type="checkbox"
-															name="name1" value="${mrn.mrnId}" /></td>
+													<td >
+													<c:if test = "${mrn.vendorName != 'Opening'}">
+													
+													<input type="checkbox"
+															name="name1" value="${mrn.mrnId}" />
+													</c:if>
+															</td>
 														<td ><c:out value="${mrn.mrnNo}" /></td>
 														<td ><c:out value="${mrn.mrnDate}" /></td>
+														<td ><c:out value="${mrn.billNo}" /></td>
+														<td ><c:out value="${mrn.billdate}" /></td>
 														<td ><c:out value="${mrn.vendorName}" /></td>
-														
-														<c:set var="mrnType" value="o"></c:set>
-														<c:forEach items="${typeList}" var="typeList">  
-														<c:choose>
-															<c:when test="${mrn.mrnType==typeList.typeId}">
-																<c:set var="mrnType" value="${typeList.typeName}"></c:set>
-															</c:when> 
-														</c:choose>
-														</c:forEach>
 													
-														<td ><c:out value="${mrnType}" /></td>
 														
-														
-														<td >
+														<td >	<c:set var="mrnStatus" value=""/>
 														<c:choose>
 															<c:when test="${mrn.mrnStatus==0}">
 																<c:set var="mrnStatus" value="Gate Inward Done /Stores MRN Pending"></c:set>
@@ -222,20 +243,20 @@
 														</c:choose>
 														<c:out value="${mrnStatus}" />
 														</td>
-														<td   >
+														<%-- <td >
 														
-														<a href="javascript:genPdf(${ mrn.mrnId});" title="PDF"><i
+														<a href="javascript:genPdf(${mrn.mrnId});" title="PDF"><i
 															class="glyphicon glyphicon glyphicon-file"></i></a>
 													
-														&nbsp;&nbsp;&nbsp;
-														<c:choose>
+														&nbsp;&nbsp;&nbsp; --%>
+													<%-- 	<c:choose>
 																<c:when test="${isEdit==1}"><a
 															href="${pageContext.request.contextPath}/showEditViewMrnDetail/${mrn.mrnId}" title="View/Edit"><span
 																class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;</c:when></c:choose>
-															<%-- 	<a
+														 --%>	<%-- 	<a
 															href="${pageContext.request.contextPath}/editIndent/${mrn.mrnId}"><span
 											 					class="glyphicon glyphicon-info-sign"></span></a> --%>
-											 					<c:choose>
+											 				<%-- 	<c:choose>
 											 					<c:when test="${isDelete==1}">
 											 					<c:choose>
 											 						<c:when test="${mrn.mrnStatus<3}">
@@ -246,7 +267,7 @@
 											 					</c:when>
 											 					</c:choose>
 																
-														</td>
+														</td> --%>
 													</tr>
 												</c:forEach>
 
@@ -254,11 +275,9 @@
 										</table>
 										
 										<br> <br>
-										<buttons
-											style="background-color: #008CBA; border: none; color: white; text-align: center; text-decoration: none; display: block; font-size: 12px; cursor: pointer; width: 50px; height: 30px; margin: auto;"
-											onclick="commonPdf()">PDF</button>
+										<div class="col-sm-2 col-lg-2 controls"> <input type="button" id="expExcel" class="btn btn-primary" value="Export To Excel" onclick="createMrnExcel();" ></div>
 
-										
+										<br> <br>
 										
 									</div>
 
@@ -283,7 +302,46 @@
 	<!-- END Container -->
 
 	<!--basic scripts-->
-	
+<script type="text/javascript">
+function exportToExcel()
+{
+	window.open("${pageContext.request.contextPath}/exportToExcel"); 
+}
+function createMrnExcel() {
+	 
+	   var select_to_print = document.forms[0];
+		var txt = "";
+		var i;
+		var flag=0;
+		var all=0;
+		 for (i = 0; i < select_to_print.length; i++) {
+			if (select_to_print[i].checked  && select_to_print[i].value!="on") {
+	    		txt = txt + select_to_print[i].value + ",";
+	    		flag=1;
+		}
+		} 
+		 if(flag==1)
+			 {
+		$
+				.getJSON(
+						'${excelForMrnExcel}',
+						{
+							checkboxes : txt ,
+						
+							ajax : 'true'
+						},
+						function(data) {
+									 exportToExcel();
+						 
+						});
+			 }
+		 else
+			 {
+			 alert("Please select minimum 1 Mrn ");
+			 }
+
+	}
+	</script>
 	
 <script type="text/javascript">
 			function genPdf(id) {

@@ -471,13 +471,13 @@ function generateSummuryPdf() {
 	var fromDate = $("#fromDate").val();
 	var toDate = $("#toDate").val();
 	var catId = $("#catId").val();
-	window.open('pdfForReport?url=/pdf/poSummuryRegisterPdf/' + fromDate+'/'+toDate+'/'+catId);
+	window.open('pdfForReport?url=pdf/poSummuryRegisterPdf/' + fromDate+'/'+toDate+'/'+catId);
 
 }
 
 function genPdf(id) {
 
-	window.open('pdfForReport?url=/pdf/poPdf/' + id);
+	window.open('pdfForReport?url=pdf/poPdf/' + id);
 
 }
 			/* function genPdf(id) {

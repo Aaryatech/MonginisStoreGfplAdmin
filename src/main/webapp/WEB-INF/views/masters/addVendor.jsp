@@ -298,13 +298,15 @@
 										<option value="2">GFPL2</option>
 										<option value="3">OTHER</option> 
 									 </c:when>
-									 <option value="1" selected>GFPL</option>
-										<option value="2">GFPL2</option>
+									 <c:when test="${editVendor.vendorApprvBy==2}">
+									 <option value="1" >GFPL</option>
+										<option value="2" selected>GFPL2</option>
 										<option value="3">OTHER</option> 
+										</c:when>
 									 <c:when test="${editVendor.vendorApprvBy==3}">
-									 	<option value="1" selected>GFPL</option>
+									 	<option value="1" >GFPL</option>
 										<option value="2">GFPL2</option>
-										<option value="3">OTHER</option>  
+										<option value="3" selected>OTHER</option>  
 									 </c:when> 
 									 <c:otherwise>
 									 
