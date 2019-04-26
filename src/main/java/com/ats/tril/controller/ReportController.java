@@ -2594,7 +2594,7 @@ public class ReportController {
 				List<String> rowData = new ArrayList<String>();
 
 				rowData.add("MRN Id");
-				rowData.add("MRN DTL ID");
+				rowData.add("MRN DTL ID");  
 				rowData.add("MRN_TYPE_ID");
 				rowData.add("MRN_TYPE");
 				rowData.add("MRN NO");
