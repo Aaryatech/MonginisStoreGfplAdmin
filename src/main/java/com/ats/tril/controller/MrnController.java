@@ -638,10 +638,14 @@ public class MrnController {
 			List<String> rowData1 = new ArrayList<String>();
 
 			rowData1.add("Sr. No");
+			rowData1.add("Category Id");
 			rowData1.add("Category Desc");
+			rowData1.add("Group Id");
 			rowData1.add("Group Desc");
-			rowData1.add("Item Desc");
 			rowData1.add("Item UOM");
+			rowData1.add("Uom Id");
+			rowData1.add("Item Id");
+			rowData1.add("Item Desc");
 			rowData1.add("Tax Per");
 			expoExcel1.setRowData(rowData1);
 			exportToExcelList1.add(expoExcel1);
@@ -651,10 +655,14 @@ public class MrnController {
 				rowData1 = new ArrayList<String>();
 				cnt = cnt + i;
 				rowData1.add("" + (cnt));
+				rowData1.add("" + itemExcelList.get(i).getCatId());
 				rowData1.add("" + itemExcelList.get(i).getCatDesc());
+				rowData1.add("" + itemExcelList.get(i).getGrpId());
 				rowData1.add("" + itemExcelList.get(i).getGrpDesc());
-				rowData1.add("" + itemExcelList.get(i).getItemDesc());
 				rowData1.add("" + itemExcelList.get(i).getItemUom());
+				rowData1.add("" + itemExcelList.get(i).getItemUom2());
+				rowData1.add("" + itemExcelList.get(i).getItemId());
+				rowData1.add("" + itemExcelList.get(i).getItemDesc());
 				rowData1.add("" + itemExcelList.get(i).getTaxPer());
 
 				expoExcel1.setRowData(rowData1);
