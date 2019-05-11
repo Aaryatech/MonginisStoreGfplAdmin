@@ -5,51 +5,167 @@
 
 <style>
 .loader {
-  border: 16px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 16px solid #3498db;
-  width: 120px;
-  height: 120px;
-  -webkit-animation: spin 2s linear infinite; /* Safari */
-  animation: spin 2s linear infinite;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
 }
 
 /* Safari */
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+@
+-webkit-keyframes spin { 0% {
+	-webkit-transform: rotate(0deg);
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+100%
+{
+-webkit-transform
+
+
+
+
+
+
+
+
+
+
+
+
+:
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+rotate
+
+
+
+
+
+
+
+
+
+
+
+
+(360
+deg
+
+
+
+
+
+
+
+
+
+
+);
+}
+}
+@
+keyframes spin { 0% {
+	transform: rotate(0deg);
+}
+100%
+{
+transform
+
+
+
+
+
+
+
+
+
+
+
+
+:
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+rotate
+
+
+
+
+
+
+
+
+
+
+
+
+(360
+deg
+
+
+
+
+
+
+
+
+
+
+);
+}
 }
 </style>
 <style>
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
+
 #overlay2 {
-    position: fixed;
-    display: none;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(101, 113, 119, 0.5);
-    z-index: 2;
-    cursor: pointer;
+	position: fixed;
+	display: none;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(101, 113, 119, 0.5);
+	z-index: 2;
+	cursor: pointer;
 }
+
 #text2 {
-   position: absolute;
-    top: 50%;
-    left: 50%;
-    font-size: 25px;
-    color: white;
-    transform: translate(-50%,-50%);
-    -ms-transform: translate(-50%,-50%);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	font-size: 25px;
+	color: white;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
 }
 /* The Modal (background) */
 .modal {
@@ -113,16 +229,18 @@ body {
 	transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
 }
+
 .bg-overlay {
-    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    color: #fff;
-    height:auto;
-    width:auto;
-    padding-top: 10px;
-    padding-left:20px;
+	background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)),
+		url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	color: #fff;
+	height: auto;
+	width: auto;
+	padding-top: 10px;
+	padding-left: 20px;
 }
 </style>
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -131,7 +249,7 @@ body {
 	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 <body>
 	<%-- <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> --%>
- 
+
 	<c:url var="getPOHeaderList" value="/getPOHeaderList" />
 	<c:url var="getpoDetailForEditMrn" value="/getpoDetailForEditMrn" />
 
@@ -139,9 +257,11 @@ body {
 
 	<c:url var="editMrnProcess" value="/editMrnProcess" />
 
-	<c:url var="getMrnDetail" value="/getMrnDetail" /> <!--  used here -->
-	<c:url var="submitNewMrnItemOnEdit" value="/submitNewMrnItemOnEdit" /> <!--  used here -->
-	
+	<c:url var="getMrnDetail" value="/getMrnDetail" />
+	<!--  used here -->
+	<c:url var="submitNewMrnItemOnEdit" value="/submitNewMrnItemOnEdit" />
+	<!--  used here -->
+
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -165,7 +285,8 @@ body {
 						<i class="fa fa-file-o"></i>
 					</h1>
 
-				</div> --><br>
+				</div> -->
+				<br>
 			</div>
 			<!-- END Page Title -->
 			<!-- BEGIN Main Content -->
@@ -177,7 +298,7 @@ body {
 								<i class="fa fa-bars"></i> Edit MRN
 							</h3>
 							<div class="box-tool">
-							<a href="${pageContext.request.contextPath}/getMrnHeaders">Back
+								<a href="${pageContext.request.contextPath}/getMrnHeaders">Back
 									to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
@@ -188,33 +309,33 @@ body {
 							<form method="post" class="form-horizontal" id="validation-form">
 
 								<div class="form-group">
-									<label class="col-md-2">MRN Type
-									</label>
+									<label class="col-md-2">MRN Type </label>
 									<div class="col-md-3">
 										<select name="grn_type" id="grn_type"
 											class="form-control chosen" placeholder="Grn Type"
 											data-rule-required="true" disabled>
-											
-											<c:forEach items="${typeList}" var="typeList">  
-														<c:choose>
-															<c:when test="${mrnHeader.mrnType==typeList.typeId}">
-																<option value="${typeList.typeId}" selected> ${typeList.typeName}</option>
-															</c:when> 
-														</c:choose>
-														</c:forEach>
- 
+
+											<c:forEach items="${typeList}" var="typeList">
+												<c:choose>
+													<c:when test="${mrnHeader.mrnType==typeList.typeId}">
+														<option value="${typeList.typeId}" selected>
+															${typeList.typeName}</option>
+													</c:when>
+												</c:choose>
+											</c:forEach>
+
 										</select>
 									</div>
-									</div><!--End of form-group div  -->
+								</div>
+								<!--End of form-group div  -->
 
 
 								<div class="form-group">
 
 
-									
 
-									<label class="col-md-2">MRN Date
-									</label>
+
+									<label class="col-md-2">MRN Date </label>
 
 									<div class="col-md-3">
 										<input class="form-control date-picker" id="grn_date" disabled
@@ -226,18 +347,19 @@ body {
 									<div class="col-md-3">
 										<input type="text" name="grn_no" id="grn_no"
 											value="${mrnHeader.mrnNo}" class="form-control"
-											placeholder="GRN No" data-rule-required="true" readonly="readonly" />
+											placeholder="GRN No" data-rule-required="true"
+											readonly="readonly" />
 									</div>
 								</div>
-<div class="form-group">
-									<label class="col-md-2">
-										Vendor </label>
+								<div class="form-group">
+									<label class="col-md-2"> Vendor </label>
 									<div class="col-md-10">
 										<select name="vendor_id" id="vendor_id"
-											class="form-control chosen" placeholder="Vendor"  disabled="disabled"
-											data-rule-required="true">
+											class="form-control chosen" placeholder="Vendor"
+											disabled="disabled" data-rule-required="true">
 
-											<option selected value="${mrnHeader.vendorId}"><c:out value="${mrnHeader.vendorName}"/></option>
+											<option selected value="${mrnHeader.vendorId}"><c:out
+													value="${mrnHeader.vendorName}" /></option>
 
 											<%-- <c:forEach items="${vendorList}" var="vendor"
 												varStatus="count">
@@ -246,12 +368,18 @@ body {
 										</select>
 									</div>
 
-								</div><!--/form-grp  -->
-								<input type="hidden" name="gate_entry_no" id="gate_entry_no" value="${mrnHeader.gateEntryNo}"  data-rule-required="true" />
-								<input  id="gate_entry_date" type="hidden" name="gate_entry_date" value="${mrnHeader.gateEntryDate}" required />
-								<input type="hidden" name="chalan_no" id="chalan_no" data-rule-required="true" value="${mrnHeader.docNo}" />
-								<input type="hidden" name="chalan_date" id="chalan_date" class="form-control" data-rule-required="true" value="${mrnHeader.docDate}" />
-											
+								</div>
+								<!--/form-grp  -->
+								<input type="hidden" name="gate_entry_no" id="gate_entry_no"
+									value="${mrnHeader.gateEntryNo}" data-rule-required="true" />
+								<input id="gate_entry_date" type="hidden" name="gate_entry_date"
+									value="${mrnHeader.gateEntryDate}" required /> <input
+									type="hidden" name="chalan_no" id="chalan_no"
+									data-rule-required="true" value="${mrnHeader.docNo}" /> <input
+									type="hidden" name="chalan_date" id="chalan_date"
+									class="form-control" data-rule-required="true"
+									value="${mrnHeader.docDate}" />
+
 								<%-- <div class="form-group">
 									<label class="col-md-2">Gate
 										Entry No </label>
@@ -292,17 +420,15 @@ body {
 
 
 								<div class="form-group">
-									<label class="col-md-2">Bill/Chalan No
-									</label>
+									<label class="col-md-2">Bill/Chalan No </label>
 
 									<div class="col-md-3">
 										<input type="text" name="bill_no" id="bill_no"
 											class="form-control" placeholder="Bill No"
 											value="${mrnHeader.billNo}" data-rule-required="true" />
 									</div>
-<div class="col-md-1"></div>
-									<label class="col-md-2">Bill/Chalan
-										Date </label>
+									<div class="col-md-1"></div>
+									<label class="col-md-2">Bill/Chalan Date </label>
 									<div class="col-md-3">
 										<input class="form-control date-picker" id="bill_date"
 											size="16" type="text" name="bill_date"
@@ -311,26 +437,29 @@ body {
 
 								</div>
 								<div class="form-group">
-												<div class="col-md-2">Remark</div>
+									<div class="col-md-2">Remark</div>
 
-												<div class="col-md-10">
-													<input type="text" name="lorry_remark" id="lorry_remark"
-											class="form-control" placeholder="Lorry Remark" value="${mrnHeader.remark1}"
-											data-rule-required="true" />
-												</div> 
-											</div>
-								
-	<div class="col-md-2"></div>
-	
-	<div class="col-md-3">	<c:choose>
-								<c:when test="${mrnHeader.mrnStatus==4}">
-								<input class="btn btn-info"  id="getPoButton" style="text-align: center;"
-											onclick="getPoDetail(0,0)" size="16" type="button"
-											name="getPoButton" value="Get PO Detail to Add New Item"  >
-																</c:when> 
-															</c:choose> </div>
+									<div class="col-md-10">
+										<input type="text" name="lorry_remark" id="lorry_remark"
+											class="form-control" placeholder="Lorry Remark"
+											value="${mrnHeader.remark1}" data-rule-required="true" />
+									</div>
+								</div>
 
-							<br/><br/>
+								<div class="col-md-2"></div>
+
+								<div class="col-md-3">
+									<c:choose>
+										<c:when test="${mrnHeader.mrnStatus==4}">
+											<input class="btn btn-info" id="getPoButton"
+												style="text-align: center;" onclick="getPoDetail(0,0)"
+												size="16" type="button" name="getPoButton"
+												value="Get PO Detail to Add New Item">
+										</c:when>
+									</c:choose>
+								</div>
+
+								<br /> <br />
 								<div id="myModal" class="modal">
 
 									<div class="modal-content" style="color: black;">
@@ -342,16 +471,20 @@ body {
 													style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
 													<table width="100%" border="0"
 														class="table table-bordered table-striped fill-head "
-														style="width: 100%;font-size:14px;" id="table_grid2">
+														style="width: 100%; font-size: 14px;" id="table_grid2">
 														<thead>
 															<tr>
-																<th   style="text-align: center; width: 2%">Sr</th>
-																<th  class="col-md-1" style="text-align: center;">Item</th>
-																<th  class="col-md-1" style="text-align: center;">PO QTY</th>
-																<th  class="col-md-1" style="text-align: center;">Rec QTY</th>
-																<th  class="col-md-1" style="text-align: center;">Pend QTY</th>
-																<th  class="col-md-1" style="text-align: center;">Po No</th>
-																<th  class="col-md-1" style="text-align: center;">Status</th>
+																<th style="text-align: center; width: 2%">Sr</th>
+																<th class="col-md-1" style="text-align: center;">Item</th>
+																<th class="col-md-1" style="text-align: center;">PO
+																	QTY</th>
+																<th class="col-md-1" style="text-align: center;">Rec
+																	QTY</th>
+																<th class="col-md-1" style="text-align: center;">Pend
+																	QTY</th>
+																<th class="col-md-1" style="text-align: center;">Po
+																	No</th>
+																<th class="col-md-1" style="text-align: center;">Status</th>
 															</tr>
 														</thead>
 														<tbody>
@@ -377,18 +510,18 @@ body {
 									<div class="row">
 										<div
 											style="overflow: scroll; height: auto; width: 100%; overflow: auto">
-											<table width="100%" border="1"
-												class="table table-advanced "
-												style="width: 100%;font-size:14px;" id="table_grid1">
+											<table width="100%" border="1" class="table table-advanced "
+												style="width: 100%; font-size: 14px;" id="table_grid1">
 												<thead>
 													<tr>
-														<th   style="  width: 2%;">Sr</th>
-														<th  class="col-md-1"  >Item </th>
+														<th style="width: 2%;">Sr</th>
+														<th class="col-md-1">Item</th>
+														<th class="col-md-1">UOM</th>
 														<!-- <th  class="col-md-1"  >PO QTY</th> -->
-														<th  class="col-md-1"  >Mrn QTY</th>
+														<th class="col-md-1">Mrn QTY</th>
 														<!-- <th  class="col-md-1"  >PO No</th> -->
-														<th  class="col-md-1"  >Status</th>
-														<th  class="col-md-1"  >Action</th>
+														<th class="col-md-1">Status</th>
+														<th class="col-md-1">Action</th>
 													</tr>
 												</thead>
 
@@ -398,12 +531,16 @@ body {
 
 														<tr>
 
-															<td style="  width: 2%;"><c:out
+															<td style="width: 2%;"><c:out
 																	value="${count.index+1}" /></td>
-														
-															<td class="col-md-2"  >
-															<div title="${mrnDetail.itemName}">${mrnDetail.itemCode} ${mrnDetail.itemName}</div>
+
+															<td class="col-md-2">
+																<div title="${mrnDetail.itemName}">${mrnDetail.itemCode}
+																	${mrnDetail.itemName}</div>
 															</td>
+
+															<td class="col-md-1"><c:out
+																	value="${mrnDetail.itemUom}" /></td>
 															<c:set var="status" value="o"></c:set>
 															<c:choose>
 																<c:when test="${mrnDetail.mrnDetailStatus==0}">
@@ -423,33 +560,33 @@ body {
 															<%-- <td class="col-md-1"  style="text-align: right;"><c:out
 																	value="${mrnDetail.poQty}" /></td> --%>
 
-															<td class="col-md-1"  >
-															<input type="text" style="text-align: right;"  class="form-control" id="mrnRecQty${mrnDetail.mrnDetailId}" onchange="updateMrnQty(this.value,${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})" name="mrnRecQty${mrnDetail.mrnDetailId}" value="${mrnDetail.mrnQty}">
-															</td>
+															<td class="col-md-1"><input type="text"
+																style="text-align: right;" class="form-control"
+																id="mrnRecQty${mrnDetail.mrnDetailId}"
+																onchange="updateMrnQty(this.value,${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})"
+																name="mrnRecQty${mrnDetail.mrnDetailId}"
+																value="${mrnDetail.mrnQty}"></td>
 
 															<%-- <td class="col-md-1"  ><c:out
 																	value="${mrnDetail.poNo}" /></td> --%>
 
-															<td class="col-md-1"  ><c:out
-																	value="${status}" /></td>
-															<td class="col-md-1"  >		
-															<c:choose>
-																<c:when test="${(mrnDetail.chalanQty==0) && (mrnHeader.mrnStatus<3)}">
-																	<a
-															href="${pageContext.request.contextPath}/deleteMrnDetail/${mrnDetail.mrnDetailId}" title="Delete"><span
-																class="fa fa-trash-o"></span></a>
-																</c:when> 
-																     
-																 <c:when test="${(mrnDetail.chalanQty==1) }">
+															<td class="col-md-1"><c:out value="${status}" /></td>
+															<td class="col-md-1"><c:choose>
+																	<c:when
+																		test="${(mrnDetail.chalanQty==0) && (mrnHeader.mrnStatus<3)}">
+																		<a
+																			href="${pageContext.request.contextPath}/deleteMrnDetail/${mrnDetail.mrnDetailId}"
+																			title="Delete"><span class="fa fa-trash-o"></span></a>
+																	</c:when>
+
+																	<c:when test="${(mrnDetail.chalanQty==1) }">
 																	Item Issued
 																</c:when>
-																   <c:otherwise>
+																	<c:otherwise>
 																   Issue Remaining
 																   </c:otherwise>
-																 
-															</c:choose>
-															
-																</td>
+
+																</c:choose></td>
 
 														</tr>
 													</c:forEach>
@@ -459,15 +596,17 @@ body {
 										</div>
 									</div>
 								</div>
-<div class="col-md-5"></div>
-					<button class="buttonload" id="loader" style="display: none">
-						<i class="fa fa-spinner fa-spin" style="color: red;"></i>Loading
-					</button>
-					<input type="hidden" name="lorry_no" id="lorry_no" value="${mrnHeader.lrNo}" data-rule-required="true" />
-					<input type="hidden" name="transport" id="transport" value="${mrnHeader.transport}" data-rule-required="true" />
-					<input id="lorry_date" type="hidden" name="lorry_date" value="${mrnHeader.lrDate}" required />		
-								 <div class="form-group">
-								 </div>
+								<div class="col-md-5"></div>
+								<button class="buttonload" id="loader" style="display: none">
+									<i class="fa fa-spinner fa-spin" style="color: red;"></i>Loading
+								</button>
+								<input type="hidden" name="lorry_no" id="lorry_no"
+									value="${mrnHeader.lrNo}" data-rule-required="true" /> <input
+									type="hidden" name="transport" id="transport"
+									value="${mrnHeader.transport}" data-rule-required="true" /> <input
+									id="lorry_date" type="hidden" name="lorry_date"
+									value="${mrnHeader.lrDate}" required />
+								<div class="form-group"></div>
 								<%-- <div class="form-group">
 									<label class="col-md-2">Lorry No</label>
 									<div class="col-md-3">
@@ -503,23 +642,25 @@ body {
 									</div>
 								</div> --%>
 
-<input type="hidden" value="${mrnHeader.mrnId}" name="mrnId" id="mrnId">
+								<input type="hidden" value="${mrnHeader.mrnId}" name="mrnId"
+									id="mrnId">
 							</form>
 
 						</div>
 					</div>
 					<div class="form-group">
-					<div class="col-md-4"></div>
-					<div class="col-md-3" align= center>
-					
-						<c:choose>
-								<c:when test="${mrnHeader.mrnStatus<3}">
-								<input type="button" onclick="editMrn()" class="btn btn-info" value="Submit">
-																</c:when> 
-															</c:choose>
-						
+						<div class="col-md-4"></div>
+						<div class="col-md-3" align=center>
 
-					</div>
+							<c:choose>
+								<c:when test="${mrnHeader.mrnStatus<3}">
+									<input type="button" onclick="editMrn()" class="btn btn-info"
+										value="Submit">
+								</c:when>
+							</c:choose>
+
+
+						</div>
 					</div>
 				</div>
 			</div>
@@ -528,8 +669,8 @@ body {
 	</div>
 	<!-- END Main Content -->
 	<footer>
-				<p>2019 © MONGINIS</p>
-			</footer>
+		<p>2019 © MONGINIS</p>
+	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
@@ -690,7 +831,7 @@ body {
 		
 	</script>
 
-		
+
 	<script>
 		// Get the modal
 		var modal = document.getElementById('myModal');
@@ -803,7 +944,7 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 	</script>
 
 
-<!-- 	<script>
+	<!-- 	<script>
 		function myFunction() {
 			var input, filter, table, tr, td, i;
 			input = document.getElementById("myInput");
@@ -921,7 +1062,7 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 			}
 		}
 	</script>
-<!-- 	<script type="text/javascript">
+	<!-- 	<script type="text/javascript">
 	function insertMrn(){
 		
 		alert("Insert Mrn ");
@@ -930,9 +1071,9 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 	</script>
  -->
 
-<!-- temp Submit from modal submit -->
+	<!-- temp Submit from modal submit -->
 
-<!-- temp Submit from modal submit -->
+	<!-- temp Submit from modal submit -->
 
 	<script type="text/javascript">
 
@@ -1000,7 +1141,7 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 
 
 
-<!-- temp Submit from modal submit end -->
+	<!-- temp Submit from modal submit end -->
 
 
 

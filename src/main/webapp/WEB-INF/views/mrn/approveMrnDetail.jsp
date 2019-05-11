@@ -3,7 +3,7 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
- 
+
 <body>
 
 
@@ -11,7 +11,7 @@
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-<c:url var="editMemoQty" value="/editMemoQty"></c:url>
+	<c:url var="editMemoQty" value="/editMemoQty"></c:url>
 
 	<div class="container" id="main-container">
 
@@ -36,7 +36,8 @@
 						<i class="fa fa-file-o"></i>Edit Rejection Memo
 					</h1>
 				</div>
-			</div> --><br>
+			</div> -->
+			<br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -45,9 +46,12 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Approve<c:choose>
-								<c:when test="${approve==1}">1</c:when><c:when test="${approve==2}">2</c:when>
-								</c:choose> MRN Detail
+								<i class="fa fa-table"></i>Approve
+								<c:choose>
+									<c:when test="${approve==1}">1</c:when>
+									<c:when test="${approve==2}">2</c:when>
+								</c:choose>
+								MRN Detail
 							</h3>
 
 							<%-- <div class="box-tool">
@@ -69,21 +73,21 @@
 
 									<div class="col-md-2">Mrn Type:</div>
 									<div class="col-md-3">
-									
-									<c:forEach items="${typeList}" var="typeList"> 
-															<c:choose>
-																<c:when test="${typeList.typeId==mrnFroApprove.mrnType}">
+
+										<c:forEach items="${typeList}" var="typeList">
+											<c:choose>
+												<c:when test="${typeList.typeId==mrnFroApprove.mrnType}">
 																	${typeList.typeName}
 																</c:when>
-																 
-															</c:choose> 
-														</c:forEach>
-									 
+
+											</c:choose>
+										</c:forEach>
+
 									</div>
 
 									<div class="col-md-2">Mrn Date:</div>
 									<div class="col-md-3">
-									${mrnFroApprove.mrnDate}
+										${mrnFroApprove.mrnDate}
 										<%-- <input class="form-control" id="rejectionNo"
 											placeholder="Rejection No" type="text" name="rejectionNo"   value="${editRejection.rejectionNo}"/> --%>
 									</div>
@@ -92,187 +96,181 @@
 								<div class="box-content">
 
 									<div class="col-md-2">Vendor Name :</div>
-									<div class="col-md-3">
-									${mrnFroApprove.vendorName}
+									<div class="col-md-3">${mrnFroApprove.vendorName}</div>
 
-										 
-
-									</div>
-									
 									<div class="col-md-2">Bill Number :</div>
-									<div class="col-md-3">
-									${mrnFroApprove.billNo}
+									<div class="col-md-3">${mrnFroApprove.billNo}</div>
 
-										 
+								</div>
+								<br>
 
-									</div>
-									  
-									</div>
-									<br>  
-									
-									<div class="box-content">
-									
+								<div class="box-content">
+
 									<div class="col-md-2">Mrn No:</div>
-									<div class="col-md-3">
-									${mrnFroApprove.mrnNo}
- 
-									</div>
- 
- 								<div class="col-md-2">Bill Date:</div>
-									<div class="col-md-3">
-									${mrnFroApprove.billDate}
- 
-									</div>
-										<%-- <div class="col-md-2">Indent No:</div>
+									<div class="col-md-3">${mrnFroApprove.mrnNo}</div>
+
+									<div class="col-md-2">Bill Date:</div>
+									<div class="col-md-3">${mrnFroApprove.billDate}</div>
+									<%-- <div class="col-md-2">Indent No:</div>
 									<div class="col-md-3">
 									${poHeaderForApprove.indNo}
  
 									</div> --%>
-									</div>
-									<br>
-
-									  
-									<div class="box-content">
+								</div>
+								<br>
 
 
+								<div class="box-content">
 
-										<div class="col-md-2">Remark:</div>
-										<div class="col-md-3">
+
+
+									<div class="col-md-2">Remark:</div>
+									<div class="col-md-3">
 										${mrnFroApprove.remark1}
-											<%-- <input type="text" name="remark" id="remark"
+										<%-- <input type="text" name="remark" id="remark"
 												placeholder="Remark" class="form-control"  value="${editRejection.rejectionRemark}"/> --%>
 
-										</div>
-										 
 									</div>
 
-									<br>
-									
-									<br>
-								
+								</div>
+
+								<br> <br>
+
 								<c:choose>
-										<c:when test="${approve==1}"> 
-												 
-													 
-														<div class="table-responsive" style="border: 0">
-																<table class="table table-advance" id="table1">
-																<thead>
-																	<tr>
-																	
-																	<th  ><input type="checkbox" id="allCheckTable1"   onClick="selectAll(this)"  />All</th>
-																		<th style="width:2%;">Sr.No.</th>
-																		<th>Item Name</th>
-																		<th class="col-md-2">MRN Qty</th>
-																		<th class="col-md-2">Approved Qty</th>
-																		<th class="col-md-2">Rejected Qty</th>
-				 
-																	</tr>
-																</thead>
-				
-																<tbody>
-				
-																	<c:forEach items="${mrnFroApprove.getMrnDetailList}" var="mrnDetailList"
-																		varStatus="count">
-																		<tr>
-																		<td  > 
-																		<c:choose>
-																			<c:when test="${mrnDetailList.mrnDetailStatus==3}">
-																			<input type="checkbox" id="select_to_approve${mrnDetailList.mrnDetailId}"
-															name="select_to_approve" value="${mrnDetailList.mrnDetailId}" checked/>
-																			</c:when>
-																			<c:otherwise>
-																			<input type="checkbox" id="select_to_approve${mrnDetailList.mrnDetailId}"
-															name="select_to_approve" value="${mrnDetailList.mrnDetailId}"  />
-																			
-																			</c:otherwise>
-																		</c:choose> </td>
-																			<td  ><c:out value="${count.index+1}" /></td>
-				 
-																			<td  ><c:out
-																					value="${mrnDetailList.itemCode} ${mrnDetailList.itemName}" /></td>
-				
-																			<td  >${mrnDetailList.mrnQty}</td>
-																			<td  >${mrnDetailList.approveQty}</td>
-																			<td  >${mrnDetailList.rejectQty}</td>
-				 
-																		</tr>
-																	</c:forEach>
-				
-				
-																</tbody>
-															</table>
-														</div>
-													 
-												 
-										</c:when>
-										<c:when test="${approve==2}">
-														  
-														<div class="table-responsive" style="border: 0">
-																<table class="table table-advance" id="table1">
-																<thead>
-																	<tr>
-																	
-																	<th  ><input type="checkbox" id="allCheckTable1"   onClick="selectAll(this)"  />All</th>
-																		<th style="width:2%;">Sr.No.</th>
-																		<th>Item Name</th>
-																		<th class="col-md-2">MRN Qty</th>
-																		<th class="col-md-2">Approved Qty</th>
-																		<th class="col-md-2">Rejected Qty</th>
-				 
-																	</tr>
-																</thead>
-				
-																<tbody>
-				
-																	<c:forEach items="${mrnFroApprove.getMrnDetailList}" var="mrnDetailList"
-																		varStatus="count">
-																		<tr>
-																		<td  > 
-																		<c:choose>
-																			<c:when test="${mrnDetailList.mrnDetailStatus==3}">
-																			<input type="checkbox" id="select_to_approve${mrnDetailList.mrnDetailId}"
-															name="select_to_approve" value="${mrnDetailList.mrnDetailId}" checked/>
-																			</c:when>
-																			<c:otherwise>
-																			<input type="checkbox" id="select_to_approve${mrnDetailList.mrnDetailId}"
-															name="select_to_approve" value="${mrnDetailList.mrnDetailId}" disabled/>
-																			
-																			</c:otherwise>
-																		</c:choose>
-																		 </td>
-																			<td  ><c:out value="${count.index+1}" /></td>
-				 
-																			<td  ><c:out
-																					value="${mrnDetailList.itemCode} ${mrnDetailList.itemName}" /></td>
-				
-																			<td  >${mrnDetailList.mrnQty}</td>
-																			<td  >${mrnDetailList.approveQty}</td>
-																			<td  >${mrnDetailList.rejectQty}</td>
-				 
-																		</tr>
-																	</c:forEach>
-				
-				
-																</tbody>
-															</table>
-														</div>
-													 
-										 
-										 </c:when>
+									<c:when test="${approve==1}">
+
+
+										<div class="table-responsive" style="border: 0">
+											<table class="table table-advance" id="table1">
+												<thead>
+													<tr>
+
+														<th><input type="checkbox" id="allCheckTable1"
+															onClick="selectAll(this)" />All</th>
+														<th style="width: 2%;">Sr.No.</th>
+														<th>Item Name</th>
+														<th class="col-md-1">UOM</th>
+														<th class="col-md-2">MRN Qty</th>
+														<th class="col-md-2">Approved Qty</th>
+														<th class="col-md-2">Rejected Qty</th>
+
+													</tr>
+												</thead>
+
+												<tbody>
+
+													<c:forEach items="${mrnFroApprove.getMrnDetailList}"
+														var="mrnDetailList" varStatus="count">
+														<tr>
+															<td><c:choose>
+																	<c:when test="${mrnDetailList.mrnDetailStatus==3}">
+																		<input type="checkbox"
+																			id="select_to_approve${mrnDetailList.mrnDetailId}"
+																			name="select_to_approve"
+																			value="${mrnDetailList.mrnDetailId}" checked />
+																	</c:when>
+																	<c:otherwise>
+																		<input type="checkbox"
+																			id="select_to_approve${mrnDetailList.mrnDetailId}"
+																			name="select_to_approve"
+																			value="${mrnDetailList.mrnDetailId}" />
+
+																	</c:otherwise>
+																</c:choose></td>
+															<td><c:out value="${count.index+1}" /></td>
+
+															<td><c:out
+																	value="${mrnDetailList.itemCode} ${mrnDetailList.itemName}" /></td>
+															<td>${mrnDetailList.itemUom}</td>
+
+															<td>${mrnDetailList.mrnQty}</td>
+															<td>${mrnDetailList.approveQty}</td>
+															<td>${mrnDetailList.rejectQty}</td>
+
+														</tr>
+													</c:forEach>
+
+
+												</tbody>
+											</table>
+										</div>
+
+
+									</c:when>
+									<c:when test="${approve==2}">
+
+										<div class="table-responsive" style="border: 0">
+											<table class="table table-advance" id="table1">
+												<thead>
+													<tr>
+
+														<th><input type="checkbox" id="allCheckTable1"
+															onClick="selectAll(this)" />All</th>
+														<th style="width: 2%;">Sr.No.</th>
+														<th>Item Name</th>
+														<th class="col-md-2">MRN Qty</th>
+														<th class="col-md-2">Approved Qty</th>
+														<th class="col-md-2">Rejected Qty</th>
+
+													</tr>
+												</thead>
+
+												<tbody>
+
+													<c:forEach items="${mrnFroApprove.getMrnDetailList}"
+														var="mrnDetailList" varStatus="count">
+														<tr>
+															<td><c:choose>
+																	<c:when test="${mrnDetailList.mrnDetailStatus==3}">
+																		<input type="checkbox"
+																			id="select_to_approve${mrnDetailList.mrnDetailId}"
+																			name="select_to_approve"
+																			value="${mrnDetailList.mrnDetailId}" checked />
+																	</c:when>
+																	<c:otherwise>
+																		<input type="checkbox"
+																			id="select_to_approve${mrnDetailList.mrnDetailId}"
+																			name="select_to_approve"
+																			value="${mrnDetailList.mrnDetailId}" disabled />
+
+																	</c:otherwise>
+																</c:choose></td>
+															<td><c:out value="${count.index+1}" /></td>
+
+															<td><c:out
+																	value="${mrnDetailList.itemCode} ${mrnDetailList.itemName}" /></td>
+
+															<td>${mrnDetailList.mrnQty}</td>
+															<td>${mrnDetailList.approveQty}</td>
+															<td>${mrnDetailList.rejectQty}</td>
+
+														</tr>
+													</c:forEach>
+
+
+												</tbody>
+											</table>
+										</div>
+
+
+									</c:when>
 								</c:choose>
-								
-								
+
+
 								<%-- <c:choose>
 										<c:when test="${approve==1}">  --%>
-										
-										<div class="row">
-												<div class="col-md-12" style="text-align: center">
-												<input type="hidden" name="approve" id="approve" value="${approve}">
-													<%-- <a href="${pageContext.request.contextPath}/submitApprove/${approve}"> --%><input type="submit" class="btn btn-info" value="Submit"  ><!-- </a> -->
-						 
-												</div>
-										</div>
-										<%-- </c:when>
+
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+										<input type="hidden" name="approve" id="approve"
+											value="${approve}">
+										<%-- <a href="${pageContext.request.contextPath}/submitApprove/${approve}"> --%>
+										<input type="submit" class="btn btn-info" value="Submit">
+										<!-- </a> -->
+
+									</div>
+								</div>
+								<%-- </c:when>
 										<c:when test="${approve==2}"> 
 										
 										<div class="row">
@@ -298,24 +296,24 @@
 
 
 							</form>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<footer>
-				<p>2019 © MONGINIS</p>
-			</footer>
 		</div>
 
-		<!-- END Main Content -->
+		<footer>
+			<p>2019 © MONGINIS</p>
+		</footer>
+	</div>
+
+	<!-- END Main Content -->
 
 
-		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-			class="fa fa-chevron-up"></i></a>
+	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+		class="fa fa-chevron-up"></i></a>
 
-		<!-- END Content -->
+	<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -376,7 +374,7 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-	  
+
 	<script type="text/javascript">
 		function search() {
 
@@ -432,24 +430,23 @@
 							});
 		}
 	</script>
-	
+
 	<script type="text/javascript">
-	function editMemoQty(memoQty,rejDetailId){
-	
+		function editMemoQty(memoQty, rejDetailId) {
 
-		 $.getJSON('${editMemoQty}',{
+			$.getJSON('${editMemoQty}', {
 
-			 rejDetailId : rejDetailId,
-			 memoQty : memoQty,
-		    	ajax : 'true',
+				rejDetailId : rejDetailId,
+				memoQty : memoQty,
+				ajax : 'true',
 
-		    }, function(data) {
-				
-			    $("#loader").hide();
+			}, function(data) {
+
+				$("#loader").hide();
 
 			});
-		
-	}
+
+		}
 	</script>
 
 

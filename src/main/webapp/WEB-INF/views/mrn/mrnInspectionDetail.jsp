@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
- <link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
-	 <style>
+<style>
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -71,30 +71,33 @@ body {
 	transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
 }
+
 .bg-overlay {
-    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    color: #fff;
-    height:auto;
-    width:auto;
-    padding-top: 10px;
-    padding-left:20px;
+	background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)),
+		url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	color: #fff;
+	height: auto;
+	width: auto;
+	padding-top: 10px;
+	padding-left: 20px;
 }
 </style>
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	  
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 
 	<c:url var="geIntendDetailByIndId" value="/geIntendDetailByIndId"></c:url>
-		<c:url var="updateRmQty0" value="/updateRmQty0"></c:url>
-		<c:url var="getRmCategory" value="/getRmCategory" />
-			<c:url var="getRmListByCatId" value="/getRmListByCatId" />
-						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
+	<c:url var="updateRmQty0" value="/updateRmQty0"></c:url>
+	<c:url var="getRmCategory" value="/getRmCategory" />
+	<c:url var="getRmListByCatId" value="/getRmListByCatId" />
+	<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 
-	<c:url var="calculatePurchaseHeaderValues" value="/calculatePurchaseHeaderValues" />
+	<c:url var="calculatePurchaseHeaderValues"
+		value="/calculatePurchaseHeaderValues" />
 
 
 	<!-- BEGIN Sidebar -->
@@ -125,7 +128,7 @@ body {
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-	<%-- 	<div id="breadcrumbs">
+		<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
@@ -134,7 +137,7 @@ body {
 			</ul>
 		</div> --%>
 		<!-- END Breadcrumb -->
-		
+
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
@@ -142,206 +145,236 @@ body {
 					<i class="fa fa-bars"></i>MRN Inspection Detail
 				</h3>
 				<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showMrnForInspection">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-				
+					<a href="${pageContext.request.contextPath}/showMrnForInspection">Back
+						to List</a> <a data-action="collapse" href="#"><i
+						class="fa fa-chevron-up"></i></a>
+				</div>
+
 
 			</div>
 
-				<div class="box-content">
-					 
-		<div class="col-md-12">
-			<form id="submitPurchaseOrder"
-				action="${pageContext.request.contextPath}/submitMrnInspection"
-				method="post">
 			<div class="box-content">
-				<div class="col-md-2">MRN No.  </div>
-				<div class="col-md-3">${getMrnHeader.mrnNo}</div>
-				<div class="col-md-2">MRN Date</div> 
-				<div class="col-md-3">${getMrnHeader.mrnDate}</div>
-				</div><br/>
-				<%-- <div class="box-content">
+
+				<div class="col-md-12">
+					<form id="submitPurchaseOrder"
+						action="${pageContext.request.contextPath}/submitMrnInspection"
+						method="post">
+						<div class="box-content">
+							<div class="col-md-2">MRN No.</div>
+							<div class="col-md-3">${getMrnHeader.mrnNo}</div>
+							<div class="col-md-2">MRN Date</div>
+							<div class="col-md-3">${getMrnHeader.mrnDate}</div>
+						</div>
+						<br />
+						<%-- <div class="box-content">
 				<div class="col-md-2" >Vendor Name</div>
 									<div class="col-md-3">
 										${getMrnHeader.vendorName}
 									</div>
 					 
 			</div><br/> --%>
-			
-			<div class="box-content">
-				 
-					<div class="col-md-2" >MRN Type</div>
-									<div class="col-md-3">
-										<c:choose>
-											<c:when test="${getMrnHeader.mrnType==1}">
+
+						<div class="box-content">
+
+							<div class="col-md-2">MRN Type</div>
+							<div class="col-md-3">
+								<c:choose>
+									<c:when test="${getMrnHeader.mrnType==1}">
 												Regular
 											</c:when>
-											<c:when test="${getMrnHeader.mrnType==2}">
+									<c:when test="${getMrnHeader.mrnType==2}">
 												Job Work
 											</c:when>
-											<c:when test="${getMrnHeader.mrnType==3}">
+									<c:when test="${getMrnHeader.mrnType==3}">
 								             General
 											</c:when>
-											<c:when test="${getMrnHeader.mrnType==4}">
+									<c:when test="${getMrnHeader.mrnType==4}">
 												Other
 											</c:when>
-										
-										</c:choose>
-										
-									</div>
-				 
-			</div><br/>
-			
-			<div class="box-content">
-			<div class="col-md-2" >Bill No.</div>
-					<div class="col-md-3">
-									${getMrnHeader.billNo}
-					</div>
-						<div class="col-md-2" >Bill Date</div>
-							<div class="col-md-2">
-								${getMrnHeader.billDate}
+
+								</c:choose>
+
 							</div>
-			<div class="col-md-2"><input type="button" class="btn btn-info" value="Get Item For MRN Inspection "  id="myBtn"></div>
-		
-							</div><br/>
-	
-								
-				<div class=" box-content">
-					<div class="row">
-								<div style="overflow:scroll;height:35%;width:100%;overflow:auto">
-									<table width="100%" border="0"class="table table-bordered table-striped fill-head "
+
+						</div>
+						<br />
+
+						<div class="box-content">
+							<div class="col-md-2">Bill No.</div>
+							<div class="col-md-3">${getMrnHeader.billNo}</div>
+							<div class="col-md-2">Bill Date</div>
+							<div class="col-md-2">${getMrnHeader.billDate}</div>
+							<div class="col-md-2">
+								<input type="button" class="btn btn-info"
+									value="Get Item For MRN Inspection " id="myBtn">
+							</div>
+
+						</div>
+						<br />
+
+
+						<div class=" box-content">
+							<div class="row">
+								<div
+									style="overflow: scroll; height: 35%; width: 100%; overflow: auto">
+									<table width="100%" border="0"
+										class="table table-bordered table-striped fill-head "
 										style="width: 100%" id="table_grid2">
 										<thead>
 											<tr>
-										<th>Sr.No.</th>
-										<th>Item Code</th>
-										<th>Item Name </th>
-										<!-- <th>PO Qty</th> -->
-										<th>MRN Qty</th> 
-										<!-- <th>Approve QTY</th> -->
-										<!-- <th>Reject QTY</th> -->
-									
-									</tr>
+												<th>Sr.No.</th>
+												<th>Item Code</th>
+												<th>Item Name</th>
+												<th>UOM</th>
+												<!-- <th>PO Qty</th> -->
+												<th>MRN Qty</th>
+												<!-- <th>Approve QTY</th> -->
+												<!-- <th>Reject QTY</th> -->
+
+											</tr>
 										</thead>
 										<tbody>
-										
-										<c:forEach items="${getMrnDetailList}" var="getMrnDetail"
-													varStatus="count">
-													 
-													<tr>
-													  
-														<td><c:out value="${count.index+1}" /></td>
-  
-																<td align="left"><c:out value="${getMrnDetail.itemCode}" /></td>
-																<td align="left"><c:out value="${getMrnDetail.itemName}" /></td>
-																<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
-																<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
-													  			<td align="right"><c:out value="${getMrnDetail.approveQty}" /></td>
-													  			<%-- <td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td> --%>
-													  			</tr>
-												</c:forEach>
+
+											<c:forEach items="${getMrnDetailList}" var="getMrnDetail"
+												varStatus="count">
+
+												<tr>
+
+													<td><c:out value="${count.index+1}" /></td>
+
+													<td align="left"><c:out
+															value="${getMrnDetail.itemCode}" /></td>
+													<td align="left"><c:out
+															value="${getMrnDetail.itemName}" /></td>
+
+													<td align="left"><c:out
+															value="${getMrnDetail.itemUom}" /></td>
+													<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
+													<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
+													<td align="right"><c:out
+															value="${getMrnDetail.approveQty}" /></td>
+													<%-- <td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td> --%>
+												</tr>
+											</c:forEach>
 										</tbody>
 									</table>
 								</div>
 							</div>
-		</div>
-			<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<c:choose>
-						<c:when test="${getMrnHeader.mrnStatus==2}">
-						<input type="submit" class="btn btn-info" value="Already Inspection Done" disabled>
-						</c:when>
-						<c:otherwise>
-						<input type="submit" class="btn btn-info" value="Submit">
-						</c:otherwise>
-							</c:choose>
-							
-
-
 						</div>
-					</div>
-				
-			</form>
-			
-			 <form id="submitList"
-				action="${pageContext.request.contextPath}/submitMrnInspectionList"
-				method="post">
-			<div id="myModal" class="modal">
-					<input  type="hidden" value="0" name="mrnId" id="mrnId"    >
-					
-										      
-					<div class="modal-content" style="color: black;">
-						<span class="close" id="close">&times;</span>
-						<h3 style="text-align: center;">Item From MRN</h3>
-							<div class="box-content">
-							<div class="row">
-								<div style="overflow:scroll;height:70%;width:100%;overflow:auto">
-									<table width="100%" border="0"class="table table-bordered table-striped fill-head "
-										style="width: 100%" id="table_grid1">
-										<thead>
-											<tr>
-										<th align="left"><input type="checkbox" onClick="selectAll(this)" /> Select All</th>
-											<th>Sr.No.</th>
-										<th>Item Code</th>
-										<th>Item Name </th>
-										<!-- <th>PO Qty</th> -->
-									<!-- 	<th>MRN Qty</th>  -->
-										<th>Approve QTY</th>
-										<!-- <th>Reject QTY</th> -->
-
-									</tr>
-										</thead>
-										<tbody>
- 	<c:forEach items="${getMrnHeader.getMrnDetailList}" var="getMrnDetail"
-													varStatus="count">
-													 
-													<tr>					
-													
-													  <td><input type="checkbox" name="select_to_approve"
-										id="select_to_approve" value="${getMrnDetail.mrnDetailId}" /></td>
-														<td><c:out value="${count.index+1}" /></td>
-  
-																<td align="left"><c:out value="${getMrnDetail.itemCode}" /></td>
-																<td align="left"><c:out value="${getMrnDetail.itemName}" /></td>
-																<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
-																<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
-													  			<td align="right"><input style="text-align:right; width:100px" type="text" id="approveQty${getMrnDetail.mrnDetailId}"  name="approveQty${getMrnDetail.mrnDetailId}" value="" min="0"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})" max="${getMrnDetail.mrnQty}" required></td>
-													  			<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
-													  			</tr>
-												</c:forEach>
-										</tbody>
-									</table>
-								</div>
-							</div> 
-							 
-						</div><br>
 						<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit" >
+							<div class="col-md-12" style="text-align: center">
+								<c:choose>
+									<c:when test="${getMrnHeader.mrnStatus==2}">
+										<input type="submit" class="btn btn-info"
+											value="Already Inspection Done" disabled>
+									</c:when>
+									<c:otherwise>
+										<input type="submit" class="btn btn-info" value="Submit">
+									</c:otherwise>
+								</c:choose>
 
+
+
+							</div>
+						</div>
+
+					</form>
+
+					<form id="submitList"
+						action="${pageContext.request.contextPath}/submitMrnInspectionList"
+						method="post">
+						<div id="myModal" class="modal">
+							<input type="hidden" value="0" name="mrnId" id="mrnId">
+
+
+							<div class="modal-content" style="color: black;">
+								<span class="close" id="close">&times;</span>
+								<h3 style="text-align: center;">Item From MRN</h3>
+								<div class="box-content">
+									<div class="row">
+										<div
+											style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
+											<table width="100%" border="0"
+												class="table table-bordered table-striped fill-head "
+												style="width: 100%" id="table_grid1">
+												<thead>
+													<tr>
+														<th align="left"><input type="checkbox"
+															onClick="selectAll(this)" /> Select All</th>
+														<th>Sr.No.</th>
+														<th>Item Code</th>
+														<th>Item Name</th>
+														<th>UOM</th>
+														<!-- <th>PO Qty</th> -->
+														<!-- 	<th>MRN Qty</th>  -->
+														<th>Approve QTY</th>
+														<!-- <th>Reject QTY</th> -->
+
+													</tr>
+												</thead>
+												<tbody>
+													<c:forEach items="${getMrnHeader.getMrnDetailList}"
+														var="getMrnDetail" varStatus="count">
+
+														<tr>
+
+															<td><input type="checkbox" name="select_to_approve"
+																id="select_to_approve"
+																value="${getMrnDetail.mrnDetailId}" /></td>
+															<td><c:out value="${count.index+1}" /></td>
+
+															<td align="left"><c:out
+																	value="${getMrnDetail.itemCode}" /></td>
+															<td align="left"><c:out
+																	value="${getMrnDetail.itemName}" /></td>
+															<td align="left"><c:out
+																	value="${getMrnDetail.itemUom}" /></td>
+															<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
+															<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
+															<td align="right"><input
+																style="text-align: right; width: 100px" type="text"
+																id="approveQty${getMrnDetail.mrnDetailId}"
+																name="approveQty${getMrnDetail.mrnDetailId}" value=""
+																min="0" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+"
+																onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})"
+																max="${getMrnDetail.mrnQty}" required></td>
+															<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
+														</tr>
+													</c:forEach>
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+										<input type="submit" class="btn btn-info" value="Submit">
+
+
+									</div>
+								</div>
+
+							</div>
 
 						</div>
-					</div>
- 
-					</div>
-
+					</form>
 				</div>
-				</form>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- END Main Content -->
 
 	<footer>
-				<p>2019 © MONGINIS</p>
-			</footer>
+		<p>2019 © MONGINIS</p>
+	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
- 
-<!--   <script>
+
+	<!--   <script>
     /*
 //  jquery equivalent
 jQuery(document).ready(function() {
@@ -418,10 +451,10 @@ jQuery(document).ready(function() {
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		
-		
-		
-		<script type="text/javascript">
+
+
+
+	<script type="text/javascript">
  
 var specialKeys = new Array();
 specialKeys.push(8); //Backspace
@@ -460,7 +493,7 @@ function check()
 
 </script>
 
-<script>
+	<script>
 // Get the modal
 var modal = document.getElementById('myModal');
 
@@ -655,7 +688,7 @@ function itemByIntendId()
 		}
 		
 	}
-	</script>	
-		
+	</script>
+
 </body>
 </html>
