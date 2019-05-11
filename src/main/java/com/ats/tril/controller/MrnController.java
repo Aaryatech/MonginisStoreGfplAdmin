@@ -39,12 +39,14 @@ import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
 import com.ats.tril.model.ErpHeader;
 import com.ats.tril.model.ErrorMessage;
+import com.ats.tril.model.ExportToExcel;
 import com.ats.tril.model.GetItem;
 import com.ats.tril.model.GetPODetail;
 import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.ImportExcelForPo;
 import com.ats.tril.model.IssueDetail;
 import com.ats.tril.model.IssueHeader;
+import com.ats.tril.model.ItemExcel;
 import com.ats.tril.model.SettingValue;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.Vendor;
@@ -67,20 +69,18 @@ import com.sun.org.apache.bcel.internal.util.SyntheticRepository;
 @Controller
 @Scope("session")
 public class MrnController {
- 
+
 	RestTemplate rest = new RestTemplate();
-	
-	
+
 	String poIdList = new String();
 	List<GetPODetail> poDetailList = new ArrayList<GetPODetail>();
-
 
 	@RequestMapping(value = "/showAddMrn", method = RequestMethod.GET)
 	public ModelAndView showAddMrn(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = null;
 		try {
-			
+
 			poIdList = new String();
 			poDetailList = new ArrayList<GetPODetail>();
 
@@ -89,10 +89,11 @@ public class MrnController {
 
 			Vendor[] vendorRes = rest.getForObject(Constants.url + "/getAllVendorByIsUsed", Vendor[].class);
 			List<Vendor> vendorList = new ArrayList<Vendor>(Arrays.asList(vendorRes));
-			for(int i=0;i<vendorList.size();i++) {
-				vendorList.get(i).setVendorName(vendorList.get(i).getVendorCode()+" "+vendorList.get(i).getVendorName());
+			for (int i = 0; i < vendorList.size(); i++) {
+				vendorList.get(i)
+						.setVendorName(vendorList.get(i).getVendorCode() + " " + vendorList.get(i).getVendorName());
 			}
-			
+
 			model.addObject("vendorList", vendorList);
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			Date date = new Date();
@@ -101,7 +102,7 @@ public class MrnController {
 			model.addObject("vendorId", 0);
 			model.addObject("poId", 0);
 			System.err.println("Inside show Add Mrn ");
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -125,17 +126,17 @@ public class MrnController {
 			int vendorId = 0;
 
 			vendorId = Integer.parseInt(request.getParameter("vendorId"));
-			
-			int	poType = Integer.parseInt(request.getParameter("grn_type"));
+
+			int poType = Integer.parseInt(request.getParameter("grn_type"));
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("poType", poType);
 			map.add("vendId", vendorId);
 			map.add("delStatus", Constants.delStatus);
 			map.add("statusList", "0,1");
-			
+
 			// Written Inside Purchase Order Rest controller in web api
-			
+
 			PoHeader[] poHeadRes = rest.postForObject(Constants.url + "/getPOHeaderList", map, PoHeader[].class);
 			poHeadList = new ArrayList<PoHeader>(Arrays.asList(poHeadRes));
 
@@ -144,152 +145,143 @@ public class MrnController {
 		} catch (Exception e) {
 
 			System.err.println("Exception in getting PO Header List By Ajax Call " + e.getMessage());
-			
+
 			e.printStackTrace();
 		}
 
 		return poHeadList;
 	}
 
-	
 	@RequestMapping(value = { "/getPODetailList" }, method = RequestMethod.GET)
 	public @ResponseBody List<GetPODetail> getPODetails(HttpServletRequest request, HttpServletResponse response) {
-System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
+		System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 		GetPODetail[] poDetailRes;
 		try {
 			poIdList = new String();
 
-			//if (poIdList.isEmpty()) {
+			// if (poIdList.isEmpty()) {
 
-				poIdList = request.getParameter("poIds");
-				System.err.println("Po  Id List  " + poIdList);
+			poIdList = request.getParameter("poIds");
+			System.err.println("Po  Id List  " + poIdList);
 
-				poIdList = poIdList.substring(1, poIdList.length() - 1);
-				poIdList = poIdList.replaceAll("\"", "");
+			poIdList = poIdList.substring(1, poIdList.length() - 1);
+			poIdList = poIdList.replaceAll("\"", "");
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-				map.add("poIdList", poIdList);
+			map.add("poIdList", poIdList);
 
-				poDetailRes = rest.postForObject(Constants.url + "/getPODetailList", map, GetPODetail[].class);
-				System.err.println("poDetail response  " +poDetailRes.toString());
-				
-				List<GetPODetail> tempPoDList=null;
-				
-				
-				tempPoDList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
-				
-					System.err.println("tempPoDList  " +tempPoDList.toString());
-						
-				if(poDetailList!=null) {
-					System.err.println("poDId list not empty ");
-					
-					for(int i=0;i<tempPoDList.size();i++) {
-						int flag=0;
-						for(int j=0;j<poDetailList.size();j++) {
-							
-							if(tempPoDList.get(i).getPoDetailId()==poDetailList.get(j).getPoDetailId()) {
-							flag=1;
-								
-							}//end of poId Match
-							
-						}
-						if(flag==0) {
+			poDetailRes = rest.postForObject(Constants.url + "/getPODetailList", map, GetPODetail[].class);
+			System.err.println("poDetail response  " + poDetailRes.toString());
+
+			List<GetPODetail> tempPoDList = null;
+
+			tempPoDList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
+
+			System.err.println("tempPoDList  " + tempPoDList.toString());
+
+			if (poDetailList != null) {
+				System.err.println("poDId list not empty ");
+
+				for (int i = 0; i < tempPoDList.size(); i++) {
+					int flag = 0;
+					for (int j = 0; j < poDetailList.size(); j++) {
+
+						if (tempPoDList.get(i).getPoDetailId() == poDetailList.get(j).getPoDetailId()) {
+							flag = 1;
+
+						} // end of poId Match
+
+					}
+					if (flag == 0) {
 						poDetailList.add(tempPoDList.get(i));
 						System.err.println("Record Added ");
-						}
 					}
-					
-					//code  here
-					List<GetPODetail> poDetList1=new ArrayList<GetPODetail>();
-					//poDetList1=poDetailList;
-					
-					for(int k=0;k<poDetailList.size();k++) {
-						
-						poDetList1.add(poDetailList.get(k));
-					}
-					System.err.println("poDetList1 before =" +poDetList1.toString());
-					System.err.println("tempPoDList111111  =" +tempPoDList.toString());
-
-
-					for(int a=0;a<poDetList1.size();a++) {
-						System.err.println("Inside poDetList1  index a = "+a);
-						int flag1=0;
-						System.err.println("tempPoDList === size" +tempPoDList.size());
-						System.err.println("tempPoDList111111  =" +tempPoDList.toString());
-						for(int p=0;p<tempPoDList.size();p++) {
-							System.err.println("Inside tempPoDList  index p = "+p);
-
-							if(poDetList1.get(a).getPoDetailId()==tempPoDList.get(p).getPoDetailId()) {
-								
-								System.err.println("Item code "+poDetList1.get(a).getItemCode());
-								flag1=1;
-								
-							}//end of match
-						}//end of b for
-						
-						if(flag1==0) {
-							poDetList1.get(a).setTempIsDelete(1);
-						}
-						
-					}//end of a for
-					
-					System.err.println("poDetList1 =" +poDetList1.toString());
-
-					
-					poDetailList=new ArrayList<>();
-					
-					for(int a=0;a<poDetList1.size();a++) {
-						
-						if(poDetList1.get(a).getTempIsDelete()==0) {
-							
-							poDetailList.add(poDetList1.get(a));
-							
-						}
-						
-					}
-					
-					
-				}//end of if poDetailList.size>0
-				
-				else {
-					System.err.println("Else new List : First call");
-					poDetailList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));	
-					
-				}
-				
-				//poDetailList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
-
-			//} // end of if poIdList is Empty
-
-			/*else {
-				int qty = Integer.parseInt(request.getParameter("qty"));
-
-				int poDId = Integer.parseInt(request.getParameter("poDId"));
-
-				if (poDetailList.size() > 0) {
-
-					// if(qty>0) {
-
-					System.err.println("Inside poDlist.size >0 ");
-
-					for (int i = 0; i < poDetailList.size(); i++) {
-
-						if (poDetailList.get(i).getPoDetailId() == poDId) {
-							System.err.println("Inside poDId matched  ");
-
-							poDetailList.get(i).setReceivedQty(qty);
-
-						} else {
-
-							System.err.println("Po Detaol ID Not matched ");
-						}
-					}
-					// }
 				}
 
-			} // end of else
-*/			System.err.println("PO Details List Using Ajax Call  " + poDetailList.toString());
+				// code here
+				List<GetPODetail> poDetList1 = new ArrayList<GetPODetail>();
+				// poDetList1=poDetailList;
+
+				for (int k = 0; k < poDetailList.size(); k++) {
+
+					poDetList1.add(poDetailList.get(k));
+				}
+				System.err.println("poDetList1 before =" + poDetList1.toString());
+				System.err.println("tempPoDList111111  =" + tempPoDList.toString());
+
+				for (int a = 0; a < poDetList1.size(); a++) {
+					System.err.println("Inside poDetList1  index a = " + a);
+					int flag1 = 0;
+					System.err.println("tempPoDList === size" + tempPoDList.size());
+					System.err.println("tempPoDList111111  =" + tempPoDList.toString());
+					for (int p = 0; p < tempPoDList.size(); p++) {
+						System.err.println("Inside tempPoDList  index p = " + p);
+
+						if (poDetList1.get(a).getPoDetailId() == tempPoDList.get(p).getPoDetailId()) {
+
+							System.err.println("Item code " + poDetList1.get(a).getItemCode());
+							flag1 = 1;
+
+						} // end of match
+					} // end of b for
+
+					if (flag1 == 0) {
+						poDetList1.get(a).setTempIsDelete(1);
+					}
+
+				} // end of a for
+
+				System.err.println("poDetList1 =" + poDetList1.toString());
+
+				poDetailList = new ArrayList<>();
+
+				for (int a = 0; a < poDetList1.size(); a++) {
+
+					if (poDetList1.get(a).getTempIsDelete() == 0) {
+
+						poDetailList.add(poDetList1.get(a));
+
+					}
+
+				}
+
+			} // end of if poDetailList.size>0
+
+			else {
+				System.err.println("Else new List : First call");
+				poDetailList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
+
+			}
+
+			// poDetailList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
+
+			// } // end of if poIdList is Empty
+
+			/*
+			 * else { int qty = Integer.parseInt(request.getParameter("qty"));
+			 * 
+			 * int poDId = Integer.parseInt(request.getParameter("poDId"));
+			 * 
+			 * if (poDetailList.size() > 0) {
+			 * 
+			 * // if(qty>0) {
+			 * 
+			 * System.err.println("Inside poDlist.size >0 ");
+			 * 
+			 * for (int i = 0; i < poDetailList.size(); i++) {
+			 * 
+			 * if (poDetailList.get(i).getPoDetailId() == poDId) {
+			 * System.err.println("Inside poDId matched  ");
+			 * 
+			 * poDetailList.get(i).setReceivedQty(qty);
+			 * 
+			 * } else {
+			 * 
+			 * System.err.println("Po Detaol ID Not matched "); } } // } }
+			 * 
+			 * } // end of else
+			 */ System.err.println("PO Details List Using Ajax Call  " + poDetailList.toString());
 
 		} catch (Exception e) {
 
@@ -301,21 +293,19 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 	}
 
-	
 	@RequestMapping(value = { "/addMrnQty" }, method = RequestMethod.GET)
 	public @ResponseBody List<GetPODetail> addMrnQty(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			
+
 			System.err.println("inside /addMrnQty");
-			
+
 			float qty = Float.parseFloat(request.getParameter("qty"));
 
 			int poDId = Integer.parseInt(request.getParameter("poDId"));
-			
+
 			float chalanQty = Float.parseFloat(request.getParameter("chalanQty"));
-			
-			
+
 			if (poDetailList.size() > 0) {
 
 				// if(qty>0) {
@@ -346,7 +336,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 		return poDetailList;
 
 	}
-	
+
 	// getTempPoDetail
 
 	@RequestMapping(value = { "/getTempPoDetail" }, method = RequestMethod.GET)
@@ -393,48 +383,44 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			String lorryRemark = request.getParameter("lorry_remark");
 
 			MrnHeader mrnHeader = new MrnHeader();
-			//----------------------------Inv No---------------------------------
-			//DocumentBean docBean=null;
-			
-			
+			// ----------------------------Inv No---------------------------------
+			// DocumentBean docBean=null;
+
 			try {
-				
-				/*MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("docId", 3);
-				map.add("catId", 1);
-				map.add("date", DateConvertor.convertToYMD(grnDate));
-				map.add("typeId", grnType);
-				RestTemplate restTemplate = new RestTemplate();
 
-				 docBean = restTemplate.postForObject(Constants.url + "getDocumentData", map, DocumentBean.class);
-				String indMNo=docBean.getSubDocument().getCategoryPrefix()+"";
-				int counter=docBean.getSubDocument().getCounter();
-				int counterLenth = String.valueOf(counter).length();
-				counterLenth = 4 - counterLenth;
-				StringBuilder code = new StringBuilder(indMNo+"");
+				/*
+				 * MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,
+				 * Object>(); map.add("docId", 3); map.add("catId", 1); map.add("date",
+				 * DateConvertor.convertToYMD(grnDate)); map.add("typeId", grnType);
+				 * RestTemplate restTemplate = new RestTemplate();
+				 * 
+				 * docBean = restTemplate.postForObject(Constants.url + "getDocumentData", map,
+				 * DocumentBean.class); String
+				 * indMNo=docBean.getSubDocument().getCategoryPrefix()+""; int
+				 * counter=docBean.getSubDocument().getCounter(); int counterLenth =
+				 * String.valueOf(counter).length(); counterLenth = 4 - counterLenth;
+				 * StringBuilder code = new StringBuilder(indMNo+"");
+				 * 
+				 * for (int i = 0; i < counterLenth; i++) { String j = "0"; code.append(j); }
+				 * code.append(String.valueOf(counter));
+				 */
 
-				for (int i = 0; i < counterLenth; i++) {
-					String j = "0";
-					code.append(j);
-				}
-				code.append(String.valueOf(counter));*/
-				
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("docType", 1); 
-				map.add("date", DateConvertor.convertToYMD(grnDate)); 
-				
+				map.add("docType", 1);
+				map.add("date", DateConvertor.convertToYMD(grnDate));
+
 				RestTemplate restTemplate = new RestTemplate();
 
-				ErrorMessage errorMessage = restTemplate.postForObject(Constants.url + "generateIssueNoAndMrnNo", map, ErrorMessage.class);
-				
-				
-				mrnHeader.setMrnNo(""+errorMessage.getMessage());
-				
-				//docBean.getSubDocument().setCounter(docBean.getSubDocument().getCounter()+1);
-			}catch (Exception e) {
+				ErrorMessage errorMessage = restTemplate.postForObject(Constants.url + "generateIssueNoAndMrnNo", map,
+						ErrorMessage.class);
+
+				mrnHeader.setMrnNo("" + errorMessage.getMessage());
+
+				// docBean.getSubDocument().setCounter(docBean.getSubDocument().getCounter()+1);
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			//----------------------------Inv No---------------------------------
+			// ----------------------------Inv No---------------------------------
 			List<MrnDetail> mrnDetailList = new ArrayList<MrnDetail>();
 
 			mrnHeader.setBillDate(DateConvertor.convertToYMD(billDate));
@@ -447,7 +433,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			mrnHeader.setLrDate(DateConvertor.convertToYMD(lrDate));
 			mrnHeader.setLrNo(lrNo);
 			mrnHeader.setMrnDate(DateConvertor.convertToYMD(grnDate));
-		
+
 			mrnHeader.setMrnStatus(0);
 			mrnHeader.setMrnType(grnType);
 			mrnHeader.setRemark1(lorryRemark);
@@ -480,7 +466,6 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 					mrnDetail.setDelStatus(Constants.delStatus);
 
 					mrnDetail.setPoDetailId(detail.getPoDetailId());
-					 
 
 					mrnDetail.setMrnQtyBeforeEdit(-1);
 					mrnDetail.setRemainingQty(mrnDetail.getMrnQty());
@@ -496,19 +481,17 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 			RestTemplate restTemp = new RestTemplate();
 
-			 mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHeader,
-					MrnHeader.class);
-			 if(mrnHeaderRes!=null)
-	          {
-	        		try {
-	        			
-	        			//SubDocument subDocRes = restTemp.postForObject(Constants.url + "/saveSubDoc", docBean.getSubDocument(), SubDocument.class);
+			mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHeader, MrnHeader.class);
+			if (mrnHeaderRes != null) {
+				try {
 
-	        		
-	        		}catch (Exception e) {
-						e.printStackTrace();
-					}
-	          }
+					// SubDocument subDocRes = restTemp.postForObject(Constants.url + "/saveSubDoc",
+					// docBean.getSubDocument(), SubDocument.class);
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 			System.err.println("mrnHeaderRes " + mrnHeaderRes.toString());
 
 		} catch (Exception e) {
@@ -529,8 +512,6 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 		ModelAndView model = null;
 		try {
-			
-			
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -551,7 +532,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			} else {
 				fromDate = request.getParameter("from_date");
 				toDate = request.getParameter("to_date");
-				int grnType=Integer.parseInt(request.getParameter("grn_type"));
+				int grnType = Integer.parseInt(request.getParameter("grn_type"));
 				System.out.println("inside Else ");
 
 				System.out.println("fromDate " + fromDate);
@@ -577,7 +558,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			model.addObject("mrnHeaderList", mrnHeaderList);
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -590,6 +571,7 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 
 		return model;
 	}
+
 	@RequestMapping(value = "/getMrnHeadersForERP", method = RequestMethod.GET)
 	public ModelAndView getMrnHeadersForERP(HttpServletRequest request, HttpServletResponse response) {
 
@@ -614,14 +596,14 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			} else {
 				fromDate = request.getParameter("from_date");
 				toDate = request.getParameter("to_date");
-				int status=Integer.parseInt(request.getParameter("status"));
-				String statusOfMrn="";
-				if(status==1)
-					statusOfMrn="0";
-				if(status==2)
-					statusOfMrn="1,2";
-			    if(status==3)
-			    	statusOfMrn="3,4";
+				int status = Integer.parseInt(request.getParameter("status"));
+				String statusOfMrn = "";
+				if (status == 1)
+					statusOfMrn = "0";
+				if (status == 2)
+					statusOfMrn = "1,2";
+				if (status == 3)
+					statusOfMrn = "3,4";
 				System.out.println("inside Else ");
 
 				System.out.println("fromDate " + fromDate);
@@ -635,18 +617,98 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 			}
 			// map.add("status", 0);
 
-			
-			ErpHeader[] mrnHead = rest.postForObject(Constants.url + "/ERPlistMRN", map,
-					ErpHeader[].class);
+			ErpHeader[] mrnHead = rest.postForObject(Constants.url + "/ERPlistMRN", map, ErpHeader[].class);
 
-			List<ErpHeader>	erpMrnHeaderList = new ArrayList<ErpHeader>();
+			List<ErpHeader> erpMrnHeaderList = new ArrayList<ErpHeader>();
 
 			erpMrnHeaderList = new ArrayList<ErpHeader>(Arrays.asList(mrnHead));
 
 			model.addObject("mrnHeaderList", erpMrnHeaderList);
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
-		
+
+			ItemExcel[] itemExcel = rest.getForObject(Constants.url + "/getItemExcelList", ItemExcel[].class);
+
+			List<ItemExcel> itemExcelList = new ArrayList<ItemExcel>((Arrays.asList(itemExcel)));
+			// System.out.println(itemExcelList.toString());
+
+			List<ExportToExcel> exportToExcelList1 = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel1 = new ExportToExcel();
+			List<String> rowData1 = new ArrayList<String>();
+
+			rowData1.add("Sr. No");
+			rowData1.add("Category Desc");
+			rowData1.add("Group Desc");
+			rowData1.add("Item Desc");
+			rowData1.add("Item UOM");
+			rowData1.add("Tax Per");
+			expoExcel1.setRowData(rowData1);
+			exportToExcelList1.add(expoExcel1);
+			int cnt = 1;
+			for (int i = 0; i < itemExcelList.size(); i++) {
+				expoExcel1 = new ExportToExcel();
+				rowData1 = new ArrayList<String>();
+				cnt = cnt + i;
+				rowData1.add("" + (cnt));
+				rowData1.add("" + itemExcelList.get(i).getCatDesc());
+				rowData1.add("" + itemExcelList.get(i).getGrpDesc());
+				rowData1.add("" + itemExcelList.get(i).getItemDesc());
+				rowData1.add("" + itemExcelList.get(i).getItemUom());
+				rowData1.add("" + itemExcelList.get(i).getTaxPer());
+
+				expoExcel1.setRowData(rowData1);
+				exportToExcelList1.add(expoExcel1);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList1", exportToExcelList1);
+			session.setAttribute("excelName1", "Get Tem Excel");
+
+			// getAllVendorByIsUsed
+
+			Vendor[] vendor = rest.getForObject(Constants.url + "/getAllVendorByIsUsed", Vendor[].class);
+
+			List<Vendor> vendorList = new ArrayList<Vendor>((Arrays.asList(vendor)));
+			// System.out.println(itemExcelList.toString());
+
+			List<ExportToExcel> exportToExcelList2 = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel2 = new ExportToExcel();
+			List<String> rowData2 = new ArrayList<String>();
+
+			rowData2.add("Sr. No");
+			rowData2.add("Vendor Code");
+			rowData2.add("Vendor Name");
+			rowData2.add("Vendor Address  ");
+			rowData2.add("Mobile No");
+			rowData2.add("City");
+			rowData2.add("Email");
+
+			expoExcel2.setRowData(rowData2);
+			exportToExcelList2.add(expoExcel2);
+			int cnt2 = 1;
+			for (int i = 0; i < vendorList.size(); i++) {
+				expoExcel2 = new ExportToExcel();
+				rowData2 = new ArrayList<String>();
+				cnt2 = cnt2 + i;
+				rowData2.add("" + (i + 1));
+
+				rowData2.add("" + vendorList.get(i).getVendorCode());
+				rowData2.add("" + vendorList.get(i).getVendorName());
+				rowData2.add("" + vendorList.get(i).getVendorAdd1());
+				rowData2.add("" + vendorList.get(i).getVendorMobile());
+				rowData2.add("" + vendorList.get(i).getVendorCity());
+				rowData2.add("" + vendorList.get(i).getVendorEmail());
+
+				expoExcel2.setRowData(rowData2);
+				exportToExcelList2.add(expoExcel2);
+
+			}
+
+			session.setAttribute("exportExcelList2", exportToExcelList2);
+			session.setAttribute("excelName2", "Vendor List");
 
 		} catch (Exception e) {
 
@@ -659,17 +721,16 @@ System.err.println("Inside getPODetailList add Mrn jsp Ajax call ");
 	// showEditViewMrnDetail/
 
 	List<GetMrnDetail> mrnDetailList = new ArrayList<GetMrnDetail>();
-	
-	List<PoItemForMrnEdit> poItemListForMrnEdit = new ArrayList<PoItemForMrnEdit>();
-List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
-	
+	List<PoItemForMrnEdit> poItemListForMrnEdit = new ArrayList<PoItemForMrnEdit>();
+	List<GetPODetail> poDetailForEditMrn = new ArrayList<GetPODetail>();
+
 	@RequestMapping(value = "/showEditViewMrnDetail/{mrnId}", method = RequestMethod.GET)
 	public ModelAndView editIndent(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("mrnId") int mrnId) {
-		
-		poItemListForMrnEdit=new ArrayList<PoItemForMrnEdit>();
-		poDetailForEditMrn=new ArrayList<GetPODetail>();
+
+		poItemListForMrnEdit = new ArrayList<PoItemForMrnEdit>();
+		poDetailForEditMrn = new ArrayList<GetPODetail>();
 		GetPODetail[] poDetailRes;
 		ModelAndView model = null;
 		try {
@@ -696,53 +757,53 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 			}
 			map = new LinkedMultiValueMap<String, Object>();
-			
-			String s=new String();
-			
-			for(int i=0;i<mrnDetailList.size();i++) {
-				if(i==0) {
-					
-					s=""+mrnDetailList.get(i).getPoId()+",";
-				}else {
-				s=s+mrnDetailList.get(i).getPoId()+",";
+
+			String s = new String();
+
+			for (int i = 0; i < mrnDetailList.size(); i++) {
+				if (i == 0) {
+
+					s = "" + mrnDetailList.get(i).getPoId() + ",";
+				} else {
+					s = s + mrnDetailList.get(i).getPoId() + ",";
 				}
 			}
-			System.err.println("to get po detail from mrn poid " +s);
+			System.err.println("to get po detail from mrn poid " + s);
 			map.add("poIdList", s);
 
 			poDetailRes = rest.postForObject(Constants.url + "/getPODetailList", map, GetPODetail[].class);
 			poDetailList = new ArrayList<GetPODetail>(Arrays.asList(poDetailRes));
-			
-			System.err.println("POd res in edit show " +poDetailList.toString());
-			
-			for(int i=0;i<poDetailList.size();i++) {
-				int flag=0;
-				System.err.println("poDetailList poid  " +poDetailList.get(i).getPoDetailId());
-				for(int j=0;j<mrnDetailList.size();j++) {
-					System.err.println("mrnDetailList poid  " +mrnDetailList.get(j).getPoDetailId());
 
-					if(mrnDetailList.get(j).getPoDetailId()==poDetailList.get(i).getPoDetailId()) {
+			System.err.println("POd res in edit show " + poDetailList.toString());
+
+			for (int i = 0; i < poDetailList.size(); i++) {
+				int flag = 0;
+				System.err.println("poDetailList poid  " + poDetailList.get(i).getPoDetailId());
+				for (int j = 0; j < mrnDetailList.size(); j++) {
+					System.err.println("mrnDetailList poid  " + mrnDetailList.get(j).getPoDetailId());
+
+					if (mrnDetailList.get(j).getPoDetailId() == poDetailList.get(i).getPoDetailId()) {
 						System.err.println("Match found ");
-						flag=1;
-						
+						flag = 1;
+
 					}
-					
+
 				}
-				if(flag==0) {
-					
+				if (flag == 0) {
+
 					poDetailForEditMrn.add(poDetailList.get(i));
-					
+
 				}
-				
+
 			}
-			
-			System.err.println("POd poDetailForEditMrn edit show " +poDetailForEditMrn.toString());
+
+			System.err.println("POd poDetailForEditMrn edit show " + poDetailForEditMrn.toString());
 			model.addObject("mrnDetailList", mrnDetailList);
-			
+
 			model.addObject("poItemList", poDetailForEditMrn);
 
 			model.addObject("mrnHeader", getMrnHeader);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -756,48 +817,47 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		}
 		return model;
 	}
-	
-	@RequestMapping(value = { "/getpoDetailForEditMrn" }, method = RequestMethod.GET)
-	public @ResponseBody List<GetPODetail> getpoDetailForEditMrn(HttpServletRequest request, HttpServletResponse response) {
 
-		System.err.println("poDetailForEditMrn  Ajx " +poDetailForEditMrn.toString());
-		
-		float qty=Float.parseFloat(request.getParameter("qty"));
-		int poDId=Integer.parseInt(request.getParameter("poDId"));
-		
-		if(qty==0 && poDId==0) {
+	@RequestMapping(value = { "/getpoDetailForEditMrn" }, method = RequestMethod.GET)
+	public @ResponseBody List<GetPODetail> getpoDetailForEditMrn(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		System.err.println("poDetailForEditMrn  Ajx " + poDetailForEditMrn.toString());
+
+		float qty = Float.parseFloat(request.getParameter("qty"));
+		int poDId = Integer.parseInt(request.getParameter("poDId"));
+
+		if (qty == 0 && poDId == 0) {
 			System.err.println("qty and podid are zero ");
-			
-		}else {
+
+		} else {
 			System.err.println("In else ");
-		for(int i=0;i<poDetailForEditMrn.size();i++) {
-			
-			if(poDetailForEditMrn.get(i).getPoDetailId()==poDId) {
-				System.err.println("Podid matched "+poDId +"quantity seted" +qty);
-				poDetailForEditMrn.get(i).setReceivedQty(qty);
+			for (int i = 0; i < poDetailForEditMrn.size(); i++) {
+
+				if (poDetailForEditMrn.get(i).getPoDetailId() == poDId) {
+					System.err.println("Podid matched " + poDId + "quantity seted" + qty);
+					poDetailForEditMrn.get(i).setReceivedQty(qty);
+				}
 			}
 		}
-		}
-		
+
 		return poDetailForEditMrn;
-			
-		
+
 	}
-	
-	//temp Submit on edit mrn: add new item
+
+	// temp Submit on edit mrn: add new item
 	@RequestMapping(value = { "/submitNewMrnItemOnEdit" }, method = RequestMethod.GET)
-	public @ResponseBody List<GetMrnDetail> submitNewMrnItemOnEdit(HttpServletRequest request, HttpServletResponse response) {
-		
-	//	uuu;
-		//getMrnHeader
-		
-		int mrnId=Integer.parseInt(request.getParameter("mrnId"));
-		
-		
+	public @ResponseBody List<GetMrnDetail> submitNewMrnItemOnEdit(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		// uuu;
+		// getMrnHeader
+
+		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("mrnId", mrnId);
-				MrnHeader mrnHead = rest.postForObject(Constants.url + "/getOneMrnHeader", map,
-						MrnHeader.class);
+		MrnHeader mrnHead = rest.postForObject(Constants.url + "/getOneMrnHeader", map, MrnHeader.class);
 		List<MrnDetail> editMrnDetailList = new ArrayList<MrnDetail>();
 
 		for (GetPODetail detail : poDetailForEditMrn) {
@@ -823,7 +883,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 				mrnDetail.setBatchNo("Default Batch KKKK-00456");
 				mrnDetail.setDelStatus(Constants.delStatus);
 
-				mrnDetail.setPoDetailId(detail.getPoDetailId()); 
+				mrnDetail.setPoDetailId(detail.getPoDetailId());
 				mrnDetail.setMrnQtyBeforeEdit(-1);
 				mrnDetail.setApproveQty(mrnDetail.getMrnQty());
 				mrnDetail.setRemainingQty(mrnDetail.getMrnQty());
@@ -835,9 +895,9 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 		RestTemplate restTemp = new RestTemplate();
 
-		MrnHeader	 mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHead,
+		MrnHeader mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHead,
 				MrnHeader.class);
-		
+
 		GetMrnDetail[] mrnDetail = rest.postForObject(Constants.url + "/getMrnDetailByMrnId", map,
 				GetMrnDetail[].class);
 
@@ -847,7 +907,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		return mrnDetailList;
 
 	}
-	
+
 	// ajax call to change the mrn Qty
 	// getMrnDetail
 
@@ -898,7 +958,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 	@RequestMapping(value = { "/editMrnProcess" }, method = RequestMethod.GET)
 	public @ResponseBody MrnHeader editMrnProcess(HttpServletRequest request, HttpServletResponse response) {
 
-		MrnHeader mrnHeaderRes = null; 
+		MrnHeader mrnHeaderRes = null;
 		try {
 			System.err.println("inside /editMrnProcess");
 
@@ -979,7 +1039,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 					mrnDetail.setRejectQty(detail.getRejectQty());
 					mrnDetail.setRejectRemark(detail.getRejectRemark());
 					mrnDetail.setIssueQty(detail.getIssueQty());
-					mrnDetail.setRemainingQty(detail.getMrnQty()); 
+					mrnDetail.setRemainingQty(detail.getMrnQty());
 					mrnDetail.setMrnQtyBeforeEdit(detail.getMrnQtyBeforeEdit());
 
 					editMrnDetailList.add(mrnDetail);
@@ -993,8 +1053,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 			RestTemplate restTemp = new RestTemplate();
 
-			 mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHeader,
-					MrnHeader.class);
+			mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHeader, MrnHeader.class);
 
 			System.err.println("mrnHeaderRes " + mrnHeaderRes.toString());
 
@@ -1032,7 +1091,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		}
 		return "redirect:/getMrnHeaders";
 	}
-	
+
 	@RequestMapping(value = "/deleteMrnDetail/{mrnDetailId}", method = RequestMethod.GET)
 	public String deleteMrnDetail(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("mrnDetailId") int mrnDetailId) {
@@ -1056,7 +1115,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		}
 		return "redirect:/getMrnHeaders";
 	}
-	
+
 	@RequestMapping(value = "/firstApproveMrn", method = RequestMethod.GET)
 	public ModelAndView firstApprovePurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1064,14 +1123,15 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
- 
-			map.add("status","2,3"); 
-			map.add("venId",0);
-			GetMrnHeader[] getMrnHeader =rest.postForObject(Constants.url+"getMrnHeaderList", map,  GetMrnHeader[].class);
+
+			map.add("status", "2,3");
+			map.add("venId", 0);
+			GetMrnHeader[] getMrnHeader = rest.postForObject(Constants.url + "getMrnHeaderList", map,
+					GetMrnHeader[].class);
 			List<GetMrnHeader> getMrnHeaderList = new ArrayList<GetMrnHeader>(Arrays.asList(getMrnHeader));
 			model.addObject("approve", 1);
 			model.addObject("getMrnHeaderList", getMrnHeaderList);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -1081,7 +1141,7 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/secondApproveMrn", method = RequestMethod.GET)
 	public ModelAndView secondApprovePurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1089,14 +1149,15 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			 
-			map.add("status","3"); 
-			map.add("venId",0);
-			GetMrnHeader[] getMrnHeader =rest.postForObject(Constants.url+"getMrnHeaderList", map,  GetMrnHeader[].class);
+
+			map.add("status", "3");
+			map.add("venId", 0);
+			GetMrnHeader[] getMrnHeader = rest.postForObject(Constants.url + "getMrnHeaderList", map,
+					GetMrnHeader[].class);
 			List<GetMrnHeader> getMrnHeaderList = new ArrayList<GetMrnHeader>(Arrays.asList(getMrnHeader));
 			model.addObject("approve", 2);
 			model.addObject("getMrnHeaderList", getMrnHeaderList);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -1107,23 +1168,24 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 		return model;
 	}
-	
+
 	GetMrnHeader mrnFroApprove = new GetMrnHeader();
-	
+
 	@RequestMapping(value = "/approveMrnDetail/{mrnId}/{approve}", method = RequestMethod.GET)
-	public ModelAndView approvePoDetail(@PathVariable int mrnId,@PathVariable int approve, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView approvePoDetail(@PathVariable int mrnId, @PathVariable int approve, HttpServletRequest request,
+			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("mrn/approveMrnDetail");
 		try {
 
 			mrnFroApprove = new GetMrnHeader();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			 map.add("mrnId",mrnId); 
-			 mrnFroApprove=rest.postForObject(Constants.url+"getMrnHeaderForApprove", map,  GetMrnHeader.class);
-			
-           model.addObject("mrnFroApprove", mrnFroApprove);
+			map.add("mrnId", mrnId);
+			mrnFroApprove = rest.postForObject(Constants.url + "getMrnHeaderForApprove", map, GetMrnHeader.class);
+
+			model.addObject("mrnFroApprove", mrnFroApprove);
 			model.addObject("approve", approve);
-			
+
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
 			model.addObject("typeList", typeList);
@@ -1134,309 +1196,300 @@ List<GetPODetail> poDetailForEditMrn=new ArrayList<GetPODetail>();
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/submitMrnApprove", method = RequestMethod.POST)
 	public String submitMrnApprove(HttpServletRequest request, HttpServletResponse response) {
 
 		String ret = null;
 		int approve = Integer.parseInt(request.getParameter("approve"));
 		try {
-			 
-			
+
 			String mrnDetalId = new String();
-			int mrnId = 0 ;
+			int mrnId = 0;
 			int status = 2;
-			
-			
-			if(approve==1) {
-				
+
+			if (approve == 1) {
+
 				mrnFroApprove.setMrnStatus(3);
-				mrnId=mrnFroApprove.getMrnId();
+				mrnId = mrnFroApprove.getMrnId();
 				String[] checkbox = request.getParameterValues("select_to_approve");
-				status=4;
-				for(int i=0 ; i<checkbox.length ;i++) {
-					
-					for(int j=0 ; j<mrnFroApprove.getGetMrnDetailList().size() ; j++) {
-						
-						if(Integer.parseInt(checkbox[i])==mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId()) {
+				status = 4;
+				for (int i = 0; i < checkbox.length; i++) {
+
+					for (int j = 0; j < mrnFroApprove.getGetMrnDetailList().size(); j++) {
+
+						if (Integer.parseInt(checkbox[i]) == mrnFroApprove.getGetMrnDetailList().get(j)
+								.getMrnDetailId()) {
 							mrnFroApprove.getGetMrnDetailList().get(j).setMrnDetailStatus(4);
-							mrnDetalId=mrnDetalId+","+mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId();
+							mrnDetalId = mrnDetalId + "," + mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId();
 							break;
 						}
 					}
 				}
-				
-				 
-			}
-			else if(approve==2){
-				 
+
+			} else if (approve == 2) {
+
 				mrnFroApprove.setMrnStatus(4);
-				mrnId=mrnFroApprove.getMrnId();
+				mrnId = mrnFroApprove.getMrnId();
 				String[] checkbox = request.getParameterValues("select_to_approve");
-				status=4;
-				for(int i=0 ; i<checkbox.length ;i++) {
-					
-					for(int j=0 ; j<mrnFroApprove.getGetMrnDetailList().size() ; j++) {
-						
-						if(Integer.parseInt(checkbox[i])==mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId()) {
+				status = 4;
+				for (int i = 0; i < checkbox.length; i++) {
+
+					for (int j = 0; j < mrnFroApprove.getGetMrnDetailList().size(); j++) {
+
+						if (Integer.parseInt(checkbox[i]) == mrnFroApprove.getGetMrnDetailList().get(j)
+								.getMrnDetailId()) {
 							mrnFroApprove.getGetMrnDetailList().get(j).setMrnDetailStatus(4);
-							mrnDetalId=mrnDetalId+","+mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId();
+							mrnDetalId = mrnDetalId + "," + mrnFroApprove.getGetMrnDetailList().get(j).getMrnDetailId();
 							break;
 						}
 					}
-				} 
-				
+				}
+
 			}
-			
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("mrnId", mrnId);
 			map.add("mrnDetalId", mrnDetalId.substring(1, mrnDetalId.length()));
 			map.add("status", status);
 			System.out.println("map " + map);
-			ErrorMessage approved = rest.postForObject(Constants.url + "/updateStatusWhileMrnApprov", map, ErrorMessage.class);
-			
-			 if(approve==2 && approved.isError()==false) {
-				 
-				 GetItem[] item = rest.getForObject(Constants.url + "/getAllItems",  GetItem[].class); 
-					List<GetItem> itemList = new ArrayList<GetItem>(Arrays.asList(item)); 
-					map = new LinkedMultiValueMap<String, Object>();
-					map.add("name", "autoIssue"); 
-					System.out.println("map " + map);
-					SettingValue settingValue = rest.postForObject(Constants.url + "/getSettingValue", map, SettingValue.class);
-					
-					int flag=0;
-					 String[] type = settingValue.getValue().split(",");
-					 
-					 for(int i = 0 ; i<type.length ; i++) {
-						 
-						 if(mrnFroApprove.getMrnType()==Integer.parseInt(type[i])) {
-							  flag=1;
-							  break;
-						 }
-					 }
-					 
-					 if(flag==1) {
-						 
-						 IssueHeader issueHeader = new IssueHeader(); 
-						 issueHeader.setIssueDate(DateConvertor.convertToYMD(mrnFroApprove.getMrnDate()));
-						 DocumentBean docBean=null;
-							try {
-								
-								 map = new LinkedMultiValueMap<String, Object>();
-								map.add("docId",6);
-								map.add("catId", 1);
-								map.add("date", DateConvertor.convertToYMD(mrnFroApprove.getMrnDate()));
-								map.add("typeId", mrnFroApprove.getMrnType());
-								RestTemplate restTemplate = new RestTemplate();
+			ErrorMessage approved = rest.postForObject(Constants.url + "/updateStatusWhileMrnApprov", map,
+					ErrorMessage.class);
 
-								 docBean = restTemplate.postForObject(Constants.url + "getDocumentData", map, DocumentBean.class);
-								String indMNo=docBean.getSubDocument().getCategoryPrefix()+"";
-								int counter=docBean.getSubDocument().getCounter();
-								int counterLenth = String.valueOf(counter).length();
-								counterLenth =4 - counterLenth;
-								StringBuilder code = new StringBuilder(indMNo+"");
+			if (approve == 2 && approved.isError() == false) {
 
-								for (int i = 0; i < counterLenth; i++) {
-									String j = "0";
-									code.append(j);
-								}
-								code.append(String.valueOf(counter));
-								
-								 issueHeader.setIssueNo(""+code);
-								
-								docBean.getSubDocument().setCounter(docBean.getSubDocument().getCounter()+1);
-							}catch (Exception e) {
-								e.printStackTrace();
-								 issueHeader.setIssueNo("1");
+				GetItem[] item = rest.getForObject(Constants.url + "/getAllItems", GetItem[].class);
+				List<GetItem> itemList = new ArrayList<GetItem>(Arrays.asList(item));
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("name", "autoIssue");
+				System.out.println("map " + map);
+				SettingValue settingValue = rest.postForObject(Constants.url + "/getSettingValue", map,
+						SettingValue.class);
+
+				int flag = 0;
+				String[] type = settingValue.getValue().split(",");
+
+				for (int i = 0; i < type.length; i++) {
+
+					if (mrnFroApprove.getMrnType() == Integer.parseInt(type[i])) {
+						flag = 1;
+						break;
+					}
+				}
+
+				if (flag == 1) {
+
+					IssueHeader issueHeader = new IssueHeader();
+					issueHeader.setIssueDate(DateConvertor.convertToYMD(mrnFroApprove.getMrnDate()));
+					DocumentBean docBean = null;
+					try {
+
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("docId", 6);
+						map.add("catId", 1);
+						map.add("date", DateConvertor.convertToYMD(mrnFroApprove.getMrnDate()));
+						map.add("typeId", mrnFroApprove.getMrnType());
+						RestTemplate restTemplate = new RestTemplate();
+
+						docBean = restTemplate.postForObject(Constants.url + "getDocumentData", map,
+								DocumentBean.class);
+						String indMNo = docBean.getSubDocument().getCategoryPrefix() + "";
+						int counter = docBean.getSubDocument().getCounter();
+						int counterLenth = String.valueOf(counter).length();
+						counterLenth = 4 - counterLenth;
+						StringBuilder code = new StringBuilder(indMNo + "");
+
+						for (int i = 0; i < counterLenth; i++) {
+							String j = "0";
+							code.append(j);
+						}
+						code.append(String.valueOf(counter));
+
+						issueHeader.setIssueNo("" + code);
+
+						docBean.getSubDocument().setCounter(docBean.getSubDocument().getCounter() + 1);
+					} catch (Exception e) {
+						e.printStackTrace();
+						issueHeader.setIssueNo("1");
+					}
+
+					ErrorMessage getDeptId = new ErrorMessage();
+					try {
+
+						int poId = mrnFroApprove.getGetMrnDetailList().get(0).getPoId();
+						map = new LinkedMultiValueMap<>();
+						map.add("poId", poId);
+						getDeptId = rest.postForObject(Constants.url + "/getDeptAndSubDeptFromIndentByPoId", map,
+								ErrorMessage.class);
+
+					} catch (Exception e) {
+						// TODO: handle exception
+					}
+
+					String[] deptIdAndSubDeptId = getDeptId.getMessage().split(",");
+					// issueHeader.setIssueNo(issueNo);
+					issueHeader.setDeleteStatus(1);
+
+					issueHeader.setDeptId(Integer.parseInt(deptIdAndSubDeptId[0]));
+					issueHeader.setSubDeptId(Integer.parseInt(deptIdAndSubDeptId[1]));
+					issueHeader.setAccHead(Integer.parseInt(deptIdAndSubDeptId[2]));
+					issueHeader.setItemCategory(mrnFroApprove.getMrnType());
+					String mrnDetailList = new String();
+					List<IssueDetail> issueDetailList = new ArrayList<IssueDetail>();
+					for (int i = 0; i < mrnFroApprove.getGetMrnDetailList().size(); i++) {
+						for (int j = 0; j < itemList.size(); j++) {
+							if (itemList.get(j).getItemId() == mrnFroApprove.getGetMrnDetailList().get(i).getItemId()) {
+								IssueDetail issueDetail = new IssueDetail();
+								issueDetail.setItemId(mrnFroApprove.getGetMrnDetailList().get(i).getItemId());
+								issueDetail.setItemIssueQty(mrnFroApprove.getGetMrnDetailList().get(i).getMrnQty());
+								issueDetail.setItemGroupId(itemList.get(j).getGrpId());
+								issueDetail.setDeptId(Integer.parseInt(deptIdAndSubDeptId[0]));
+								issueDetail.setSubDeptId(Integer.parseInt(deptIdAndSubDeptId[1]));
+								issueDetail.setAccHead(Integer.parseInt(deptIdAndSubDeptId[2]));
+								// issueDetail.setItemName(itemName);
+								/*
+								 * issueDetail.setGroupName(groupName); issueDetail.setDeptName(deptName);
+								 * issueDetail.setSubDeptName(subDeptName); issueDetail.setAccName(accName);
+								 */
+								issueDetail.setDelStatus(1);
+								issueDetail.setBatchNo(mrnFroApprove.getGetMrnDetailList().get(i).getBatchNo());
+								issueDetail.setMrnDetailId(mrnFroApprove.getGetMrnDetailList().get(i).getMrnDetailId());
+								mrnDetailList = mrnDetailList + ","
+										+ mrnFroApprove.getGetMrnDetailList().get(i).getMrnDetailId();
+								issueDetailList.add(issueDetail);
+								break;
 							}
-							
-							ErrorMessage getDeptId = new ErrorMessage();
-							try {
-								
-								int poId = mrnFroApprove.getGetMrnDetailList().get(0).getPoId(); 
-								 map = new LinkedMultiValueMap<>();
-								 map.add("poId", poId);
-								 getDeptId = rest.postForObject(Constants.url + "/getDeptAndSubDeptFromIndentByPoId", map,
-										 ErrorMessage.class);
-								
-							} catch (Exception e) {
-								// TODO: handle exception
-							}
-							
-							String[] deptIdAndSubDeptId = getDeptId.getMessage().split(",");
-						 //issueHeader.setIssueNo(issueNo);
-						 issueHeader.setDeleteStatus(1);
-						
-						 issueHeader.setDeptId(Integer.parseInt(deptIdAndSubDeptId[0]));
-						 issueHeader.setSubDeptId(Integer.parseInt(deptIdAndSubDeptId[1]));
-						 issueHeader.setAccHead(Integer.parseInt(deptIdAndSubDeptId[2]));
-						 issueHeader.setItemCategory(mrnFroApprove.getMrnType());
-						 String mrnDetailList = new String();
-						 List<IssueDetail> issueDetailList = new ArrayList<IssueDetail>();
-						 for(int i=0 ; i<mrnFroApprove.getGetMrnDetailList().size() ; i++)
-						 {
-							 for(int j=0 ; j<itemList.size() ;j++)
-							 {
-								 if(itemList.get(j).getItemId()==mrnFroApprove.getGetMrnDetailList().get(i).getItemId()) {
-									 IssueDetail issueDetail = new IssueDetail();
-									 issueDetail.setItemId(mrnFroApprove.getGetMrnDetailList().get(i).getItemId());
-									 issueDetail.setItemIssueQty(mrnFroApprove.getGetMrnDetailList().get(i).getMrnQty());
-									 issueDetail.setItemGroupId(itemList.get(j).getGrpId());
-									 issueDetail.setDeptId(Integer.parseInt(deptIdAndSubDeptId[0]));
-									 issueDetail.setSubDeptId(Integer.parseInt(deptIdAndSubDeptId[1]));
-									 issueDetail.setAccHead(Integer.parseInt(deptIdAndSubDeptId[2]));
-									 //issueDetail.setItemName(itemName);
-									 /*issueDetail.setGroupName(groupName);
-									 issueDetail.setDeptName(deptName);
-									 issueDetail.setSubDeptName(subDeptName);
-									 issueDetail.setAccName(accName);*/
-									 issueDetail.setDelStatus(1); 
-									 issueDetail.setBatchNo(mrnFroApprove.getGetMrnDetailList().get(i).getBatchNo());
-									 issueDetail.setMrnDetailId(mrnFroApprove.getGetMrnDetailList().get(i).getMrnDetailId()); 
-									 mrnDetailList=mrnDetailList+","+mrnFroApprove.getGetMrnDetailList().get(i).getMrnDetailId();
-									 issueDetailList.add(issueDetail);
-									 break;
-								 }
-							 }
-							 
-						 }
-			  
-						 mrnDetailList = mrnDetailList.substring(1, mrnDetailList.length());
-						 
-						  map = new LinkedMultiValueMap<>();
-						 map.add("mrnDetailList", mrnDetailList);
-						 MrnDetail[] MrnDetail = rest.postForObject(Constants.url + "/getMrnDetailListByMrnDetailId", map,
-								 MrnDetail[].class);
-						 
-						 List<MrnDetail> updateMrnDetail = new ArrayList<MrnDetail>(Arrays.asList(MrnDetail));
-						 
-						 for(int j=0 ; j<issueDetailList.size() ; j++)
-						 {
-							 for(int i=0 ; i<updateMrnDetail.size() ; i++)
-							 { 
-								 if(updateMrnDetail.get(i).getMrnDetailId()==issueDetailList.get(j).getMrnDetailId())
-								 {
-									 updateMrnDetail.get(i).setRemainingQty(updateMrnDetail.get(i).getRemainingQty()-issueDetailList.get(j).getItemIssueQty());
-									 updateMrnDetail.get(i).setIssueQty(updateMrnDetail.get(i).getIssueQty()+issueDetailList.get(j).getItemIssueQty());
-								 }
-							 }
-						 }
-						 issueHeader.setIssueDetailList(issueDetailList); 
-						 System.err.println("issueHeader  " + issueHeader); 
-						 System.err.println("updateMrnDetail  " + updateMrnDetail); 
-						  IssueHeader res = rest.postForObject(Constants.url + "/saveIssueHeaderAndDetail", issueHeader,
-								IssueHeader.class);
-						  MrnDetail[] update = rest.postForObject(Constants.url + "/updateMrnDetailList", updateMrnDetail,
-			    					 MrnDetail[].class);
-						  SubDocument subDocRes = rest.postForObject(Constants.url + "/saveSubDoc", docBean.getSubDocument(), SubDocument.class);
+						}
 
-						 
-					 }
-			} 
- 
-			
+					}
+
+					mrnDetailList = mrnDetailList.substring(1, mrnDetailList.length());
+
+					map = new LinkedMultiValueMap<>();
+					map.add("mrnDetailList", mrnDetailList);
+					MrnDetail[] MrnDetail = rest.postForObject(Constants.url + "/getMrnDetailListByMrnDetailId", map,
+							MrnDetail[].class);
+
+					List<MrnDetail> updateMrnDetail = new ArrayList<MrnDetail>(Arrays.asList(MrnDetail));
+
+					for (int j = 0; j < issueDetailList.size(); j++) {
+						for (int i = 0; i < updateMrnDetail.size(); i++) {
+							if (updateMrnDetail.get(i).getMrnDetailId() == issueDetailList.get(j).getMrnDetailId()) {
+								updateMrnDetail.get(i).setRemainingQty(updateMrnDetail.get(i).getRemainingQty()
+										- issueDetailList.get(j).getItemIssueQty());
+								updateMrnDetail.get(i).setIssueQty(updateMrnDetail.get(i).getIssueQty()
+										+ issueDetailList.get(j).getItemIssueQty());
+							}
+						}
+					}
+					issueHeader.setIssueDetailList(issueDetailList);
+					System.err.println("issueHeader  " + issueHeader);
+					System.err.println("updateMrnDetail  " + updateMrnDetail);
+					IssueHeader res = rest.postForObject(Constants.url + "/saveIssueHeaderAndDetail", issueHeader,
+							IssueHeader.class);
+					MrnDetail[] update = rest.postForObject(Constants.url + "/updateMrnDetailList", updateMrnDetail,
+							MrnDetail[].class);
+					SubDocument subDocRes = rest.postForObject(Constants.url + "/saveSubDoc", docBean.getSubDocument(),
+							SubDocument.class);
+
+				}
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
-		if(approve==1) {
+
+		if (approve == 1) {
 			ret = "redirect:/firstApproveMrn";
-		}
-		else {
+		} else {
 			ret = "redirect:/secondApproveMrn";
 		}
 
 		return ret;
 	}
-	
-	
+
 	@RequestMapping(value = "/exportExcelforMrn", method = RequestMethod.GET)
 	@ResponseBody
 	public List<ImportExcelForPo> exportExcelforPo(HttpServletRequest request, HttpServletResponse response) {
 
-		
 		List<ImportExcelForPo> list = new ArrayList<>();
 		try {
-			  
-			//String excelFilePath = "C:/pdf/Books1.xlsx";
-			//String excelFilePath = "http://132.148.143.124:8080/triluploads/Books1.xlsx";
+
+			// String excelFilePath = "C:/pdf/Books1.xlsx";
+			// String excelFilePath = "http://132.148.143.124:8080/triluploads/Books1.xlsx";
 			String excelFilePath = "/opt/tomcat-latest/webapps/uploads/Books1.xlsx";
-			//String excelFilePath = "/home/lenovo/Downloads/Books1.xlsx";
-	        FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
-	         
-	        Workbook workbook = new XSSFWorkbook(inputStream);
-	        Sheet firstSheet = workbook.getSheetAt(0);
-	        Iterator<Row> iterator = firstSheet.iterator();
-	         
-	        DataFormatter formatter = new DataFormatter(Locale.US);
-	        
-	        while (iterator.hasNext()) {
-	            Row nextRow = iterator.next();
-	            Iterator<Cell> cellIterator = nextRow.cellIterator();
-	             
-	            int index=0;
-	            ImportExcelForPo importExcelForPo = new ImportExcelForPo();
-	            
-	            while (cellIterator.hasNext()) {
-	                Cell cell = cellIterator.next();
-	                
-	                
-	               try {
-	                //importExcelForPo.setItemId(Integer.parseInt(cell.getStringCellValue()));
-	                 switch (cell.getCellType()) {
-	                 
-	                    case Cell.CELL_TYPE_STRING:
-	                        System.out.print(cell.getStringCellValue());
-	                        break;
-	                    case Cell.CELL_TYPE_BOOLEAN:
-	                        System.out.print(cell.getBooleanCellValue());
-	                        break;
-	                    case Cell.CELL_TYPE_NUMERIC:
-	                        System.out.print(cell.getNumericCellValue());
-	                        break; 
-	               }
-	                 
-	                 if(index==0)
-		                	importExcelForPo.setItemId(Integer.parseInt(formatter.formatCellValue(cell)));
-		                else if(index==1)
-		                	importExcelForPo.setQty(Float.parseFloat(formatter.formatCellValue(cell)));
-		                else if(index==2)
-		                	importExcelForPo.setRate(Float.parseFloat(formatter.formatCellValue(cell)));
-	                
-	                index++;
-	                
-	                System.out.print(" - ");
-	               } catch (Exception e) {
-	       			 
-	       		}
-	            }
-	            
-	            list.add(importExcelForPo);
-	            System.out.println();
-	        }
-	         
-	        workbook.close();
-	        inputStream.close();
-	    
-	        
-	        
-	        for(int i=0 ; i<poDetailList.size() ; i++) {
-	        	
-	        	for(int j=0 ; j< list.size() ; j++) {
-	        		
-	        		if(poDetailList.get(i).getItemId()==list.get(j).getItemId()) {
-	        			
-	        			list.get(j).setIndDetailId(poDetailList.get(i).getPoDetailId());
-	        			poDetailList.get(i).setReceivedQty(list.get(j).getQty());
+			// String excelFilePath = "/home/lenovo/Downloads/Books1.xlsx";
+			FileInputStream inputStream = new FileInputStream(new File(excelFilePath));
+
+			Workbook workbook = new XSSFWorkbook(inputStream);
+			Sheet firstSheet = workbook.getSheetAt(0);
+			Iterator<Row> iterator = firstSheet.iterator();
+
+			DataFormatter formatter = new DataFormatter(Locale.US);
+
+			while (iterator.hasNext()) {
+				Row nextRow = iterator.next();
+				Iterator<Cell> cellIterator = nextRow.cellIterator();
+
+				int index = 0;
+				ImportExcelForPo importExcelForPo = new ImportExcelForPo();
+
+				while (cellIterator.hasNext()) {
+					Cell cell = cellIterator.next();
+
+					try {
+						// importExcelForPo.setItemId(Integer.parseInt(cell.getStringCellValue()));
+						switch (cell.getCellType()) {
+
+						case Cell.CELL_TYPE_STRING:
+							System.out.print(cell.getStringCellValue());
+							break;
+						case Cell.CELL_TYPE_BOOLEAN:
+							System.out.print(cell.getBooleanCellValue());
+							break;
+						case Cell.CELL_TYPE_NUMERIC:
+							System.out.print(cell.getNumericCellValue());
+							break;
+						}
+
+						if (index == 0)
+							importExcelForPo.setItemId(Integer.parseInt(formatter.formatCellValue(cell)));
+						else if (index == 1)
+							importExcelForPo.setQty(Float.parseFloat(formatter.formatCellValue(cell)));
+						else if (index == 2)
+							importExcelForPo.setRate(Float.parseFloat(formatter.formatCellValue(cell)));
+
+						index++;
+
+						System.out.print(" - ");
+					} catch (Exception e) {
+
+					}
+				}
+
+				list.add(importExcelForPo);
+				System.out.println();
+			}
+
+			workbook.close();
+			inputStream.close();
+
+			for (int i = 0; i < poDetailList.size(); i++) {
+
+				for (int j = 0; j < list.size(); j++) {
+
+					if (poDetailList.get(i).getItemId() == list.get(j).getItemId()) {
+
+						list.get(j).setIndDetailId(poDetailList.get(i).getPoDetailId());
+						poDetailList.get(i).setReceivedQty(list.get(j).getQty());
 						poDetailList.get(i).setChalanQty(list.get(j).getRate());
-	        		}
-	        		
-	        	}
-	        	
-	        } 
-	        
-	        System.out.println("list---------" + list);
+					}
+
+				}
+
+			}
+
+			System.out.println("list---------" + list);
 
 		} catch (Exception e) {
 			e.printStackTrace();
