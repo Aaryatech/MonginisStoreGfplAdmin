@@ -213,6 +213,7 @@
 													<th class="col-md-1">Bill No</th>
 													<th class="col-md-1">Bill Date</th>
 													<th class="col-md-1">Vendor Name</th>
+													<th class="col-md-1">PO</th>
 													<th class="col-md-1">MRN Status</th>
 													<!-- <th class="col-md-1">Action</th> -->
 												</tr>
@@ -240,8 +241,13 @@
 														<td><c:out value="${mrn.mrnDate}" /></td>
 														<td><c:out value="${mrn.billNo}" /></td>
 														<td><c:out value="${mrn.billdate}" /></td>
+														
 														<td><c:out value="${mrn.vendorName}" /></td>
-
+<td >
+													<c:forEach items="${mrn.poNosList}" var="po">
+													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${po.poId}" target="_blank">${po.poNo}</a>&nbsp;
+													</c:forEach>
+													</td>
 
 														<td><c:set var="mrnStatus" value="" /> <c:choose>
 																<c:when test="${mrn.mrnStatus==0}">

@@ -1,5 +1,9 @@
 package com.ats.tril.model;
 
+import java.util.List;
+
+import com.ats.tril.model.mrn.PoNos;
+
 
 public class ErpHeader {
 	
@@ -11,8 +15,16 @@ public class ErpHeader {
 	private int MrnStatus;
 	private int vendorId; 
 	private String vendorName; 
+	List<PoNos> poNosList;
+
 	
 	
+	public List<PoNos> getPoNosList() {
+		return poNosList;
+	}
+	public void setPoNosList(List<PoNos> poNosList) {
+		this.poNosList = poNosList;
+	}
 	public int getMrnId() {
 		return mrnId;
 	}
@@ -63,12 +75,12 @@ public class ErpHeader {
 	public void setVendorName(String vendorName) {
 		this.vendorName = vendorName;
 	}
-	
-	
 	@Override
 	public String toString() {
-		return "ERPHeader [mrnId=" + mrnId + ", mrnDate=" + mrnDate + ", MrnNo=" + MrnNo +" BillNo=" + BillNo + ", Billdate=" + Billdate + ", MrnStatus=" + MrnStatus + ", vendorid="
-				+ vendorId + ", vendorName=" + vendorName + "]";
+		return "ErpHeader [mrnId=" + mrnId + ", mrnDate=" + mrnDate + ", MrnNo=" + MrnNo + ", BillNo=" + BillNo
+				+ ", Billdate=" + Billdate + ", MrnStatus=" + MrnStatus + ", vendorId=" + vendorId + ", vendorName="
+				+ vendorName + ", poNosList=" + poNosList + "]";
 	}
-
+	
+	
 }
