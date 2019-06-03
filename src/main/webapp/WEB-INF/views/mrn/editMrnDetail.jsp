@@ -35,6 +35,56 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
@@ -42,7 +92,57 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -62,8 +162,108 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -96,6 +296,56 @@ transform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 :
 
 
@@ -103,7 +353,57 @@ transform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -123,8 +423,108 @@ rotate
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 (360
 deg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -482,8 +882,7 @@ body {
 																	QTY</th>
 																<th class="col-md-1" style="text-align: center;">Pend
 																	QTY</th>
-																<th class="col-md-1" style="text-align: center;">Po
-																	No</th>
+
 																<th class="col-md-1" style="text-align: center;">Status</th>
 															</tr>
 														</thead>
@@ -519,6 +918,7 @@ body {
 														<th class="col-md-1">UOM</th>
 														<!-- <th  class="col-md-1"  >PO QTY</th> -->
 														<th class="col-md-1">Mrn QTY</th>
+														<th class="col-md-1">Approved QTY</th>
 														<!-- <th  class="col-md-1"  >PO No</th> -->
 														<th class="col-md-1">Status</th>
 														<th class="col-md-1">Action</th>
@@ -563,9 +963,18 @@ body {
 															<td class="col-md-1"><input type="text"
 																style="text-align: right;" class="form-control"
 																id="mrnRecQty${mrnDetail.mrnDetailId}"
-																onchange="updateMrnQty(this.value,${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})"
+																onchange="updateMrnQty(${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})"
 																name="mrnRecQty${mrnDetail.mrnDetailId}"
 																value="${mrnDetail.mrnQty}"></td>
+
+
+
+															<td class="col-md-1"><input type="text"
+																style="text-align: right;" class="form-control"
+																id="appQty${mrnDetail.mrnDetailId}"
+																onchange="updateMrnQty(${mrnDetail.mrnDetailId},${mrnDetail.itemId},${mrnDetail.mrnQty},${mrnDetail.poPendingQty})"
+																name="appQty${mrnDetail.mrnDetailId}"
+																value="${mrnDetail.approveQty}"></td>
 
 															<%-- <td class="col-md-1"  ><c:out
 																	value="${mrnDetail.poNo}" /></td> --%>
@@ -991,9 +1400,17 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 
 	<script type="text/javascript">
 
-		function updateMrnQty(qty,detailId,itemId,oldMrnQty,poPendingQty) {
+		function updateMrnQty(detailId,itemId,oldMrnQty,poPendingQty) {
+		//	alert("Hii");
 			
+		//	document.getElementById("appQty"+detailId).value=appQty;
+		//	document.getElementById("mrnRecQty"+detailId).value=qty;
 			
+			var qty = $("#mrnRecQty"+detailId).val();
+			var appQty = $("#appQty"+detailId).val();
+			//alert("mrnRecQtymrnRecQty"+mrnRecQty);
+			
+		//	alert(qty);
 			$('#loader').show();
 			var newQty=parseFloat(oldMrnQty)+parseInt(poPendingQty);
 			/* alert("po pend " +qty);
@@ -1001,6 +1418,7 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 			if(qty<=newQty){
 			$.getJSON('${getMrnDetail}', {
 				qty : qty,
+				approveQty :appQty,
 				detailId : detailId,
 				itemId : itemId,
 				ajax : 'true',
@@ -1022,11 +1440,18 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 							'<td class="col-md-2" ></td>')
 							.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' '+itemList.itemName+'</div>'))
 					//tr.append($('<td class="col-md-3" style="text-align: center;"></td>').html(itemList.itemName));
-					tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.poQty));
+					
+					tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.itemUom));
 					tr
 					.append($(
 							'<td class="col-md-1" style="text-align: right;"></td>')
-					.html("<input type=text  style='text-align:right;'  class=form-control name=mrnRecQty"+itemList.mrnDetailId+" id=mrnRecQty"+itemList.mrnDetailId+" onchange='updateMrnQty(this.value,"+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+")' value="+itemList.mrnQty+"  />"));
+					.html("<input type=text  style='text-align:right;'  class=form-control name=mrnRecQty"+itemList.mrnDetailId+" id=mrnRecQty"+itemList.mrnDetailId+" onchange='updateMrnQty("+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+")' value="+itemList.mrnQty+"  />"));
+										
+					
+					tr
+					.append($(
+							'<td class="col-md-1" style="text-align: right;"></td>')
+					.html("<input type=text  style='text-align:right;'  class=form-control name=appQty"+itemList.mrnDetailId+" id=appQty"+itemList.mrnDetailId+" onchange='updateMrnQty("+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+","+itemList.approveQty+")' value="+itemList.approveQty+"  />"));
 										
 					var status;
 					if(itemList.mrnDetailStatus==0){
@@ -1040,7 +1465,7 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 						status="Completed";
 					}
 					
-					tr.append($('<td class="col-md-1"  ></td>').html(itemList.poNo));
+					 
 					tr.append($('<td class="col-md-1"  ></td>').html(status));
 					
 					tr.append($('<td class="col-md-1"  ></td>').html("<a href='${pageContext.request.contextPath}/deleteMrnDetail/"+itemList.mrnDetailId+"' title='Delete' class='action_btn'><i class='fa fa-trash-o'></i></a>"));
@@ -1106,12 +1531,20 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 																						'<td class="col-md-2" ></td>')
 																						.html('<div title="'+itemList.itemName+'">'+itemList.itemCode+' '+itemList.itemName+'</div>'))
 				
-					tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.poQty));
+					tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.itemUom));
+					//tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(itemList.poQty));
+					 
 					tr
 					.append($(
-							'<td class="col-md-1" ></td>')
-					.html("<input type=text  style='text-align:center;'  class=form-control name=mrnRecQty"+itemList.mrnDetailId+" id=mrnRecQty"+itemList.mrnDetailId+" onchange='updateMrnQty(this.value,"+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+")' value="+itemList.mrnQty+"  />"));
+							'<td class="col-md-1" style="text-align: right;"></td>')
+					.html("<input type=text  style='text-align:right;'  class=form-control name=mrnRecQty"+itemList.mrnDetailId+" id=mrnRecQty"+itemList.mrnDetailId+" onchange='updateMrnQty("+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+")' value="+itemList.mrnQty+"  />"));
 										
+					
+					tr
+					.append($(
+							'<td class="col-md-1" style="text-align: right;"></td>')
+					.html("<input type=text  style='text-align:right;'  class=form-control name=appQty"+itemList.mrnDetailId+" id=appQty"+itemList.mrnDetailId+" onchange='updateMrnQty("+itemList.mrnDetailId+","+itemList.itemId+","+itemList.mrnQty+","+itemList.poPendingQty+","+itemList.approveQty+")' value="+itemList.approveQty+"  />"));
+							
 					var status;
 					if(itemList.mrnDetailStatus==0){
 						status="Pending";
@@ -1123,8 +1556,9 @@ tr.append($('<td class="col-md-1" style="text-align: right;"></td>').html(pendQt
 					if(itemList.mrnDetailStatus==2){
 						status="Completed";
 					}
-					
-					tr.append($('<td class="col-md-1" ></td>').html(itemList.poNo));
+				 
+
+				 
 					tr.append($('<td class="col-md-1" ></td>').html(status));
 					
 					tr.append($('<td class="col-md-1" style="text-align: center;"></td>').html("<a href='${pageContext.request.contextPath}/deleteMrnDetail/"+itemList.mrnDetailId+"' title='Delete' class='action_btn'><i class='fa fa-trash-o'></i></a>"));

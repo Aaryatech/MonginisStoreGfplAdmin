@@ -927,6 +927,7 @@ public class MrnController {
 		try {
 
 			float mrnQty = Float.parseFloat(request.getParameter("qty"));
+			float approveQty = Float.parseFloat(request.getParameter("approveQty"));
 
 			int mrnDetailId = Integer.parseInt(request.getParameter("detailId"));
 
@@ -942,7 +943,7 @@ public class MrnController {
 						System.err.println("Inside mrnDetailId matched  ");
 
 						mrnDetailList.get(i).setMrnQty(mrnQty);
-
+						mrnDetailList.get(i).setApproveQty(approveQty);
 					} else {
 
 						System.err.println("Mrn Detail ID Not matched ");
@@ -998,6 +999,7 @@ public class MrnController {
 					mrnHeader.setMrnNo(mrnHeaderList.get(i).getMrnNo());
 					mrnHeader.setMrnDate(DateConvertor.convertToYMD(mrnHeaderList.get(i).getMrnDate()));
 					mrnHeader.setMrnType(mrnHeaderList.get(i).getMrnType());
+					mrnHeader.setMrnStatus(mrnHeaderList.get(i).getMrnStatus());
 
 				}
 
@@ -1015,7 +1017,7 @@ public class MrnController {
 			mrnHeader.setLrDate(DateConvertor.convertToYMD(lrDate));
 			mrnHeader.setLrNo(lrNo);
 			// mrnHeader.setMrnNo("default MRN NO");
-			mrnHeader.setMrnStatus(4);
+
 			mrnHeader.setRemark1(lorryRemark);
 			mrnHeader.setRemark2("def");
 			mrnHeader.setTransport(transport);
@@ -1037,13 +1039,13 @@ public class MrnController {
 					mrnDetail.setItemId(detail.getItemId());
 					mrnDetail.setPoId(detail.getPoId());
 					mrnDetail.setPoNo(detail.getPoNo());
-					mrnDetail.setMrnDetailStatus(4);
+					mrnDetail.setMrnDetailStatus(detail.getMrnDetailStatus());
 					mrnDetail.setMrnDetailId(detail.getMrnDetailId());
 					mrnDetail.setBatchNo(detail.getBatchNo());
 					mrnDetail.setDelStatus(detail.getDelStatus());
 					mrnDetail.setPoDetailId(detail.getPoDetailId());
 
-					mrnDetail.setApproveQty(detail.getMrnQty());
+					mrnDetail.setApproveQty(detail.getApproveQty());
 					mrnDetail.setRejectQty(detail.getRejectQty());
 					mrnDetail.setRejectRemark(detail.getRejectRemark());
 					mrnDetail.setIssueQty(detail.getIssueQty());
@@ -1139,6 +1141,8 @@ public class MrnController {
 			List<GetMrnHeader> getMrnHeaderList = new ArrayList<GetMrnHeader>(Arrays.asList(getMrnHeader));
 			model.addObject("approve", 1);
 			model.addObject("getMrnHeaderList", getMrnHeaderList);
+
+			System.out.println(getMrnHeaderList.toString());
 
 			Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
 			List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
