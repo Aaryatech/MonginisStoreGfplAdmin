@@ -1047,8 +1047,8 @@ public class PurchaseOrderController {
 	GetPoHeaderList getPoHeader = new GetPoHeaderList();
 	List<GetIntendDetail> getIntendDetailListforEdit = new ArrayList<>();
 
-	@RequestMapping(value = "/editPurchaseOrder/{poId}", method = RequestMethod.GET)
-	public ModelAndView editPurchaseOrder(@PathVariable int poId, HttpServletRequest request,
+	@RequestMapping(value = "/editPurchaseOrder/{poId}/{mrnId}", method = RequestMethod.GET)
+	public ModelAndView editPurchaseOrder(@PathVariable int poId,@PathVariable int mrnId, HttpServletRequest request,
 			HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("purchaseOrder/editPurchaseOrder");
@@ -1056,6 +1056,7 @@ public class PurchaseOrderController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("poId", poId);
+			
 			getPoHeader = rest.postForObject(Constants.url + "/getPoHeaderAndDetailByHeaderId", map,
 					GetPoHeaderList.class);
 			model.addObject("getPoHeader", getPoHeader);
@@ -1100,6 +1101,8 @@ public class PurchaseOrderController {
 
 			TaxForm[] taxFormList = rest.getForObject(Constants.url + "/getAllTaxForms", TaxForm[].class);
 			model.addObject("taxFormList", taxFormList);
+			model.addObject("mrnId", mrnId);
+			
 
 			/*map = new LinkedMultiValueMap<>();
 			map.add("status", "0,1");
@@ -1396,7 +1399,7 @@ public class PurchaseOrderController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/editPurchaseOrder/"+getPoHeader.getPoId();
+		return "redirect:/editPurchaseOrder/"+getPoHeader.getPoId()+"/0";
 	}
 	
 	@RequestMapping(value = "/deletePoItemInEditPo/{poDetailId}", method = RequestMethod.GET)
@@ -1518,7 +1521,7 @@ public class PurchaseOrderController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/editPurchaseOrder/"+getPoHeader.getPoId();
+		return "redirect:/editPurchaseOrder/"+getPoHeader.getPoId()+"/0";
 	}
 
 	@RequestMapping(value = "/changeItemRate", method = RequestMethod.GET)
@@ -1726,6 +1729,7 @@ public class PurchaseOrderController {
 			Calendar c = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
+			int mrnId = Integer.parseInt(request.getParameter("mrnId"));
 			int vendId = Integer.parseInt(request.getParameter("vendId"));
 			String quotation = request.getParameter("quotation");
 			int poType = Integer.parseInt(request.getParameter("poType"));
@@ -1799,7 +1803,15 @@ public class PurchaseOrderController {
 				 
 				 ErrorMessage errorMessage = rest.postForObject(Constants.url + "/updateIndendPendingQty",
 						getIntendDetailListforEdit, ErrorMessage.class);
+				 if(mrnId>0)
+				 {
+				 ErrorMessage errorMessage1 = rest.postForObject(Constants.url + "/updateMRNStatusById",
+						 mrnId, ErrorMessage.class);
+				 System.out.println(errorMessage1);
+				 }
+				 
 				System.out.println(errorMessage);
+				
 			} 
 
 		} catch (Exception e) {

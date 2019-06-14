@@ -604,6 +604,8 @@ public class MrnController {
 					statusOfMrn = "1,2";
 				if (status == 3)
 					statusOfMrn = "3,4,5";
+				if (status == 4)
+					statusOfMrn = "6";
 				System.out.println("inside Else ");
 
 				System.out.println("fromDate " + fromDate);

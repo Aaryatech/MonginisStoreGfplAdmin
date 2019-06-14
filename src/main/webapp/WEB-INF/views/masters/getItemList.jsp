@@ -139,6 +139,8 @@
 										<thead>
 											<tr class="bgpink">
 												<th style="width: 2%;">Sr No</th>
+												<th style="width: 2%;">Item Code</th>
+												<th style="width: 2%;">ERP Code</th>
 												
 												<th class="col-md-5">Item Description</th>
 												<th class="col-md-1">Item UOM</th>
@@ -151,7 +153,8 @@
 												varStatus="count">
 												<tr>
 													<td style="width: 2%;"><c:out value="${count.index+1}" /></td>
-													
+													<td class="col-md-1"><c:out value="${itemList.itemCode}" /></td>
+													<td class="col-md-1"><c:out value="${itemList.itemId}" /></td>
 													<td class="col-md-5"><c:out
 															value="${itemList.itemDesc}" /></td>
 													<td class="col-md-1"><c:out

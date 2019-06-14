@@ -311,7 +311,7 @@
 										  	tr.append($('<td></td>').html(itemList.poNo));  
 										  	tr.append($('<td></td>').html(itemList.vendorName));
 										  	tr.append($('<td></td>').html(itemList.indNo));
-										  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/editPurchaseOrder/'+itemList.poId+'"><abbr'+
+										  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/editPurchaseOrder/'+itemList.poId+'/0"><abbr'+
 													'title="Edit"><i class="fa fa-edit"></i></abbr></a> <a href="${pageContext.request.contextPath}/deletePurchaseOrder/'+itemList.poId+'"'+
 													'onClick="return confirm("Are you sure want to delete this record");"><span class="glyphicon glyphicon-remove"></span></a>'));
 										    $('#table1 tbody').append(tr); 

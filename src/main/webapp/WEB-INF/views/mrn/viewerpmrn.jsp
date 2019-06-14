@@ -97,6 +97,7 @@
 													<option value="2">Stores MRN Done/Director
 														Approval Pending</option>
 													<option value="3">Director Approved</option>
+													<option value="4" >Account Approved</option>
 												</c:when>
 												<c:when test="${status==2}">
 													<option value="-1">Select MRN Type</option>
@@ -105,6 +106,7 @@
 													<option value="2" selected>Stores MRN
 														Done/Director Approval Pending</option>
 													<option value="3">Director Approved</option>
+													<option value="4" >Account Approved</option>
 												</c:when>
 												<c:when test="${status==3}">
 													<option value="-1">Select MRN Type</option>
@@ -113,6 +115,16 @@
 													<option value="2">Stores MRN Done/Director
 														Approval Pending</option>
 													<option value="3" selected>Director Approved</option>
+													<option value="4" >Account Approved</option>
+												</c:when>
+												<c:when test="${status==4}">
+													<option value="-1">Select MRN Type</option>
+													<option value="1">Gate Inward Done /Stores MRN
+														Pending</option>
+													<option value="2">Stores MRN Done/Director
+														Approval Pending</option>
+													<option value="3" >Director Approved</option>
+													<option value="4" selected>Account Approved</option>
 												</c:when>
 												<c:otherwise>
 													<option value="-1">Select MRN Type</option>
@@ -121,6 +133,7 @@
 													<option value="2">Stores MRN Done/Director
 														Approval Pending</option>
 													<option value="3">Director Approved</option>
+													<option value="4">Account Approved</option>
 												</c:otherwise>
 											</c:choose>
 
@@ -245,7 +258,7 @@
 														<td><c:out value="${mrn.vendorName}" /></td>
 <td >
 													<c:forEach items="${mrn.poNosList}" var="po">
-													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${po.poId}" target="_blank">${po.poNo}</a>&nbsp;
+													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${po.poId}/${mrn.mrnId}" target="_blank">${po.poNo}</a>&nbsp;
 													</c:forEach>
 													</td>
 
@@ -260,6 +273,9 @@
 																</c:when>
 																<c:when test="${mrn.mrnStatus==3 or mrn.mrnStatus==4 or mrn.mrnStatus==5 }">
 																	<c:set var="mrnStatus" value="Director Approved"></c:set>
+																</c:when>
+																<c:when test="${mrn.mrnStatus==6 }">
+																	<c:set var="mrnStatus" value="Account Approved"></c:set>
 																</c:when>
 															</c:choose> <c:out value="${mrnStatus}" /></td>
 														<%-- <td >
