@@ -603,7 +603,7 @@ public class MrnController {
 				if (status == 2)
 					statusOfMrn = "1,2";
 				if (status == 3)
-					statusOfMrn = "3,4";
+					statusOfMrn = "3,4,5";
 				System.out.println("inside Else ");
 
 				System.out.println("fromDate " + fromDate);

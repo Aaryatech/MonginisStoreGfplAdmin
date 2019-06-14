@@ -258,7 +258,7 @@
 																	<c:set var="mrnStatus"
 																		value="Stores MRN Done/Director Approval Pending"></c:set>
 																</c:when>
-																<c:when test="${mrn.mrnStatus==3 or mrn.mrnStatus==4}">
+																<c:when test="${mrn.mrnStatus==3 or mrn.mrnStatus==4 or mrn.mrnStatus==5 }">
 																	<c:set var="mrnStatus" value="Director Approved"></c:set>
 																</c:when>
 															</c:choose> <c:out value="${mrnStatus}" /></td>
