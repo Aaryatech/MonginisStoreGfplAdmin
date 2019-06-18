@@ -252,7 +252,7 @@ h6 {
 												</table>
 
 											</div>
-											<div class="row">
+									<%-- 		<div class="row">
 												<div class="col-md-12" style="text-align: center">
 													<c:choose>
 														<c:when test="${flag==0}">
@@ -267,7 +267,7 @@ h6 {
 
 
 												</div>
-											</div>
+											</div> --%>
 											<br>
 										</div>
 

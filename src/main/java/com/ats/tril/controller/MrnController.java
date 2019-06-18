@@ -1001,7 +1001,10 @@ public class MrnController {
 					mrnHeader.setMrnNo(mrnHeaderList.get(i).getMrnNo());
 					mrnHeader.setMrnDate(DateConvertor.convertToYMD(mrnHeaderList.get(i).getMrnDate()));
 					mrnHeader.setMrnType(mrnHeaderList.get(i).getMrnType());
-					mrnHeader.setMrnStatus(mrnHeaderList.get(i).getMrnStatus());
+
+					if (mrnHeaderList.get(i).getMrnStatus() < 4 && mrnHeaderList.get(i).getMrnStatus() > 0) {
+						mrnHeader.setMrnStatus(4);
+					}
 
 				}
 
@@ -1041,7 +1044,10 @@ public class MrnController {
 					mrnDetail.setItemId(detail.getItemId());
 					mrnDetail.setPoId(detail.getPoId());
 					mrnDetail.setPoNo(detail.getPoNo());
-					mrnDetail.setMrnDetailStatus(detail.getMrnDetailStatus());
+
+					if (detail.getMrnDetailStatus() > 0 && detail.getMrnDetailStatus() < 4) {
+						mrnDetail.setMrnDetailStatus(4);
+					}
 					mrnDetail.setMrnDetailId(detail.getMrnDetailId());
 					mrnDetail.setBatchNo(detail.getBatchNo());
 					mrnDetail.setDelStatus(detail.getDelStatus());
