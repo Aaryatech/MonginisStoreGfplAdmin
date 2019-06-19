@@ -957,11 +957,11 @@ body {
 						+ itemId).value;
 
 				//alert("Qty  " +qty  +"chalan Qty  " +chalanQty);
-				  if (parseInt(qty) > parseInt(pendingQty)) {
+				 /*  if (parseInt(qty) > parseInt(pendingQty)) {
 					document.getElementById("recQty" + poDId + itemId).value = 0;
 					alert("Received Qty can not be greater than Pending Qty");
 
-				} else { 
+				} else { */ 
 
 					/* if (chalanQty > 0) { */
 						addMrnQty(qty, poDId, chalanQty);
@@ -972,7 +972,7 @@ body {
 					} */
 					//getPoDetail(qty, poDId);
 
-				 }
+				// }
 
 			}
 			function checkMe(checking) {

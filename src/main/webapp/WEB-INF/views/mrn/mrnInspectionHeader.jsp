@@ -211,10 +211,10 @@
 																	<c:out value="Partially Inspection " />
 																</c:when>
 															</c:choose></td>
-														<td class="col-md-1"><a
+														<td class="col-md-1"><%-- <a
 															href="javascript:genPdf(${ getMrnHeaderList.mrnId});"
 															title="PDF"><i
-																class="glyphicon glyphicon glyphicon-file"></i></a> <a
+																class="glyphicon glyphicon glyphicon-file"></i></a> --%> <a
 															href="${pageContext.request.contextPath}/getMrnDetail/${getMrnHeaderList.mrnId}"><abbr
 																title="Details"><i class="fa fa-list"></i></abbr></a></td>
 													</tr>
@@ -223,10 +223,10 @@
 											</tbody>
 
 										</table>
-										<buttons
+										<!-- <buttons
 											style="background-color: #008CBA; border: none; color: white; text-align: center; text-decoration: none; display: block; font-size: 12px; cursor: pointer; width: 50px; height: 30px; margin: auto;"
 											onclick="commonPdf()">PDF
-										</button>
+										</button> -->
 									</div>
 								</div>
 							</form>
