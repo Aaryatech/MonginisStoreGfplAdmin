@@ -1517,4 +1517,64 @@ public class MrnController {
 
 		return list;
 	}
+
+	@RequestMapping(value = { "/getMrnHeaderByBillDateAndBillNo" }, method = RequestMethod.GET)
+	public @ResponseBody List<MrnHeader> getMrnHeaderByBillDateAndBillNo(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<MrnHeader> mrnHeadList = new ArrayList<>();
+
+		try {
+			System.out.println("I============n Marn");
+
+			String billDate = request.getParameter("billDate");
+			String billNo = request.getParameter("billNo");
+			int vendor_id = Integer.parseInt(request.getParameter("vendor_id"));
+
+			System.out.println("billNobillNobillNobillNobillNo" + billNo);
+			System.out.println("vendor_id" + vendor_id);
+			System.out.println("billDate" + billDate);
+
+			String dateArr[] = billDate.split("-");
+			String day = dateArr[0];
+			String month = dateArr[1];
+			String currentYear = dateArr[2];
+
+			String financiyalYearFrom = "";
+			String financiyalYearTo = "";
+			if (Integer.parseInt(month) < 4) {
+				financiyalYearFrom = "01-04-" + (Integer.parseInt(currentYear) - 1);
+				financiyalYearTo = "31-03-" + (currentYear);
+			} else {
+				financiyalYearFrom = "01-04-" + (currentYear);
+				financiyalYearTo = "31-03-" + (Integer.parseInt(currentYear) + 1);
+			}
+
+			System.out.println("financiyalYearFrom" + financiyalYearFrom);
+			System.out.println("financiyalYearTo" + financiyalYearTo);
+
+			// getMrnHeaderByVendIdAndDate
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(financiyalYearFrom));
+			map.add("toDate", DateConvertor.convertToYMD(financiyalYearTo));
+			map.add("vendId", vendor_id);
+			map.add("billNo", billNo);
+
+			MrnHeader[] poHeadRes = rest.postForObject(Constants.url + "/getMrnHeaderByVendIdAndDate", map,
+					MrnHeader[].class);
+			mrnHeadList = new ArrayList<MrnHeader>(Arrays.asList(poHeadRes));
+
+			System.out.println(mrnHeadList.toString());
+
+		} catch (Exception e) {
+
+			System.err.println("Exception in getting Mrn Detail List @getMrnDetail By Ajax Call " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return mrnHeadList;
+
+	}
+
 }
