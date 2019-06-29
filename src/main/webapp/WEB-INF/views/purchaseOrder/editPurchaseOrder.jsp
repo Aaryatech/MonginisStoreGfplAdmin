@@ -2,9 +2,9 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
- <link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
-	 <style>
+<style>
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
@@ -71,32 +71,37 @@ body {
 	transform: translate(-50%, -50%);
 	-ms-transform: translate(-50%, -50%);
 }
+
 .bg-overlay {
-    background: linear-gradient(rgba(0,0,0,.7), rgba(0,0,0,.7)), url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center center;
-    color: #fff;
-    height:auto;
-    width:auto;
-    padding-top: 10px;
-    padding-left:20px;
+	background: linear-gradient(rgba(0, 0, 0, .7), rgba(0, 0, 0, .7)),
+		url("${pageContext.request.contextPath}/resources/images/smart.jpeg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	color: #fff;
+	height: auto;
+	width: auto;
+	padding-top: 10px;
+	padding-left: 20px;
 }
 </style>
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	  
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
 
-	<c:url var="geIntendDetailByIndIdInEditPo" value="/geIntendDetailByIndIdInEditPo"></c:url>
-		<c:url var="changeItemRate" value="/changeItemRate"></c:url>
-		<c:url var="getRmCategory" value="/getRmCategory" />
-			<c:url var="getRmListByCatId" value="/getRmListByCatId" />
-						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 
-	<c:url var="calculatePurchaseHeaderValuesInEdit" value="/calculatePurchaseHeaderValuesInEdit" />
+	<c:url var="geIntendDetailByIndIdInEditPo"
+		value="/geIntendDetailByIndIdInEditPo"></c:url>
+	<c:url var="changeItemRate" value="/changeItemRate"></c:url>
+	<c:url var="getRmCategory" value="/getRmCategory" />
+	<c:url var="getRmListByCatId" value="/getRmListByCatId" />
+	<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 
-<c:url var="getPreviousRecordOfPoItem" value="/getPreviousRecordOfPoItem" />
+	<c:url var="calculatePurchaseHeaderValuesInEdit"
+		value="/calculatePurchaseHeaderValuesInEdit" />
+
+	<c:url var="getPreviousRecordOfPoItem"
+		value="/getPreviousRecordOfPoItem" />
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -122,467 +127,696 @@ body {
 				<h4>Bill for franchises</h4>
 			</div>
 		</div> -->
-		 
+
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
 				<h3>
 					<i class="fa fa-bars"></i> Edit Purchase Order
 				</h3>
-				
+
 				<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/listOfPurachaseOrder">
-									PO List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
+					<a href="${pageContext.request.contextPath}/listOfPurachaseOrder">
+						PO List</a> <a data-action="collapse" href="#"><i
+						class="fa fa-chevron-up"></i></a>
+				</div>
 
 			</div>
 
-				<div class=" box-content">
-					 
-		<div >
-			<form id="submitPurchaseOrder"
-				action="${pageContext.request.contextPath}/submitEditPurchaseOrder"
-				onsubmit="return confirm('Do you really want to Apply Changes In purchase Order ?');" method="post">
-				
-				<input  type="hidden" id="mrnId" name="mrnId" value="${mrnId}"  >
-				<div class="box-content">
-			<div class="col-md-2" >PO Type</div>
-									<div class="col-md-3">
-									<input type="hidden" id="poType" name="poType" value="${getPoHeader.poType}">
-										<select name="poTypes" id="poTypes"   class="form-control chosen"  disabled>
-										<c:forEach items="${typeList}" var="typeList">
-															<c:choose> 
-																<c:when test="${getPoHeader.poType==typeList.typeId}">
-																	<option value="${typeList.typeId}" selected>${typeList.typeName}</option>
-																</c:when> 
-															</c:choose>
-														</c:forEach>
-										
-										</select>
-									</div>
-									
-									 
-									</div><br/>
-									
-			<div class="box-content">
-				<div class="col-md-2">PO No.  </div>
-				<div class="col-md-3"><input type="text" id="poNo" name="poNo" value="${getPoHeader.poNo}" class="form-control" readonly>
-				</div>
-				<div class="col-md-2">PO Date</div> 
-				<div class="col-md-3">
-				<input type="text" id="poDate" name="poDate" value="${getPoHeader.poDate}" class="form-control date-picker" required>
-					
-				</div>
-				</div><br/>
-				<div class="box-content">
-				<div class="col-md-2" >Vendor Name</div>
-									<div class="col-md-10">
-										<select name="vendId" id="vendId"   class="form-control chosen"  required>
-										 
-											 <c:forEach items="${vendorList}" var="vendorList" >
-											<c:choose>
-									 			<c:when test="${vendorList.vendorId==getPoHeader.vendId}">
-							  						<option value="${vendorList.vendorId}" selected> ${vendorList.vendorCode} &nbsp; ${vendorList.vendorName} </option>
- 												</c:when>
- 												<%-- <c:otherwise>
+			<div class=" box-content">
+
+				<div>
+					<form id="submitPurchaseOrder"
+						action="${pageContext.request.contextPath}/submitEditPurchaseOrder"
+						onsubmit="return confirm('Do you really want to Apply Changes In purchase Order ?');"
+						method="post">
+
+						<input type="hidden" id="mrnId" name="mrnId" value="${mrnId}">
+						<div class="box-content">
+							<div class="col-md-2">PO Type</div>
+							<div class="col-md-3">
+								<input type="hidden" id="poType" name="poType"
+									value="${getPoHeader.poType}"> <select name="poTypes"
+									id="poTypes" class="form-control chosen" disabled>
+									<c:forEach items="${typeList}" var="typeList">
+										<c:choose>
+											<c:when test="${getPoHeader.poType==typeList.typeId}">
+												<option value="${typeList.typeId}" selected>${typeList.typeName}</option>
+											</c:when>
+										</c:choose>
+									</c:forEach>
+
+								</select>
+							</div>
+
+
+						</div>
+						<br />
+
+						<div class="box-content">
+							<div class="col-md-2">PO No.</div>
+							<div class="col-md-3">
+								<input type="text" id="poNo" name="poNo"
+									value="${getPoHeader.poNo}" class="form-control" readonly>
+							</div>
+							<div class="col-md-2">PO Date</div>
+							<div class="col-md-3">
+								<input type="text" id="poDate" name="poDate"
+									value="${getPoHeader.poDate}" class="form-control date-picker"
+									required>
+
+							</div>
+						</div>
+						<br />
+						<div class="box-content">
+							<div class="col-md-2">Vendor Name</div>
+							<div class="col-md-10">
+								<select name="vendId" id="vendId" class="form-control chosen"
+									required>
+
+									<c:forEach items="${vendorList}" var="vendorList">
+										<c:choose>
+											<c:when test="${vendorList.vendorId==getPoHeader.vendId}">
+												<option value="${vendorList.vendorId}" selected>
+													${vendorList.vendorCode} &nbsp; ${vendorList.vendorName}</option>
+											</c:when>
+											<%-- <c:otherwise>
  													<option value="${vendorList.vendorId}"  >${vendorList.vendorName}&nbsp;&nbsp; ${vendorList.vendorCode}</option>
  												</c:otherwise> --%>
- 												</c:choose>	 
-												</c:forEach>
-						
+										</c:choose>
+									</c:forEach>
 
-										</select>
-									</div>
-									 
-			</div><br/>
-			
-			<div class="box-content">
-				<div class="col-md-2" >Remark</div>
-									<div class="col-md-10">
-										<input type="text"   placeholder="Remark" value="${getPoHeader.poRemark}" name="poRemark" id="poRemark" class="form-control" required>
-									
-									</div>
-									
-				 
-			</div><br/>
-			
-								<c:choose> 
-										<c:when test="${autoMrn==1}"> 
-											<div class="box-content"> 
-												<div class="col-md-2">Bill No</div>
-													<div class="col-md-3">
-														<input type="text" placeholder="Bill No"  value="${getPoHeader.vendQuation}" name="quotation" id="quotation" class="form-control"  required>
-													</div>
-				
-												<div class="col-md-2" >Bill Date</div>
-												<div class="col-md-3">
-													 <input type="text"   placeholder="Bill Date" value="${getPoHeader.vendQuationDate}" name="quotationDate" id="quotationDate" class="form-control date-picker" required>
-												</div>
-				 
-											</div><br/> 		 
-										</c:when> 
-										<c:otherwise>
-											<div class="box-content"> 
-												<div class="col-md-2">Vendor Quotation</div>
-													<div class="col-md-3">
-														<input type="text" placeholder="Enter Quotation No"  value="${getPoHeader.vendQuation}" name="quotation" id="quotation" class="form-control"  required>
-													</div>
-				
-												<div class="col-md-2" >Quotation Ref. Date</div>
-												<div class="col-md-3">
-													 <input type="text"   placeholder="Select Quotation Date" value="${getPoHeader.vendQuationDate}" name="quotationDate" id="quotationDate" class="form-control date-picker" required>
-												</div>
-				 
-											</div><br/>
-										
-										</c:otherwise>
-										
-								</c:choose>
-			
-			
-			 			
-			<div class="box-content">
-				<div class="col-md-2" >Payment Terms</div>
-									<div class="col-md-3">
-										<select name="payId" id="payId"    class="form-control chosen"  required>
-									 
-											 <c:forEach items="${paymentTermsList}" var="paymentTermsList" >
-											 <c:choose>
-											 	<c:when test="${paymentTermsList.pymtTermId==getPoHeader.paymentTermId}">
-											 		<option value="${paymentTermsList.pymtTermId}" selected><c:out value="${paymentTermsList.pymtDesc}"/></option> 
-											 	</c:when>
-											 	<c:otherwise>
-											 		<option value="${paymentTermsList.pymtTermId}"><c:out value="${paymentTermsList.pymtDesc}"/></option> 
-											 	</c:otherwise>
-											 </c:choose>
-							   
-												</c:forEach>
-						 
-										</select>
-									</div>
-									
-									 <div class="col-md-2" >Select Delivery</div>
-									<div class="col-md-3">
-										<select name="deliveryId" id="deliveryId"    class="form-control chosen"  required>
-										 
-											 <c:forEach items="${deliveryTermsList}" var="deliveryTermsList" >
-											 <c:choose>
-											 	<c:when test="${deliveryTermsList.deliveryTermId==getPoHeader.deliveryId}">
-											 	 <option value="${deliveryTermsList.deliveryTermId}" selected><c:out value="${deliveryTermsList.deliveryDesc}"/></option>
-											 	</c:when>
-											 	<c:otherwise>
-											 	 <option value="${deliveryTermsList.deliveryTermId}"><c:out value="${deliveryTermsList.deliveryDesc}"/></option>
-											 	</c:otherwise>
-											 </c:choose>
-							  
- 											 </c:forEach>
-						 
-										</select>
-									</div> 
-				</div><br/>
+
+								</select>
+							</div>
+
+						</div>
+						<br />
+
+						<div class="box-content">
+							<div class="col-md-2">Remark</div>
+							<div class="col-md-10">
+								<input type="text" placeholder="Remark"
+									value="${getPoHeader.poRemark}" name="poRemark" id="poRemark"
+									class="form-control" required>
+
+							</div>
+
+
+						</div>
+						<br />
+
+						<c:choose>
+							<c:when test="${autoMrn==1}">
 								<div class="box-content">
-								
-									<div class="col-md-2" >Select Dispatch Mode</div>
+									<div class="col-md-2">Bill No</div>
 									<div class="col-md-3">
-									
-										<select name="dispatchMode"  id="dispatchMode"   class="form-control chosen"  required>
-										 
-									 <c:forEach items="${dispatchModeList}" var="dispatchModeList" >
-									 <c:choose>
-									 	<c:when test="${dispatchModeList.dispModeId==getPoHeader.dispatchId}">
-									 		 <option value="${dispatchModeList.dispModeId}" selected><c:out value="${dispatchModeList.dispModeDesc}"/></option>
-									 	</c:when>
-									 	<c:otherwise>
-									 	 	<option value="${dispatchModeList.dispModeId}"><c:out value="${dispatchModeList.dispModeDesc}"/></option>
-									 	</c:otherwise>
-									 </c:choose>
-							  
- 													 
-												</c:forEach>
-										 </select>
+										<input type="text" placeholder="Bill No"
+											value="${getPoHeader.vendQuation}" name="quotation"
+											id="quotation" class="form-control" required>
 									</div>
-									
-									<div class="col-md-2">Order Validity</div>
-										<div class="col-md-3">
-											<input type="number" placeholder="Order Validity"  value="${getPoHeader.approvStatus}" name="orderValidity" id="orderValidity" class="form-control" required>
-										</div>
-										
-								</div><br/>
-								 
-								
-			
-				
-					<div class="box-content">
-								<div class="col-md-2" >Indend No.</div>
+
+									<div class="col-md-2">Bill Date</div>
 									<div class="col-md-3">
-									<input type="text"   placeholder="Indend No" value="${getPoHeader.indNo}" name="indNo" id="indNo" class="form-control"  readonly>
-									<input type="hidden"  value="${getPoHeader.indId}" name="indId" id="indId" class="form-control"   >
-									 	 
-									</div>	
-									<div class="col-md-1"></div>
-									<c:choose>
-															<c:when test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7}">
-									  <div class="col-md-2"><input type="button" class="btn btn-info" value="Get Item From Indend "  id="myBtn"></div>
-									  </c:when>
-									  
-									  </c:choose>
-									 
-					</div>
-			 		<br/>
-									
-									<hr/>
-									
-									  
-			 
-			 
-				<div class=" box-content">
-					<div class="row">
-								<div style="overflow:scroll;height:35%;width:100%;overflow:auto">
-									<table width="100%" border="0"class="table table-bordered table-striped fill-head "
+										<input type="text" placeholder="Bill Date"
+											value="${getPoHeader.vendQuationDate}" name="quotationDate"
+											id="quotationDate" class="form-control date-picker" required>
+									</div>
+
+								</div>
+								<br />
+							</c:when>
+							<c:otherwise>
+								<div class="box-content">
+									<div class="col-md-2">Vendor Quotation</div>
+									<div class="col-md-3">
+										<input type="text" placeholder="Enter Quotation No"
+											value="${getPoHeader.vendQuation}" name="quotation"
+											id="quotation" class="form-control" required>
+									</div>
+
+									<div class="col-md-2">Quotation Ref. Date</div>
+									<div class="col-md-3">
+										<input type="text" placeholder="Select Quotation Date"
+											value="${getPoHeader.vendQuationDate}" name="quotationDate"
+											id="quotationDate" class="form-control date-picker" required>
+									</div>
+
+								</div>
+								<br />
+
+							</c:otherwise>
+
+						</c:choose>
+
+
+
+						<div class="box-content">
+							<div class="col-md-2">Payment Terms</div>
+							<div class="col-md-3">
+								<select name="payId" id="payId" class="form-control chosen"
+									required>
+
+									<c:forEach items="${paymentTermsList}" var="paymentTermsList">
+										<c:choose>
+											<c:when
+												test="${paymentTermsList.pymtTermId==getPoHeader.paymentTermId}">
+												<option value="${paymentTermsList.pymtTermId}" selected><c:out
+														value="${paymentTermsList.pymtDesc}" /></option>
+											</c:when>
+											<c:otherwise>
+												<option value="${paymentTermsList.pymtTermId}"><c:out
+														value="${paymentTermsList.pymtDesc}" /></option>
+											</c:otherwise>
+										</c:choose>
+
+									</c:forEach>
+
+								</select>
+							</div>
+
+							<div class="col-md-2">Select Delivery</div>
+							<div class="col-md-3">
+								<select name="deliveryId" id="deliveryId"
+									class="form-control chosen" required>
+
+									<c:forEach items="${deliveryTermsList}" var="deliveryTermsList">
+										<c:choose>
+											<c:when
+												test="${deliveryTermsList.deliveryTermId==getPoHeader.deliveryId}">
+												<option value="${deliveryTermsList.deliveryTermId}" selected><c:out
+														value="${deliveryTermsList.deliveryDesc}" /></option>
+											</c:when>
+											<c:otherwise>
+												<option value="${deliveryTermsList.deliveryTermId}"><c:out
+														value="${deliveryTermsList.deliveryDesc}" /></option>
+											</c:otherwise>
+										</c:choose>
+
+									</c:forEach>
+
+								</select>
+							</div>
+						</div>
+						<br />
+						<div class="box-content">
+
+							<div class="col-md-2">Select Dispatch Mode</div>
+							<div class="col-md-3">
+
+								<select name="dispatchMode" id="dispatchMode"
+									class="form-control chosen" required>
+
+									<c:forEach items="${dispatchModeList}" var="dispatchModeList">
+										<c:choose>
+											<c:when
+												test="${dispatchModeList.dispModeId==getPoHeader.dispatchId}">
+												<option value="${dispatchModeList.dispModeId}" selected><c:out
+														value="${dispatchModeList.dispModeDesc}" /></option>
+											</c:when>
+											<c:otherwise>
+												<option value="${dispatchModeList.dispModeId}"><c:out
+														value="${dispatchModeList.dispModeDesc}" /></option>
+											</c:otherwise>
+										</c:choose>
+
+
+									</c:forEach>
+								</select>
+							</div>
+
+							<div class="col-md-2">Order Validity</div>
+							<div class="col-md-3">
+								<input type="number" placeholder="Order Validity"
+									value="${getPoHeader.approvStatus}" name="orderValidity"
+									id="orderValidity" class="form-control" required>
+							</div>
+
+						</div>
+						<br />
+
+
+
+
+						<div class="box-content">
+							<div class="col-md-2">Indend No.</div>
+							<div class="col-md-3">
+								<input type="text" placeholder="Indend No"
+									value="${getPoHeader.indNo}" name="indNo" id="indNo"
+									class="form-control" readonly> <input type="hidden"
+									value="${getPoHeader.indId}" name="indId" id="indId"
+									class="form-control">
+
+							</div>
+							<div class="col-md-1"></div>
+							<c:choose>
+								<c:when
+									test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7}">
+									<div class="col-md-2">
+										<input type="button" class="btn btn-info"
+											value="Get Item From Indend " id="myBtn">
+									</div>
+								</c:when>
+
+							</c:choose>
+
+						</div>
+						<br />
+
+						<hr />
+
+
+
+						<c:set var="mrnBasicValue" value="0"></c:set>
+						<c:set var="mrnTaxValue" value="0"></c:set>
+						<div class=" box-content">
+							<div class="row">
+								<div
+									style="overflow: scroll; height: 35%; width: 100%; overflow: auto">
+									<table width="100%" border="0"
+										class="table table-bordered table-striped fill-head "
 										style="width: 100%; font-size: 14px;" id="table_grid2">
 										<thead>
 											<tr>
-											<th width="2%"> SR </th>
-										<th  > Item Name </th>
-										<th width="5%"> Uom </th>
-										<th width="6%"> Ind Qty </th> 
-										<th width="6%"> PO Qty </th>
-										<th width="6%"> Bal QTY </th>
-										<th width="6%"> Rate </th>
-										<th class="col-md-1"> Sch Date </th>
-										<th width="7%"> Value </th>
-										<!-- <th> Disc% </th> -->
-										<!-- <th> Sch Days </th> --> 
-										<th width="3%"> Action </th>
-									</tr>
+												<th width="2%">SR</th>
+												<th>Item Name</th>
+												<th width="5%">Uom</th>
+												<th width="6%">Ind Qty</th>
+												<th width="6%">PO Qty</th>
+												<c:if test="${mrnId>0}">
+													<th width="6%">MRN Qty</th>
+												</c:if>
+												<th width="6%">Bal QTY</th>
+												<th width="6%">Rate</th>
+												<th class="col-md-1">Sch Date</th>
+												<th width="7%">Value</th>
+												<!-- <th> Disc% </th> -->
+												<!-- <th> Sch Days </th> -->
+												<th width="3%">Action</th>
+											</tr>
 										</thead>
 										<tbody>
-										
-										<c:forEach items="${getPoHeader.poDetailList}" var="poDetailList"
-													varStatus="count">
-													 
-													<tr>
-													  
-																<td> <c:out value="${count.index+1}" /> </td>
-  
-																<td class="col-md-4"> <c:out value="${poDetailList.itemCode}" /> </td>
-																<td align="left"> <c:out value="${poDetailList.itemUom}" /> 
-																<input type="hidden" id="existingItemQty${count.index}" name="existingItemQty${count.index}" value="${poDetailList.itemQty}" >
-																<input type="hidden" id="existingBalanceQty${count.index}" name="existingBalanceQty${count.index}" value="${poDetailList.balanceQty}" ></td>
-																<td align="right"> <input type="hidden" id="indQty${count.index}" name="indQty${count.index}" value="${poDetailList.indedQty}" ><c:out value="${poDetailList.indedQty}" /> </td>
-																
-													  			 <c:choose>
-													  			 	<c:when test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
-																			<td align="right"><font size="2"><input style="text-align:right; width:95px" type="text" onchange="calculateBalaceQty(${count.index})"  id="poQty${count.index}" name="poQty${count.index}" value="${poDetailList.itemQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required></font> </td>
-													  				  			 	
-													  			 	</c:when>
-													  			 	<c:otherwise>
-													  			 			<td align="right"><font size="2"><input style="text-align:right; width:95px" type="text" onchange="calculateBalaceQty(${count.index})"  id="poQty${count.index}" name="poQty${count.index}" value="${poDetailList.itemQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></font> </td>
-													  			 
-													  			 	</c:otherwise>
-													  			 </c:choose>
-													  			<td align="right"> <input style="text-align:right; width:95px" type="text" id="balanceQty${count.index}" 
-													  			name="balanceQty${count.index}" value="${poDetailList.balanceQty}" class="form-control" 
-													  			 pattern="[+-]?([0-9]*[.])?[0-9]+" readonly> </td>
-													  			 
-													  			  <c:choose>
-													  			 	<c:when test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
-															  			 	<td align="right"><input style="text-align:right; width:95px" onchange="changeItemRate(${count.index})" type="text" id="rate${count.index}" name="rate${count.index}" value="${poDetailList.itemRate}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
-															  			 	<td ><c:out value="${poDetailList.schDate}" /> </td>
-															  			 	<td align="right" id="value${count.index}"><c:out value="${poDetailList.basicValue}" /> </td>
-															  				 <input style="text-align:right; width:70px" onchange="changeItemRate(${count.index})" type="hidden" id="disc${count.index}" name="disc${count.index}" value="${poDetailList.discPer}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
-															  				<!-- <td align="right"> --><input style="text-align:right; width:50px" type="hidden" id="indItemSchd${count.index}" name="indItemSchd${count.index}" value="${poDetailList.schDays}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required><!-- </td> -->
-													  						 <input style="text-align:right; width:50px" type="hidden" id="indRemark${count.index}" name="indRemark${count.index}" value="${poDetailList.schRemark}"  class="form-control" required> 
-													  			
-															  		</c:when>
-															  		<c:otherwise>
-															  				<td align="right"><input style="text-align:right; width:95px" onchange="changeItemRate(${count.index})" type="text" id="rate${count.index}" name="rate${count.index}" value="${poDetailList.itemRate}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></td>
-															  				<td  ><c:out value="${poDetailList.schDate}" /> </td>
-															  				<td align="right" id="value${count.index}"><c:out value="${poDetailList.basicValue}" /> </td>
-															  				 <input style="text-align:right; width:70px" onchange="changeItemRate(${count.index})" type="hidden" id="disc${count.index}" name="disc${count.index}" value="${poDetailList.discPer}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" readonly> 
-															  				<!-- <td align="right"> --><input style="text-align:right; width:50px" type="hidden" id="indItemSchd${count.index}" name="indItemSchd${count.index}" value="${poDetailList.schDays}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" readonly><!-- </td> -->
-													  						 <input style="text-align:right; width:50px" type="hidden" id="indRemark${count.index}" name="indRemark${count.index}" value="${poDetailList.schRemark}"  class="form-control" readonly> 
-													  			 
-															  		</c:otherwise>
-													  			 </c:choose>
-													  			 
-													  			
-													  			
-													  			 
-													  			 <td> 
-													  			 <c:choose>
-													  			 	<c:when test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
-													  			 	<a href="${pageContext.request.contextPath}/deletePoItemInEditPo/${poDetailList.poDetailId}"
-													onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a> 
-													  			 	</c:when>
-													  			 	<c:when test="${(poDetailList.status==0 or poDetailList.status==1 or poDetailList.status==2)}">
+
+											<c:forEach items="${getPoHeader.poDetailList}"
+												var="poDetailList" varStatus="count">
+
+												<tr>
+
+													<td><c:out value="${count.index+1}" /></td>
+
+													<td class="col-md-4"><c:out
+															value="${poDetailList.itemCode}" /></td>
+													<td align="left"><c:out
+															value="${poDetailList.itemUom}" /> <input type="hidden"
+														id="existingItemQty${count.index}"
+														name="existingItemQty${count.index}"
+														value="${poDetailList.itemQty}"> <input
+														type="hidden" id="existingBalanceQty${count.index}"
+														name="existingBalanceQty${count.index}"
+														value="${poDetailList.balanceQty}"></td>
+													<td align="right"><input type="hidden"
+														id="indQty${count.index}" name="indQty${count.index}"
+														value="${poDetailList.indedQty}"> <c:out
+															value="${poDetailList.indedQty}" /></td>
+
+													<c:choose>
+														<c:when
+															test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
+															<td align="right"><font size="2"><input
+																	style="text-align: right; width: 95px" type="text"
+																	onchange="calculateBalaceQty(${count.index})"
+																	id="poQty${count.index}" name="poQty${count.index}"
+																	value="${poDetailList.itemQty}" class="form-control"
+																	pattern="[+-]?([0-9]*[.])?[0-9]+" required></font></td>
+
+														</c:when>
+														<c:otherwise>
+															<td align="right"><font size="2"><input
+																	style="text-align: right; width: 95px" type="text"
+																	onchange="calculateBalaceQty(${count.index})"
+																	id="poQty${count.index}" name="poQty${count.index}"
+																	value="${poDetailList.itemQty}" class="form-control"
+																	pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></font></td>
+
+														</c:otherwise>
+													</c:choose>
+
+													<c:if test="${mrnId>0}">
+
+														<c:set var="findItem" value="0"></c:set>
+														<td align="right"><c:forEach items="${mrnDetailList}"
+																var="mrnDetailList">
+
+																<c:if
+																	test="${mrnDetailList.itemId==poDetailList.itemId}">
+																	${mrnDetailList.mrnQty} 
+																	<c:set var="findItem" value="1"></c:set>
+																	<c:set var="mrnBasicValue"
+																		value="${mrnBasicValue+(mrnDetailList.mrnQty*poDetailList.itemRate)}"></c:set>
+																	<c:set var="mrnTaxValue"
+																		value="${mrnTaxValue+poDetailList.taxValue}"></c:set>
+																</c:if>
+
+															</c:forEach> <c:if test="${findItem==0}">
+															-
+															</c:if></td>
+													</c:if>
+
+													<td align="right"><input
+														style="text-align: right; width: 95px" type="text"
+														id="balanceQty${count.index}"
+														name="balanceQty${count.index}"
+														value="${poDetailList.balanceQty}" class="form-control"
+														pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></td>
+
+													<c:choose>
+														<c:when
+															test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
+															<td align="right"><input
+																style="text-align: right; width: 95px"
+																onchange="changeItemRate(${count.index})" type="text"
+																id="rate${count.index}" name="rate${count.index}"
+																value="${poDetailList.itemRate}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
+															<td><c:out value="${poDetailList.schDate}" /></td>
+															<td align="right" id="value${count.index}"><c:out
+																	value="${poDetailList.basicValue}" /></td>
+															<input style="text-align: right; width: 70px"
+																onchange="changeItemRate(${count.index})" type="hidden"
+																id="disc${count.index}" name="disc${count.index}"
+																value="${poDetailList.discPer}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+															<!-- <td align="right"> -->
+															<input style="text-align: right; width: 50px"
+																type="hidden" id="indItemSchd${count.index}"
+																name="indItemSchd${count.index}"
+																value="${poDetailList.schDays}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+															<!-- </td> -->
+															<input style="text-align: right; width: 50px"
+																type="hidden" id="indRemark${count.index}"
+																name="indRemark${count.index}"
+																value="${poDetailList.schRemark}" class="form-control"
+																required>
+
+														</c:when>
+														<c:otherwise>
+															<td align="right"><input
+																style="text-align: right; width: 95px"
+																onchange="changeItemRate(${count.index})" type="text"
+																id="rate${count.index}" name="rate${count.index}"
+																value="${poDetailList.itemRate}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></td>
+															<td><c:out value="${poDetailList.schDate}" /></td>
+															<td align="right" id="value${count.index}"><c:out
+																	value="${poDetailList.basicValue}" /></td>
+															<input style="text-align: right; width: 70px"
+																onchange="changeItemRate(${count.index})" type="hidden"
+																id="disc${count.index}" name="disc${count.index}"
+																value="${poDetailList.discPer}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+															<!-- <td align="right"> -->
+															<input style="text-align: right; width: 50px"
+																type="hidden" id="indItemSchd${count.index}"
+																name="indItemSchd${count.index}"
+																value="${poDetailList.schDays}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+															<!-- </td> -->
+															<input style="text-align: right; width: 50px"
+																type="hidden" id="indRemark${count.index}"
+																name="indRemark${count.index}"
+																value="${poDetailList.schRemark}" class="form-control"
+																readonly>
+
+														</c:otherwise>
+													</c:choose>
+
+
+
+
+													<td><c:choose>
+															<c:when
+																test="${(poDetailList.status==7 or poDetailList.status==9) && (getPoHeader.poStatus==9 or getPoHeader.poStatus==7)}">
+																<a
+																	href="${pageContext.request.contextPath}/deletePoItemInEditPo/${poDetailList.poDetailId}"
+																	onClick="return confirm('Are you sure want to delete this record');"><span
+																	class="glyphicon glyphicon-remove"></span></a>
+															</c:when>
+															<c:when
+																test="${(poDetailList.status==0 or poDetailList.status==1 or poDetailList.status==2)}">
 													  			 	
 													  			 	Approved
 													  			 	</c:when>
-													  			 	<c:otherwise>
+															<c:otherwise>
 													  			 	
 													  			 	Disapproved
 													  			 	</c:otherwise>
-													  			 </c:choose>
-														 </td>
-																</tr>
-												</c:forEach>
- 
+														</c:choose></td>
+												</tr>
+											</c:forEach>
+
 										</tbody>
 									</table>
 								</div>
 							</div>
- 
-		</div>
-		 			 <br/>
-		 			 <hr/>
-		 			 
-		 			  <div class="box-content">
-								 
-									<div class="col-md-2">Basic value</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px"  type="text" value="${getPoHeader.poBasicValue}" pattern="[+-]?([0-9]*[.])?[0-9]+" 
-											name="poBasicValue" id="poBasicValue" class="form-control" readonly>
-										</div>
-									<div class="col-md-2">Disc Value</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" value="${getPoHeader.discValue}"   name="discValue" id="discValue" class="form-control"
-										value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
-										</div>
-								 
-							
-							</div><br>
-							
-		 			 <div class="box-content"> 
-		 			 
-									<div class="col-md-2">Packing Charges %</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" onchange="calculation()" type="text" value="${getPoHeader.poPackPer}" pattern="[+-]?([0-9]*[.])?[0-9]+" name="packPer" id="packPer" class="form-control" required>
-										</div>
-									<div class="col-md-2">Packing Charges Value <i class="fa fa-inr" style="font-size:13px"></i></div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" onchange="calculation()" type="text"  name="packValue" id="packValue" class="form-control"
-										value="${getPoHeader.poPackVal}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-										</div>
-									<div class="col-md-2">Remark</div>
-										<div class="col-md-2">
-											<input   type="text" name="packRemark" id="packRemark" class="form-control" value="${getPoHeader.poPackRemark}"  >
-										</div>
-							
-							
-							</div><br>
+
+						</div>
+						<br />
+						<hr />
+
+						<div class="box-content">
+
+							<div class="col-md-2">PO Basic value</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									value="${getPoHeader.poBasicValue}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" name="poBasicValue"
+									id="poBasicValue" class="form-control" readonly>
+							</div>
+							<div class="col-md-2">Disc Value</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									value="${getPoHeader.discValue}" name="discValue"
+									id="discValue" class="form-control" value="0"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+							</div>
+
+
+						</div>
+						<br>
+						<c:if test="${mrnId>0}">
+
 							<div class="box-content">
-									<div class="col-md-2">Insurance Charges %</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" onchange="calculation()" type="text" value="${getPoHeader.poInsuPer}" pattern="[+-]?([0-9]*[.])?[0-9]+" name="insuPer" id="insuPer" class="form-control" required>
-										</div>
-									<div class="col-md-2">Insurance Charges Value <i class="fa fa-inr" style="font-size:13px"></i></div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" onchange="calculation()" name="insuValue" id="insuValue" class="form-control"
-										value="${getPoHeader.poInsuVal}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-										</div>
-									<div class="col-md-2">Remark</div>
-										<div class="col-md-2">
-											<input   type="text" name="insuRemark" id="insuRemark" class="form-control" value="${getPoHeader.poInsuRemark}"  >
-										</div>
-							
-							</div><br>
-						
-						<div class="box-content"> 
-							 
-						 	<div class="col-md-2">Freight Charges %</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" onchange="calculation()" type="text" value="${getPoHeader.poFrtPer}" pattern="[+-]?([0-9]*[.])?[0-9]+" name="freightPer" id="freightPer" class="form-control" required>
-										</div>
-									<div class="col-md-2">Freight Charges Value <i class="fa fa-inr" style="font-size:13px"></i></div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" onchange="calculation()" name="freightValue" id="freightValue" class="form-control"
-										value="${getPoHeader.poFrtVal}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-										</div>
-									<div class="col-md-2">Remark</div>
-										<div class="col-md-2">
-											<input   type="text" name="freghtRemark" id="freghtRemark" class="form-control" value="${getPoHeader.poFrtRemark}"  >
-										</div>
-							 </div><br>
-						   
+
+								<div class="col-md-2">MRN Basic value</div>
+								<div class="col-md-2">
+									<input style="text-align: right; width: 150px" type="text"
+										value="${mrnBasicValue}" name="mrnBasicValuetext"
+										id="mrnBasicValuetext" class="form-control" readonly>
+								</div>
+
+							</div>
+							<br>
+						</c:if>
+						<div class="box-content">
+
+							<div class="col-md-2">Packing Charges %</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px"
+									onchange="calculation()" type="text"
+									value="${getPoHeader.poPackPer}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" name="packPer" id="packPer"
+									class="form-control" required>
+							</div>
+							<div class="col-md-2">
+								Packing Charges Value <i class="fa fa-inr"
+									style="font-size: 13px"></i>
+							</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px"
+									onchange="calculation()" type="text" name="packValue"
+									id="packValue" class="form-control"
+									value="${getPoHeader.poPackVal}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+							</div>
+							<div class="col-md-2">Remark</div>
+							<div class="col-md-2">
+								<input type="text" name="packRemark" id="packRemark"
+									class="form-control" value="${getPoHeader.poPackRemark}">
+							</div>
+
+
+						</div>
+						<br>
+						<div class="box-content">
+							<div class="col-md-2">Insurance Charges %</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px"
+									onchange="calculation()" type="text"
+									value="${getPoHeader.poInsuPer}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" name="insuPer" id="insuPer"
+									class="form-control" required>
+							</div>
+							<div class="col-md-2">
+								Insurance Charges Value <i class="fa fa-inr"
+									style="font-size: 13px"></i>
+							</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									onchange="calculation()" name="insuValue" id="insuValue"
+									class="form-control" value="${getPoHeader.poInsuVal}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+							</div>
+							<div class="col-md-2">Remark</div>
+							<div class="col-md-2">
+								<input type="text" name="insuRemark" id="insuRemark"
+									class="form-control" value="${getPoHeader.poInsuRemark}">
+							</div>
+
+						</div>
+						<br>
+
+						<div class="box-content">
+
+							<div class="col-md-2">Freight Charges %</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px"
+									onchange="calculation()" type="text"
+									value="${getPoHeader.poFrtPer}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" name="freightPer"
+									id="freightPer" class="form-control" required>
+							</div>
+							<div class="col-md-2">
+								Freight Charges Value <i class="fa fa-inr"
+									style="font-size: 13px"></i>
+							</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									onchange="calculation()" name="freightValue" id="freightValue"
+									class="form-control" value="${getPoHeader.poFrtVal}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+							</div>
+							<div class="col-md-2">Remark</div>
+							<div class="col-md-2">
+								<input type="text" name="freghtRemark" id="freghtRemark"
+									class="form-control" value="${getPoHeader.poFrtRemark}">
+							</div>
+						</div>
+						<br>
+
+
+						<div class="box-content">
+
+							<div class="col-md-2"></div>
+							<div class="col-md-2"></div>
+							<div class="col-md-2">
+								Tax Value <i class="fa fa-inr" style="font-size: 13px"></i>
+							</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									onchange="calculation()" name="taxValue" id="taxValue"
+									class="form-control" value="${getPoHeader.poTaxValue}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+							</div>
+							<div class="col-md-2"></div>
+							<div class="col-md-2">
+								<input type="hidden" name="taxRemark" id="taxRemark"
+									class="form-control" value="NA">
+							</div>
+
+						</div>
+						<br>
+						<c:if test="${mrnId>0}">
+
 							<div class="box-content">
-								 
-									<div class="col-md-2"> </div>
-										<div class="col-md-2">
-										<%-- <select name="taxPer" id="taxPer"  onchange="calculation()"  class="form-control chosen"  required>
-										 
-											 <c:forEach items="${taxFormList}" var="taxFormList" >
-											  <c:choose>
-									 	<c:when test="${taxFormList.taxId==getPoHeader.poTaxId}">
-									 		 <option value="${taxFormList.taxId}" selected><c:out value="${taxFormList.taxPer}"/></option>
-									 	</c:when>
-									 	<c:otherwise>
-									 	 	<option value="${taxFormList.taxId}"><c:out value="${taxFormList.taxPer}"/></option>
-									 	</c:otherwise>
-									 </c:choose>
-											 	  
- 											 </c:forEach>
-						 
-										</select> --%>
-											 </div>
-									<div class="col-md-2">Tax Value <i class="fa fa-inr" style="font-size:13px"></i></div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" onchange="calculation()" name="taxValue" id="taxValue" class="form-control"
-										value="${getPoHeader.poTaxValue}" pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
-										</div>
-									<div class="col-md-2"> </div>
-										<div class="col-md-2">
-											<input   type="hidden" name="taxRemark" id="taxRemark" class="form-control" value="NA"  >
-										</div>
-							
-							</div><br>
-							
-							<div class="box-content">
-								 
-									<div class="col-md-2">Other Charges %</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" onchange="calculation()" value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" name="otherPer" id="otherPer" class="form-control" required>
-										</div>
-									<div class="col-md-2">Other Charges Value <i class="fa fa-inr" style="font-size:13px"></i></div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" onchange="calculation()" name="otherValue" id="otherValue" class="form-control"
-										value="${getPoHeader.otherChargeAfter}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-										</div>
-									<div class="col-md-2">Remark</div>
-										<div class="col-md-2">
-											<input   type="text" name="otherRemark" id="otherRemark" class="form-control" value="${getPoHeader.otherChargeAfterRemark}"  >
-										</div>
-							
-							</div><br>
-							    
-							 <div class="box-content">
-								 
-									<div class="col-md-2"></div>
-										<div class="col-md-2">
-											
-										</div>
-									 
-									 <div class="col-md-2">Final Value</div>
-										<div class="col-md-2">
-											<input style="text-align:right; width:150px" type="text" value="<fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${getPoHeader.poBasicValue-getPoHeader.discValue
-											+getPoHeader.poPackVal+getPoHeader.poInsuVal+getPoHeader.poFrtVal+getPoHeader.poTaxValue+getPoHeader.otherChargeAfter}"/>"   name="finalValue" id="finalValue" class="form-control"
-										value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
-										</div>
-							
-							</div><br>
-							   
-							 <br>
-			
-			<div class="row">
-						<div class="col-md-12" style="text-align: center">
-						<c:choose>
-															<c:when test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7 or sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
-															<input type="submit" class="btn btn-info" value="Submit" onclick="check()" >
-															</c:when>
-															</c:choose>
-						<%-- <c:choose>
+
+								<div class="col-md-2"></div>
+								<div class="col-md-2"></div>
+								<div class="col-md-2">
+									MRN Tax Value <i class="fa fa-inr" style="font-size: 13px"></i>
+								</div>
+								<div class="col-md-2">
+									<input style="text-align: right; width: 150px" type="text"
+										value="${mrnTaxValue}" name="mrntaxValuetext"
+										id="mrntaxValuetext" class="form-control" readonly>
+								</div>
+								<div class="col-md-2"></div>
+								<div class="col-md-2"></div>
+
+							</div>
+							<br>
+						</c:if>
+						<div class="box-content">
+
+							<div class="col-md-2">Other Charges %</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									onchange="calculation()" value="0"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" name="otherPer" id="otherPer"
+									class="form-control" required>
+							</div>
+							<div class="col-md-2">
+								Other Charges Value <i class="fa fa-inr" style="font-size: 13px"></i>
+							</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									onchange="calculation()" name="otherValue" id="otherValue"
+									class="form-control" value="${getPoHeader.otherChargeAfter}"
+									pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+							</div>
+							<div class="col-md-2">Remark</div>
+							<div class="col-md-2">
+								<input type="text" name="otherRemark" id="otherRemark"
+									class="form-control"
+									value="${getPoHeader.otherChargeAfterRemark}">
+							</div>
+
+						</div>
+						<br>
+
+						<div class="box-content">
+
+							<div class="col-md-2"></div>
+							<div class="col-md-2"></div>
+
+							<div class="col-md-2">Final Value</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									value="<fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${getPoHeader.poBasicValue-getPoHeader.discValue
+											+getPoHeader.poPackVal+getPoHeader.poInsuVal+getPoHeader.poFrtVal+getPoHeader.poTaxValue+getPoHeader.otherChargeAfter}"/>"
+									name="finalValue" id="finalValue" class="form-control"
+									value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+							</div>
+
+						</div>
+						<br> <br>
+
+						<c:if test="${mrnId>0}">
+
+							<div class="col-md-2"></div>
+							<div class="col-md-2"></div>
+
+							<div class="col-md-2">Mrn Final Value</div>
+							<div class="col-md-2">
+								<input style="text-align: right; width: 150px" type="text"
+									value="<fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value ="${mrnBasicValue-getPoHeader.discValue
+											+getPoHeader.poPackVal+getPoHeader.poInsuVal+getPoHeader.poFrtVal+mrnTaxValue+getPoHeader.otherChargeAfter}"/>"
+									name="finalValue" id="finalValue" class="form-control"
+									value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" readonly>
+							</div>
+							<br> <br>
+						</c:if>
+
+						<div class="row">
+							<div class="col-md-12" style="text-align: center">
+								<c:choose>
+									<c:when
+										test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7 or sessionScope.userInfo.deptId==1 or sessionScope.userInfo.deptId==2}">
+										<input type="submit" class="btn btn-info" value="Submit"
+											onclick="check()">
+									</c:when>
+								</c:choose>
+								<%-- <c:choose>
 							<c:when test="${getPoHeader.poStatus==2}">
 								<input type="submit" class="btn btn-info" value="Submit" onclick="check()" disabled>
 							
@@ -591,117 +825,127 @@ body {
 								<input type="submit" class="btn btn-info" value="Submit" onclick="check()" >
 							</c:otherwise>
 						</c:choose> --%>
-							
 
+
+
+							</div>
+						</div>
+
+					</form>
+
+					<form id="submitList"
+						action="${pageContext.request.contextPath}/submitPoDetailListInPoEditList"
+						method="post">
+						<div id="myModal" class="modal">
+
+							<div class="modal-content" style="color: black;">
+								<span class="close" id="close">&times;</span>
+								<h3 style="text-align: center;">Select Item From Indend</h3>
+								<div class=" box-content">
+									<div class="row">
+										<div
+											style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
+											<table width="100%" border="0"
+												class="table table-bordered table-striped fill-head "
+												style="width: 100%; font-size: 14px;" id="table_grid1">
+												<thead>
+													<tr>
+														<th align="left" width="1%"><input type="checkbox"
+															id="allCheck" onClick="selectAll(this)"
+															onchange="requiredAll()" />All</th>
+														<th width="2%">SR</th>
+														<th class="col-md-5">Item Name</th>
+														<th class="col-md-1">Uom</th>
+														<th class="col-md-1">Ind Qty</th>
+														<th class="col-md-1">PO Qty</th>
+														<th class="col-md-1">Bal Qty</th>
+														<th class="col-md-1">Rate</th>
+														<!-- <th>Disc%</th> -->
+														<!-- <th>Sch Days</th> -->
+														<th class="col-md-1">Sch Date</th>
+														<th class="col-md-1">Remark</th>
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+								</div>
+								<br>
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+										<input type="submit" class="btn btn-info" value="Submit"
+											onclick="checkIndId()">
+
+
+									</div>
+								</div>
+
+							</div>
 
 						</div>
-					</div>
-				
-			</form>
-			
-			 <form id="submitList"
-				action="${pageContext.request.contextPath}/submitPoDetailListInPoEditList"
-				method="post">
-			<div id="myModal" class="modal">
-					      
-					<div class="modal-content" style="color: black;">
-						<span class="close" id="close">&times;</span>
-						<h3 style="text-align: center;">Select Item From Indend</h3>
+					</form>
+
+					<div id="poPreviousRecord" class="modal">
+
+						<div class="modal-content" style="color: black;">
+							<span class="close" id="close2">&times;</span>
+							<h5 style="text-align: center;" id="itmeNameHeadeing">Previous
+								Record</h5>
+
 							<div class=" box-content">
-							<div class="row">
-								<div style="overflow:scroll;height:70%;width:100%;overflow:auto">
-									<table width="100%" border="0"class="table table-bordered table-striped fill-head "
-										style="width: 100%; font-size: 14px;" id="table_grid1">
-										<thead>
-											<tr>
-										<th align="left" width="1%"><input type="checkbox" id="allCheck" onClick="selectAll(this)" onchange="requiredAll()"/>All</th>
-										<th width="2%">SR</th>
-										<th class="col-md-5">Item Name </th>
-										<th class="col-md-1">Uom</th>
-										<th class="col-md-1">Ind Qty</th> 
-										<th class="col-md-1">PO Qty</th>
-										<th class="col-md-1">Bal Qty</th>
-										<th class="col-md-1">Rate</th>
-										<!-- <th>Disc%</th> -->
-										<!-- <th>Sch Days</th> -->
-										<th class="col-md-1">Sch Date</th>
-										<th class="col-md-1">Remark</th>
-									</tr>
-										</thead>
-										<tbody>
- 
-										</tbody>
-									</table>
+								<div class="row">
+									<div class="col-md-9"></div>
+									<label for="search" class="col-md-3" id="search"> <i
+										class="fa fa-search" style="font-size: 20px"></i> <input
+										type="text" id="myInput" onkeyup="myFunction()"
+										placeholder="Search.." title="Type in a name">
+									</label>
+									<div
+										style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
+										<table width="100%" border="0"
+											class="table table-bordered table-striped fill-head "
+											style="width: 100%; font-size: 14px;" id="table_grid3">
+											<thead>
+												<tr>
+													<th>SR</th>
+													<th>PO NO</th>
+													<th>PO Date</th>
+													<th class="col-md-5">Vendor name</th>
+													<th>Item Rate</th>
+													<th>Item Qty</th>
+												</tr>
+											</thead>
+											<tbody>
+
+											</tbody>
+										</table>
+									</div>
 								</div>
-							</div> 
-							 
-						</div><br>
-						<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit" onclick="checkIndId()">
 
-
+							</div>
+							<br>
 						</div>
-					</div>
- 
-					</div>
 
-				</div>
-				</form>
-				
-				<div id="poPreviousRecord" class="modal">
-					 
-					<div class="modal-content" style="color: black;">
-						<span class="close" id="close2">&times;</span>
-						<h5 style="text-align: center;" id="itmeNameHeadeing">Previous Record</h5>
-							 
-							 <div class=" box-content">
-							<div class="row">
-							<div class="col-md-9"></div>
-								<label for="search" class="col-md-3" id="search"> <i
-									class="fa fa-search" style="font-size: 20px"></i> <input
-									type="text" id="myInput" onkeyup="myFunction()"
-									placeholder="Search.." title="Type in a name">
-								</label>
-								<div style="overflow:scroll;height:70%;width:100%;overflow:auto">
-									<table width="100%" border="0"class="table table-bordered table-striped fill-head "
-										style="width: 100%;font-size: 14px;" id="table_grid3">
-										<thead>
-											<tr>
-										 <th>SR</th>
-										<th>PO NO</th>
-										<th>PO Date</th>
-										<th class="col-md-5">Vendor name</th> 
-										<th>Item Rate</th>
-										<th>Item Qty</th> 
-									</tr>
-										</thead>
-										<tbody>
- 
-										</tbody>
-									</table>
-								</div>
-							</div> 
-							 
-						</div><br>
 					</div>
-
 				</div>
 			</div>
 		</div>
-	</div>
-	<footer>
-				<p>2019 © MONGINIS</p>
-			</footer>
+		<footer>
+			<p>2019 © MONGINIS</p>
+		</footer>
 	</div>
 	<!-- END Main Content -->
 
-	
+
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
- 
-<!--   <script>
+
+	<!--   <script>
     /*
 //  jquery equivalent
 jQuery(document).ready(function() {
@@ -778,10 +1022,10 @@ jQuery(document).ready(function() {
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		
-		
-		
-		<script type="text/javascript">
+
+
+
+	<script type="text/javascript">
  
 var specialKeys = new Array();
 specialKeys.push(8); //Backspace
@@ -825,7 +1069,7 @@ function check()
 
 </script>
 
-<script>
+	<script>
 // Get the modal
 var modal = document.getElementById('myModal');
 var poPreviousRecord = document.getElementById('poPreviousRecord');
@@ -1272,7 +1516,7 @@ function changeItemRate(key)
   	
   }
 </script>
-		<script>
+	<script>
 function myFunction() {
   var input, filter, table, tr, td ,td1,td2, i;
   input = document.getElementById("myInput");
@@ -1300,6 +1544,6 @@ function myFunction() {
 }
  
 </script>
-		
+
 </body>
 </html>

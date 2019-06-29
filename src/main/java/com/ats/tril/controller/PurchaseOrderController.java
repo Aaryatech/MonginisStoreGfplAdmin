@@ -62,6 +62,7 @@ import com.ats.tril.model.getqueryitems.GetPoQueryItem;
 import com.ats.tril.model.indent.GetIndentByStatus;
 import com.ats.tril.model.indent.GetIntendDetail;
 import com.ats.tril.model.indent.IndentTrans;
+import com.ats.tril.model.mrn.GetMrnDetail;
 import com.ats.tril.model.mrn.MrnDetail;
 import com.ats.tril.model.mrn.MrnHeader;
 import com.ats.tril.model.po.PoHeader;
@@ -1136,6 +1137,18 @@ public class PurchaseOrderController {
 					 model.addObject("autoMrn", 1);
 				 else*/  
 					 model.addObject("autoMrn", 0);
+					 
+					 if(mrnId>0) {
+						 
+						map = new LinkedMultiValueMap<>(); 
+						map.add("mrnId", mrnId);
+
+						GetMrnDetail[] mrnDetail = rest.postForObject(Constants.url + "/getMrnDetailByMrnId", map,
+								GetMrnDetail[].class);
+
+						List<GetMrnDetail> mrnDetailList = new ArrayList<GetMrnDetail>(Arrays.asList(mrnDetail));
+						model.addObject("mrnDetailList", mrnDetailList);
+					 }
 						 
 				
 		} catch (Exception e) {
