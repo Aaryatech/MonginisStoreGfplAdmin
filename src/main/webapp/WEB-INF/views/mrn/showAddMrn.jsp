@@ -1584,7 +1584,7 @@ body {
 
 					//alert(data);
 					//alert("adf");
-					if (data != null) {
+					if (data.length != 0) {
 						alert("Bill No Already Exist")
 						document.getElementById("bill_no").value = " ";
 
