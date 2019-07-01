@@ -1567,6 +1567,9 @@ body {
 				var bill_no = $("#bill_no").val();
 				var bill_date = $("#bill_date").val();
 
+				var billNoNew = bill_no.trim();
+				//alert(billNoNew);
+
 				//alert(vendor_id);
 				//alert(bill_no);
 				//alert(bill_date);
@@ -1575,7 +1578,7 @@ body {
 
 				{
 					vendor_id : vendor_id,
-					billNo : bill_no,
+					billNo : billNoNew,
 					billDate : bill_date,
 
 					ajax : 'true'
