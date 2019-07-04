@@ -1738,6 +1738,8 @@ public class PurchaseOrderController {
 	@RequestMapping(value = "/submitEditPurchaseOrder", method = RequestMethod.POST)
 	public String submitEditPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
+		String ret = new String();
+		
 		try {
 			Calendar c = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1818,12 +1820,21 @@ public class PurchaseOrderController {
 						getIntendDetailListforEdit, ErrorMessage.class);
 				 if(mrnId>0)
 				 {
-				 ErrorMessage errorMessage1 = rest.postForObject(Constants.url + "/updateMRNStatusById",
+					 try {
+						 
+						 ErrorMessage errorMessage1 = rest.postForObject(Constants.url + "/updateMRNStatusById",
 						 mrnId, ErrorMessage.class);
-				 System.out.println(errorMessage1);
+						 
+					 }catch(Exception e) {
+						 
+					 }
+				 ret="redirect:/editPurchaseOrder/"+getPoHeader.getPoId()+"/"+mrnId;
+				 //System.out.println(errorMessage1);
+				 }else {
+					 ret="redirect:/listOfPurachaseOrder";
 				 }
 				 
-				System.out.println(errorMessage);
+				//System.out.println(errorMessage);
 				
 			} 
 
@@ -1831,7 +1842,7 @@ public class PurchaseOrderController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/listOfPurachaseOrder";
+		return ret;
 	}
 	
 	@RequestMapping(value = "/firstApprovePurchaseOrder", method = RequestMethod.GET)

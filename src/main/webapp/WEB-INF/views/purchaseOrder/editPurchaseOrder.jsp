@@ -474,7 +474,7 @@ body {
 																	<c:set var="mrnBasicValue"
 																		value="${mrnBasicValue+(mrnDetailList.mrnQty*poDetailList.itemRate)}"></c:set>
 																	<c:set var="mrnTaxValue"
-																		value="${mrnTaxValue+poDetailList.taxValue}"></c:set>
+																		value="${mrnTaxValue+((poDetailList.taxValue/poDetailList.itemQty)*mrnDetailList.mrnQty)}"></c:set>
 																</c:if>
 
 															</c:forEach> <c:if test="${findItem==0}">
@@ -611,7 +611,7 @@ body {
 								<div class="col-md-2">MRN Basic value</div>
 								<div class="col-md-2">
 									<input style="text-align: right; width: 150px" type="text"
-										value="${mrnBasicValue}" name="mrnBasicValuetext"
+										value="<fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${mrnBasicValue}"/>" name="mrnBasicValuetext"
 										id="mrnBasicValuetext" class="form-control" readonly>
 								</div>
 
@@ -737,7 +737,7 @@ body {
 								</div>
 								<div class="col-md-2">
 									<input style="text-align: right; width: 150px" type="text"
-										value="${mrnTaxValue}" name="mrntaxValuetext"
+										value="<fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value="${mrnTaxValue}"/> " name="mrntaxValuetext"
 										id="mrntaxValuetext" class="form-control" readonly>
 								</div>
 								<div class="col-md-2"></div>
