@@ -2339,5 +2339,387 @@ public class PurchaseOrderController {
 
 		return list;
 	}
+	
+	
+	@RequestMapping(value = "/editPurchaseOrderForChagneRate", method = RequestMethod.GET)
+	public ModelAndView editPurchaseOrder( HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("purchaseOrder/editPurchaseOrderByAdmin");
+		try {
+
+			int poId = Integer.parseInt(request.getParameter("poId"));
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("poId", poId);
+			
+			getPoHeader = rest.postForObject(Constants.url + "/getPoHeaderAndDetailByHeaderId", map,
+					GetPoHeaderList.class);
+			model.addObject("getPoHeader", getPoHeader);
+
+			map = new LinkedMultiValueMap<>();
+			map.add("indId", getPoHeader.getIndId());
+			GetIntendDetail[] GetIntendDetail = rest.postForObject(Constants.url + "/getIntendsDetailByIntendId", map,
+					GetIntendDetail[].class);
+			getIntendDetailListforEdit = new ArrayList<>(Arrays.asList(GetIntendDetail));
+ 
+			for (int j = 0; j < getPoHeader.getPoDetailList().size(); j++) {
+				for (int i = 0; i < getIntendDetailListforEdit.size(); i++) {
+					if (getPoHeader.getPoDetailList().get(j).getIndId() == getIntendDetailListforEdit.get(i)
+							.getIndDId()) {
+						getPoHeader.getPoDetailList().get(j)
+								.setBalanceQty(getIntendDetailListforEdit.get(i).getIndFyr());
+						getPoHeader.getPoDetailList().get(j)
+								.setSchDate(DateConvertor.convertToYMD(DateConvertor.convertToDMY(getIntendDetailListforEdit.get(i).getIndItemSchddt())));
+					}
+				}
+			}
+ 
+			Vendor[] vendorRes = rest.getForObject(Constants.url + "/getAllVendorByIsUsed", Vendor[].class);
+			List<Vendor> vendorList = new ArrayList<Vendor>(Arrays.asList(vendorRes));
+			model.addObject("vendorList", vendorList);
+
+			DispatchMode[] dispatchMode = rest.getForObject(Constants.url + "/getAllDispatchModesByIsUsed",
+					DispatchMode[].class);
+			List<DispatchMode> dispatchModeList = new ArrayList<DispatchMode>(Arrays.asList(dispatchMode));
+
+			model.addObject("dispatchModeList", dispatchModeList);
+
+			PaymentTerms[] paymentTermsLists = rest.getForObject(Constants.url + "/getAllPaymentTermsByIsUsed",
+					PaymentTerms[].class);
+			model.addObject("paymentTermsList", paymentTermsLists);
+
+			DeliveryTerms[] deliveryTerms = rest.getForObject(Constants.url + "/getAllDeliveryTermsByIsUsed",
+					DeliveryTerms[].class);
+			List<DeliveryTerms> deliveryTermsList = new ArrayList<DeliveryTerms>(Arrays.asList(deliveryTerms));
+
+			model.addObject("deliveryTermsList", deliveryTermsList);
+
+			TaxForm[] taxFormList = rest.getForObject(Constants.url + "/getAllTaxForms", TaxForm[].class);
+			model.addObject("taxFormList", taxFormList);
+			model.addObject("mrnId", 0);
+			 
+				Type[] type = rest.getForObject(Constants.url + "/getAlltype", Type[].class);
+				List<Type> typeList = new ArrayList<Type>(Arrays.asList(type));
+
+				model.addObject("typeList", typeList);
+				model.addObject("autoMrn", 0);
+					   
+				
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/submitEditPurchaseOrderByAdmin", method = RequestMethod.POST)
+	public String submitEditPurchaseOrderByAdmin(HttpServletRequest request, HttpServletResponse response) {
+
+		String ret = new String();
+		
+		try {
+			Calendar c = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+			int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+			int vendId = Integer.parseInt(request.getParameter("vendId"));
+			String quotation = request.getParameter("quotation");
+			int poType = Integer.parseInt(request.getParameter("poType"));
+			int payId = Integer.parseInt(request.getParameter("payId"));
+			int deliveryId = Integer.parseInt(request.getParameter("deliveryId"));
+			int dispatchMode = Integer.parseInt(request.getParameter("dispatchMode"));
+			int orderValidity = Integer.parseInt(request.getParameter("orderValidity"));
+			String quotationDate = request.getParameter("quotationDate");
+			String poDate = request.getParameter("poDate");
+			String poNo = request.getParameter("poNo");
+
+			String packRemark = request.getParameter("packRemark");
+			String insuRemark = request.getParameter("insuRemark");
+			String freghtRemark = request.getParameter("freghtRemark");
+			String otherRemark = request.getParameter("otherRemark");
+			String poRemark = request.getParameter("poRemark");
+
+			getPoHeader.setVendId(vendId);
+			getPoHeader.setVendQuation(quotation);
+			getPoHeader.setPoType(poType);
+			getPoHeader.setPaymentTermId(payId);
+			getPoHeader.setDeliveryId(deliveryId);
+			getPoHeader.setDispatchId(dispatchMode);
+			getPoHeader.setVendQuationDate(DateConvertor.convertToYMD(quotationDate));
+			getPoHeader.setPoDate(DateConvertor.convertToYMD(poDate));
+			getPoHeader.setPoNo(poNo);
+			getPoHeader.setOtherChargeAfterRemark(otherRemark);
+			getPoHeader.setPoFrtRemark(freghtRemark);
+			getPoHeader.setPoInsuRemark(insuRemark);
+			getPoHeader.setPoPackRemark(packRemark);
+			getPoHeader.setDelStatus(1);
+			getPoHeader.setPoRemark(poRemark);
+			getPoHeader.setApprovStatus(orderValidity);
+			
+			System.out.println(getPoHeader);
+
+			/*for (int i = 0; i < getPoHeader.getPoDetailList().size(); i++) {
+				getPoHeader.getPoDetailList().get(i).setSchRemark(request.getParameter("indRemark" + i));
+ 
+				c.setTime(sdf.parse(getPoHeader.getPoDetailList().get(i).getSchDate()));
+				getPoHeader.getPoDetailList().get(i)
+						.setSchDays(Integer.parseInt(request.getParameter("indItemSchd" + i)));
+				c.add(Calendar.DAY_OF_MONTH, getPoHeader.getPoDetailList().get(i).getSchDays());
+				getPoHeader.getPoDetailList().get(i).setSchDate(sdf.format(c.getTime())); 
+			}*/
+			 PoHeader save = rest.postForObject(Constants.url + "/savePoHeaderAndDetail", getPoHeader, PoHeader.class);
+			System.out.println(save);
+			ret="redirect:/listOfPurachaseOrder";
+			
+			/*if (save != null) { 
+				for (int i = 0; i < getIntendDetailListforEdit.size(); i++) {
+					for (int j = 0; j < getPoHeader.getPoDetailList().size(); j++) {
+						if (getPoHeader.getPoDetailList().get(j).getIndId() == getIntendDetailListforEdit.get(i)
+								.getIndDId()) {
+							getIntendDetailListforEdit.get(i)
+									.setIndFyr(getPoHeader.getPoDetailList().get(j).getBalanceQty());
+							break;
+						}
+
+					}
+					getIntendDetailListforEdit.get(i)
+							.setIndMDate(DateConvertor.convertToYMD(getIntendDetailListforEdit.get(i).getIndMDate()));
+					if (getIntendDetailListforEdit.get(i).getIndFyr() == 0)
+						getIntendDetailListforEdit.get(i).setIndDStatus(2);
+					else if (getIntendDetailListforEdit.get(i).getIndFyr() > 0 && getIntendDetailListforEdit.get(i)
+							.getIndFyr() < getIntendDetailListforEdit.get(i).getIndQty())
+						getIntendDetailListforEdit.get(i).setIndDStatus(1);
+					else
+						getIntendDetailListforEdit.get(i).setIndDStatus(0);
+
+				}
+				 
+				 ErrorMessage errorMessage = rest.postForObject(Constants.url + "/updateIndendPendingQty",
+						getIntendDetailListforEdit, ErrorMessage.class);
+				 if(mrnId>0)
+				 {
+					 try {
+						 
+						 ErrorMessage errorMessage1 = rest.postForObject(Constants.url + "/updateMRNStatusById",
+						 mrnId, ErrorMessage.class);
+						 
+					 }catch(Exception e) {
+						 
+					 }
+				 ret="redirect:/editPurchaseOrder/"+getPoHeader.getPoId()+"/"+mrnId;
+				 //System.out.println(errorMessage1);
+				 }else {
+					 ret="redirect:/listOfPurachaseOrder";
+				 }
+				 
+				//System.out.println(errorMessage);
+				
+			}*/ 
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return ret;
+	}
+	
+	@RequestMapping(value = "/changeItemRateInEditByAdmin", method = RequestMethod.GET)
+	@ResponseBody
+	public GetPoHeaderList changeItemRateInEditByAdmin(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			float total = 0;
+			float poBasicValue = 0;
+			float poDiscValue = 0;
+			float poTaxValue = 0;
+			
+			float rate = Float.parseFloat(request.getParameter("rate"));
+			float disc = Float.parseFloat(request.getParameter("disc"));
+			int key = Integer.parseInt(request.getParameter("key"));
+			float poQty = Float.parseFloat(request.getParameter("poQty"));
+			float balanceQty = Float.parseFloat(request.getParameter("balanceQty"));
+
+			getPoHeader.getPoDetailList().get(key).setItemRate(rate);
+			getPoHeader.getPoDetailList().get(key).setDiscPer(disc);
+			getPoHeader.getPoDetailList().get(key).setItemQty(poQty);
+			/*getPoHeader.getPoDetailList().get(key).setPendingQty(poQty);
+			getPoHeader.getPoDetailList().get(key).setBalanceQty(balanceQty);*/
+
+			getPoHeader.getPoDetailList().get(key).setBasicValue(getPoHeader.getPoDetailList().get(key).getItemRate()
+					* getPoHeader.getPoDetailList().get(key).getItemQty());
+			getPoHeader.getPoDetailList().get(key)
+					.setDiscValue((getPoHeader.getPoDetailList().get(key).getDiscPer() / 100)
+							* getPoHeader.getPoDetailList().get(key).getBasicValue());
+
+			for (int i = 0; i < getPoHeader.getPoDetailList().size(); i++) {
+				poBasicValue = poBasicValue + getPoHeader.getPoDetailList().get(i).getBasicValue();
+				poDiscValue = poDiscValue + getPoHeader.getPoDetailList().get(i).getDiscValue();
+			}
+
+			getPoHeader.setPoBasicValue(Float.parseFloat(df.format(poBasicValue)));
+			getPoHeader.setDiscValue(Float.parseFloat(df.format(poDiscValue)));
+
+			if (getPoHeader.getPoPackPer() != 0) {
+				getPoHeader.setPoPackVal(Float.parseFloat(df.format((getPoHeader.getPoPackPer() / 100) * getPoHeader.getPoBasicValue())));
+			}
+
+			if (getPoHeader.getPoInsuPer() != 0) {
+				getPoHeader.setPoInsuVal(Float.parseFloat(df.format((getPoHeader.getPoInsuPer() / 100) * getPoHeader.getPoBasicValue())));
+			}
+
+			if (getPoHeader.getPoFrtPer() != 0) {
+				getPoHeader.setPoFrtVal(Float.parseFloat(df.format((getPoHeader.getPoFrtPer() / 100) * getPoHeader.getPoBasicValue())));
+			}
+
+			total = getPoHeader.getPoBasicValue() + getPoHeader.getPoPackVal() + getPoHeader.getPoInsuVal()
+					+ getPoHeader.getPoFrtVal() - getPoHeader.getDiscValue();
+			//getPoHeader.setPoTaxValue((getPoHeader.getPoTaxPer() / 100) * total);
+
+			for (int i = 0; i < getPoHeader.getPoDetailList().size(); i++) {
+				float divFactor = getPoHeader.getPoDetailList().get(i).getBasicValue() / getPoHeader.getPoBasicValue()
+						* 100;
+				getPoHeader.getPoDetailList().get(i).setPackValue(Float.parseFloat(df.format(divFactor * getPoHeader.getPoPackVal() / 100)));
+				getPoHeader.getPoDetailList().get(i).setInsu(Float.parseFloat(df.format(divFactor * getPoHeader.getPoInsuVal() / 100)));
+				getPoHeader.getPoDetailList().get(i).setFreightValue(Float.parseFloat(df.format(divFactor * getPoHeader.getPoFrtVal() / 100)));
+				
+				if(getPoHeader.getPoDetailList().get(i).getIgst()>0) {
+					
+					getPoHeader.getPoDetailList().get(i).setTaxValue(Float.parseFloat(df.format((getPoHeader.getPoDetailList().get(i).getIgst()/ 100)*(getPoHeader.getPoDetailList().get(i).getBasicValue()-
+							getPoHeader.getPoDetailList().get(i).getDiscValue()+getPoHeader.getPoDetailList().get(i).getPackValue()+getPoHeader.getPoDetailList().get(i).getInsu()+
+							getPoHeader.getPoDetailList().get(i).getFreightValue()))));
+					
+				}else {
+					getPoHeader.getPoDetailList().get(i).setTaxValue(Float.parseFloat(df.format(((getPoHeader.getPoDetailList().get(i).getCgst()+getPoHeader.getPoDetailList().get(i).getSgst())/ 100)*(getPoHeader.getPoDetailList().get(i).getBasicValue()-
+							getPoHeader.getPoDetailList().get(i).getDiscValue()+getPoHeader.getPoDetailList().get(i).getPackValue()+getPoHeader.getPoDetailList().get(i).getInsu()+
+							getPoHeader.getPoDetailList().get(i).getFreightValue()))));
+				}
+				
+				//getPoHeader.getPoDetailList().get(i).setTaxValue(divFactor * getPoHeader.getPoTaxValue() / 100);
+				getPoHeader.getPoDetailList().get(i)
+						.setOtherChargesAfter(Float.parseFloat(df.format(divFactor * getPoHeader.getOtherChargeAfter() / 100)));
+				getPoHeader.getPoDetailList().get(i)
+						.setLandingCost(Float.parseFloat(df.format(getPoHeader.getPoDetailList().get(i).getBasicValue()
+								- getPoHeader.getPoDetailList().get(i).getDiscValue()
+								+ getPoHeader.getPoDetailList().get(i).getPackValue()
+								+ getPoHeader.getPoDetailList().get(i).getInsu()
+								+ getPoHeader.getPoDetailList().get(i).getFreightValue()
+								+ getPoHeader.getPoDetailList().get(i).getTaxValue()
+								+ getPoHeader.getPoDetailList().get(i).getOtherChargesAfter())));
+				
+				poTaxValue=poTaxValue+getPoHeader.getPoDetailList().get(i).getTaxValue();
+			}
+			getPoHeader.setPoTaxValue(Float.parseFloat(df.format(poTaxValue)));
+			System.out.println("getPoHeader" + getPoHeader);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return getPoHeader;
+	}
+	
+	@RequestMapping(value = "/calculatePurchaseHeaderValuesInEditByAdmin", method = RequestMethod.GET)
+	@ResponseBody
+	public GetPoHeaderList calculatePurchaseHeaderValuesInEditByAdmin(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		try {
+			float total = 0; 
+			float poTaxValue = 0;
+			
+			float packPer = Float.parseFloat(request.getParameter("packPer"));
+			float packValue = Float.parseFloat(request.getParameter("packValue"));
+			float insuPer = Float.parseFloat(request.getParameter("insuPer"));
+			float insuValue = Float.parseFloat(request.getParameter("insuValue"));
+			float freightPer = Float.parseFloat(request.getParameter("freightPer"));
+			float freightValue = Float.parseFloat(request.getParameter("freightValue"));
+			float otherPer = Float.parseFloat(request.getParameter("otherPer"));
+			float otherValue = Float.parseFloat(request.getParameter("otherValue"));
+			/*float taxPer = Float.parseFloat(request.getParameter("taxPer"));
+			int taxId = Integer.parseInt(request.getParameter("taxId"));*/
+
+			if (packPer != 0) {
+				getPoHeader.setPoPackPer(packPer);
+				getPoHeader.setPoPackVal(Float.parseFloat(df.format((packPer / 100) * getPoHeader.getPoBasicValue())));
+			} else {
+				getPoHeader.setPoPackPer(0);
+				getPoHeader.setPoPackVal(packValue);
+			}
+
+			if (insuPer != 0) {
+				getPoHeader.setPoInsuPer(insuPer);
+				getPoHeader.setPoInsuVal(Float.parseFloat(df.format((insuPer / 100) * getPoHeader.getPoBasicValue())));
+			} else {
+				getPoHeader.setPoInsuPer(0);
+				getPoHeader.setPoInsuVal(insuValue);
+			}
+
+			if (freightPer != 0) {
+				getPoHeader.setPoFrtPer(freightPer);
+				getPoHeader.setPoFrtVal(Float.parseFloat(df.format((freightPer / 100) * getPoHeader.getPoBasicValue())));
+			} else {
+				getPoHeader.setPoFrtPer(0);
+				getPoHeader.setPoFrtVal(freightValue);
+			}
+
+			total = getPoHeader.getPoBasicValue() + getPoHeader.getPoPackVal() + getPoHeader.getPoInsuVal()
+					+ getPoHeader.getPoFrtVal() - getPoHeader.getDiscValue();
+			/*getPoHeader.setPoTaxId(taxId);
+			getPoHeader.setPoTaxPer(taxPer);
+			getPoHeader.setPoTaxValue((taxPer / 100) * total);*/
+
+			if (otherPer != 0) {
+				total = getPoHeader.getPoBasicValue() + getPoHeader.getPoPackVal() + getPoHeader.getPoInsuVal()
+						+ getPoHeader.getPoFrtVal() - getPoHeader.getDiscValue() + getPoHeader.getPoTaxValue();
+				getPoHeader.setOtherChargeAfter(Float.parseFloat(df.format((otherPer / 100) * total)));
+			} else if (otherValue != 0) {
+				getPoHeader.setOtherChargeAfter(otherValue);
+			} else {
+				getPoHeader.setOtherChargeAfter(0);
+			}
+
+			for (int i = 0; i < getPoHeader.getPoDetailList().size(); i++) {
+				float divFactor = getPoHeader.getPoDetailList().get(i).getBasicValue() / getPoHeader.getPoBasicValue()
+						* 100;
+				getPoHeader.getPoDetailList().get(i).setPackValue(Float.parseFloat(df.format(divFactor * getPoHeader.getPoPackVal() / 100)));
+				getPoHeader.getPoDetailList().get(i).setInsu(Float.parseFloat(df.format(divFactor * getPoHeader.getPoInsuVal() / 100)));
+				getPoHeader.getPoDetailList().get(i).setFreightValue(Float.parseFloat(df.format(divFactor * getPoHeader.getPoFrtVal() / 100)));
+				
+				if(getPoHeader.getPoDetailList().get(i).getIgst()>0) {
+					
+					getPoHeader.getPoDetailList().get(i).setTaxValue(Float.parseFloat(df.format((getPoHeader.getPoDetailList().get(i).getIgst()/ 100)*(getPoHeader.getPoDetailList().get(i).getBasicValue()-
+							getPoHeader.getPoDetailList().get(i).getDiscValue()+getPoHeader.getPoDetailList().get(i).getPackValue()+getPoHeader.getPoDetailList().get(i).getInsu()+
+							getPoHeader.getPoDetailList().get(i).getFreightValue()))));
+					
+				}else {
+					getPoHeader.getPoDetailList().get(i).setTaxValue(Float.parseFloat(df.format(((getPoHeader.getPoDetailList().get(i).getCgst()+getPoHeader.getPoDetailList().get(i).getSgst())/ 100)*(getPoHeader.getPoDetailList().get(i).getBasicValue()-
+							getPoHeader.getPoDetailList().get(i).getDiscValue()+getPoHeader.getPoDetailList().get(i).getPackValue()+getPoHeader.getPoDetailList().get(i).getInsu()+
+							getPoHeader.getPoDetailList().get(i).getFreightValue()))));
+				}
+				
+				//getPoHeader.getPoDetailList().get(i).setTaxValue(divFactor * getPoHeader.getPoTaxValue() / 100);
+				getPoHeader.getPoDetailList().get(i)
+						.setOtherChargesAfter(Float.parseFloat(df.format(divFactor * getPoHeader.getOtherChargeAfter() / 100)));
+				getPoHeader.getPoDetailList().get(i)
+						.setLandingCost(Float.parseFloat(df.format(getPoHeader.getPoDetailList().get(i).getBasicValue()
+								- getPoHeader.getPoDetailList().get(i).getDiscValue()
+								+ getPoHeader.getPoDetailList().get(i).getPackValue()
+								+ getPoHeader.getPoDetailList().get(i).getInsu()
+								+ getPoHeader.getPoDetailList().get(i).getFreightValue()
+								+ getPoHeader.getPoDetailList().get(i).getTaxValue()
+								+ getPoHeader.getPoDetailList().get(i).getOtherChargesAfter())));
+				poTaxValue=poTaxValue+getPoHeader.getPoDetailList().get(i).getTaxValue();
+			}
+
+			getPoHeader.setPoTaxValue(Float.parseFloat(df.format(poTaxValue)));
+			System.out.println(getPoHeader);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return getPoHeader;
+	}
 
 }
