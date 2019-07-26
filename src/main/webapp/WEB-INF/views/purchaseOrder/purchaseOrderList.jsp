@@ -36,7 +36,8 @@
 
 					</h1>
 				</div>
-			</div> --><br>
+			</div> -->
+			<br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -54,61 +55,68 @@
 							</div>
 
 						</div>
-			<form action="${pageContext.request.contextPath}/listOfPurachaseOrder"
-								class="form-horizontal" id="validation-form" method="get">
-						<div class="box-content">
-
+						<form
+							action="${pageContext.request.contextPath}/listOfPurachaseOrder"
+							class="form-horizontal" id="validation-form" method="get">
 							<div class="box-content">
 
-								<div class="col-md-2">From Date*</div>
-								<div class="col-md-3">
-									<input id="fromDate" class="form-control date-picker"
-										placeholder="From Date" value="${fromDate}" name="fromDate"
-										type="text" required>
+								<div class="box-content">
+
+									<div class="col-md-2">From Date*</div>
+									<div class="col-md-3">
+										<input id="fromDate" class="form-control date-picker"
+											placeholder="From Date" value="${fromDate}" name="fromDate"
+											type="text" required>
+
+
+									</div>
+									<div class="col-md-1"></div>
+									<div class="col-md-2">To Date*</div>
+									<div class="col-md-3">
+										<input id="toDate" class="form-control date-picker"
+											placeholder="To Date" value="${toDate}" name="toDate"
+											type="text" required>
+
+
+									</div>
 
 
 								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">To Date*</div>
-								<div class="col-md-3">
-									<input id="toDate" class="form-control date-picker"
-										placeholder="To Date" value="${toDate}" name="toDate"
-										type="text" required>
+								<br> <br>
 
-
-								</div>
-
-
-							</div>
-							<br><br>
-							
-							<c:set value="0" var="isEdit"></c:set>
+								<c:set value="0" var="isEdit"></c:set>
 								<c:set value="0" var="isDelete"></c:set>
-									<c:forEach items="${sessionScope.newModuleList}" var="allModuleList" >
-															<c:choose>
-																<c:when test="${allModuleList.moduleId==sessionScope.sessionModuleId}">
-																	  <c:forEach items="${allModuleList.subModuleJsonList}" var="subModuleJsonList" >
-																	  		<c:choose>
-																			  	<c:when test="${subModuleJsonList.subModuleId==sessionScope.sessionSubModuleId}">
-																			  		  <c:choose>
-																			  		  
-																			  				<c:when test="${subModuleJsonList.editReject eq 'visible'}">
-																			  				<c:set value="1" var="isEdit"></c:set>
-																			  				</c:when>
-																			  			</c:choose>
-																			  			<c:choose>
-																			  				<c:when test="${subModuleJsonList.deleteRejectApprove eq 'visible'}">
-																			  				<c:set value="1" var="isDelete"></c:set>
-																			  				</c:when> 
-																			  			</c:choose>
-																			  	</c:when>
-																		  	</c:choose>
-																	  </c:forEach>
-																</c:when> 
-															</c:choose>
-														 
-														</c:forEach> 
-							<div class="box-content">
+								<c:forEach items="${sessionScope.newModuleList}"
+									var="allModuleList">
+									<c:choose>
+										<c:when
+											test="${allModuleList.moduleId==sessionScope.sessionModuleId}">
+											<c:forEach items="${allModuleList.subModuleJsonList}"
+												var="subModuleJsonList">
+												<c:choose>
+													<c:when
+														test="${subModuleJsonList.subModuleId==sessionScope.sessionSubModuleId}">
+														<c:choose>
+
+															<c:when
+																test="${subModuleJsonList.editReject eq 'visible'}">
+																<c:set value="1" var="isEdit"></c:set>
+															</c:when>
+														</c:choose>
+														<c:choose>
+															<c:when
+																test="${subModuleJsonList.deleteRejectApprove eq 'visible'}">
+																<c:set value="1" var="isDelete"></c:set>
+															</c:when>
+														</c:choose>
+													</c:when>
+												</c:choose>
+											</c:forEach>
+										</c:when>
+									</c:choose>
+
+								</c:forEach>
+								<div class="box-content">
 
 									<div class="col-md-2">Select Category*</div>
 									<div class="col-md-3">
@@ -116,15 +124,15 @@
 											required>
 											<option value="0">All</option>
 											<c:forEach items="${categoryList}" var="categoryList">
-											<c:choose>
-												<c:when test="${categoryList.catId==catId}">
-												<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option> 
-												</c:when>
-												<c:otherwise>
-												<option value="${categoryList.catId}">${categoryList.catDesc}</option> 
-												</c:otherwise>
-											</c:choose> 
-													 
+												<c:choose>
+													<c:when test="${categoryList.catId==catId}">
+														<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${categoryList.catId}">${categoryList.catDesc}</option>
+													</c:otherwise>
+												</c:choose>
+
 											</c:forEach>
 										</select>
 
@@ -136,162 +144,168 @@
 											required>
 											<option value="0">All</option>
 											<c:forEach items="${typeList}" var="typeList">
-											<c:choose>
-												<c:when test="${typeList.typeId==typeId}">
-												<option value="${typeList.typeId}" selected>${typeList.typeName}</option> 
-												</c:when>
-												<c:otherwise>
-												<option value="${typeList.typeId}">${typeList.typeName}</option> 
-												</c:otherwise>
-											</c:choose> 
-													 
+												<c:choose>
+													<c:when test="${typeList.typeId==typeId}">
+														<option value="${typeList.typeId}" selected>${typeList.typeName}</option>
+													</c:when>
+													<c:otherwise>
+														<option value="${typeList.typeId}">${typeList.typeName}</option>
+													</c:otherwise>
+												</c:choose>
+
 											</c:forEach>
 										</select>
 
 									</div>
-									  
-								</div><br>
-							<br>
-							<div class="form-group">
-								<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-									<!-- <input type="button" class="btn btn-primary"
-										value="Submit" onclick="search()"> -->
-										<input type="submit" class="btn btn-primary"
-										value="Submit"  >
+
 								</div>
-							</div>
-							<br>
+								<br> <br>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<!-- <input type="button" class="btn btn-primary"
+										value="Submit" onclick="search()"> -->
+										<input type="submit" class="btn btn-primary" value="Submit">
+									</div>
+								</div>
+								<br>
 
-							<div align="center" id="loader" style="display: none">
+								<div align="center" id="loader" style="display: none">
 
-								<span>
-									<h4>
-										<font color="#343690">Loading</font>
-									</h4>
-								</span> <span class="l-1"></span> <span class="l-2"></span> <span
-									class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
-								<span class="l-6"></span>
-							</div>
-							<div class="col-md-9"></div>
+									<span>
+										<h4>
+											<font color="#343690">Loading</font>
+										</h4>
+									</span> <span class="l-1"></span> <span class="l-2"></span> <span
+										class="l-3"></span> <span class="l-4"></span> <span
+										class="l-5"></span> <span class="l-6"></span>
+								</div>
+								<div class="col-md-9"></div>
 								<label for="search" class="col-md-3" id="search"> <i
 									class="fa fa-search" style="font-size: 20px"></i> <input
 									type="text" id="myInput" onkeyup="myFunction()"
 									placeholder="Search.." title="Type in a name">
-								</label>
+								</label> <br /> <br />
+								<div class="clearfix"></div>
+								<div class="table-responsive" style="border: 0">
+									<table class="table table-advance" id="table1">
+										<thead>
+											<tr class="bgpink">
+												<th style="width: 2%;"
+													style="text-align: left; padding: 0px; align-items: left;"
+													width="10%"><input type="checkbox" name="name1"
+													value="0" />All</th>
 
-							<br /> <br />
-							<div class="clearfix"></div>
-							<div class="table-responsive" style="border: 0">
-								<table class="table table-advance" id="table1">
-									<thead>
-										<tr class="bgpink">
-										<th style="width:2%;"	style="text-align: left; padding: 0px; align-items: left;"
-														width="10%"><input type="checkbox" name="name1"
-														value="0" />All</th>
-										
-											<th style="width:2%;">SR</th>
-											<th class="col-md-1">Date</th>
-											<th style="width:10%;">PO No</th>
-											<th class="col-md-1">PO TYPE</th>
-											<th class="col-md-3">Vendor Name</th>
-											<th style="width:10%;">Indent No</th>
-											<th class="col-md-2">Status</th>
-											<th class="col-md-1">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-
-										<c:forEach items="${poList}" var="poList" varStatus="count">
-											<tr>
-											
-												<td style="width:2%;" style="text-align: left; padding: 0px; align-items: center; align-content: center;"
-															width="10%">&nbsp;&nbsp;<input type="checkbox"
-															name="name1" value="${poList.poId}" /></td>
-										
-												<td style="width:2%;"><c:out value="${count.index+1}" /></td>
-
-
-												<td class="col-md-1"><c:out value="${poList.poDate}" /></td>
-												 
-												<td style="width:10%;"><c:out value="${poList.poNo}" /></td>
-												<c:set var="type"></c:set>
-												<c:forEach items="${typeList}" var="typeList"> 
-															<c:choose>
-																<c:when test="${typeList.typeId==poList.poType}">
-																	<c:set var="type" value="${typeList.typeName}"></c:set>
-																</c:when>
-																 
-															</c:choose> 
-														</c:forEach>
-												
-												<td class="col-md-1"><c:out value="${type}" /></td>
-												<td class="col-md-3"><c:out
-														value="${poList.vendorName}" /></td>
-
-												<td style="width:10%;"><c:out value="${poList.indNo}" /></td>
-												
-												<c:set var="poStatus" value=""></c:set>
-												<c:choose>
-													<c:when test="${poList.poStatus==9}">
-													<c:set var="poStatus" value="Pending For Director Approval"></c:set>
-													</c:when>
-													<c:when test="${poList.poStatus==7}">
-													<c:set var="poStatus" value="Pending For Director Approval"></c:set>
-													</c:when>
-													<c:when test="${poList.poStatus==0}">
-													<c:set var="poStatus" value="GRN Pending"></c:set>
-													</c:when>
-													<c:when test="${poList.poStatus==1}">
-													<c:set var="poStatus" value="Partially GRN "></c:set>
-													</c:when>
-													<c:when test="${poList.poStatus==2}">
-													<c:set var="poStatus" value="GRN Completed"></c:set>
-													</c:when>
-													
-												</c:choose>
-												
-												<td class="col-md-1"><c:out
-														value="${poStatus}" /></td><td>
-														<c:choose>
-													<c:when test="${poList.poStatus!=9 and poList.poStatus!=7}">
-												<a href="javascript:genPdf(${ poList.poId});"><abbr title="PDF"><i
-															class="glyphicon glyphicon glyphicon-file"></i></abbr></a>
-														</c:when></c:choose> 
-														<c:choose>
-																<c:when test="${isEdit==1}">	 
-													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${poList.poId}/0"><abbr
-														title="Edit"><i class="fa fa-edit"></i></abbr></a>
-														</c:when></c:choose> 
-														
-														<c:choose>
-											 					<c:when test="${isDelete==1}">
-														<c:choose>
-															<c:when test="${poList.poStatus==9 or poList.poStatus==7}">
-															<a href="${pageContext.request.contextPath}/deletePurchaseOrder/${poList.poId}"
-													onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a>
-															</c:when>
-														</c:choose>
-														</c:when>
-														</c:choose>
-														 </td>
-
+												<th style="width: 2%;">SR</th>
+												<th class="col-md-1">Date</th>
+												<th style="width: 10%;">PO No</th>
+												<th class="col-md-1">PO TYPE</th>
+												<th class="col-md-3">Vendor Name</th>
+												<th style="width: 10%;">Indent No</th>
+												<th class="col-md-2">Status</th>
+												<th class="col-md-1">Action</th>
 											</tr>
-										</c:forEach>
+										</thead>
+										<tbody>
 
-									</tbody>
+											<c:forEach items="${poList}" var="poList" varStatus="count">
+												<tr>
 
-								</table>
-<br> <br>
-										<button
-											style="background-color: #008CBA; border: none; color: white; text-align: center; text-decoration: none; display: block; font-size: 12px; cursor: pointer; width: 50px; height: 30px; margin: auto;"
-											onclick="commonPdf()">PDF</button>
+													<td style="width: 2%;"
+														style="text-align: left; padding: 0px; align-items: center; align-content: center;"
+														width="10%">&nbsp;&nbsp;<input type="checkbox"
+														name="name1" value="${poList.poId}" /></td>
 
-								
+													<td style="width: 2%;"><c:out value="${count.index+1}" /></td>
+
+
+													<td class="col-md-1"><c:out value="${poList.poDate}" /></td>
+
+													<td style="width: 10%;"><c:out value="${poList.poNo}" /></td>
+													<c:set var="type"></c:set>
+													<c:forEach items="${typeList}" var="typeList">
+														<c:choose>
+															<c:when test="${typeList.typeId==poList.poType}">
+																<c:set var="type" value="${typeList.typeName}"></c:set>
+															</c:when>
+
+														</c:choose>
+													</c:forEach>
+
+													<td class="col-md-1"><c:out value="${type}" /></td>
+													<td class="col-md-3"><c:out
+															value="${poList.vendorName}" /></td>
+
+													<td style="width: 10%;"><c:out value="${poList.indNo}" /></td>
+
+													<c:set var="poStatus" value=""></c:set>
+													<c:choose>
+														<c:when test="${poList.poStatus==9}">
+															<c:set var="poStatus"
+																value="Pending For Director Approval"></c:set>
+														</c:when>
+														<c:when test="${poList.poStatus==7}">
+															<c:set var="poStatus"
+																value="Pending For Director Approval"></c:set>
+														</c:when>
+														<c:when test="${poList.poStatus==0}">
+															<c:set var="poStatus" value="GRN Pending"></c:set>
+														</c:when>
+														<c:when test="${poList.poStatus==1}">
+															<c:set var="poStatus" value="Partially GRN "></c:set>
+														</c:when>
+														<c:when test="${poList.poStatus==2}">
+															<c:set var="poStatus" value="GRN Completed"></c:set>
+														</c:when>
+
+													</c:choose>
+
+													<td class="col-md-1"><c:out value="${poStatus}" /></td>
+													<td><c:choose>
+															<c:when
+																test="${poList.poStatus!=9 and poList.poStatus!=7}">
+																<a href="javascript:genPdf(${ poList.poId});"><abbr
+																	title="PDF"><i
+																		class="glyphicon glyphicon glyphicon-file"></i></abbr></a>
+																<a
+																	href="${pageContext.request.contextPath}/editPurchaseOrderForChagneRate?poId=${poList.poId}"><abbr
+																	title="Edit Only For Change Rate "><i class="fa fa-edit" style="color: red;"></i></abbr></a>
+															</c:when>
+														</c:choose> <c:choose>
+															<c:when test="${isEdit==1}">
+																<a
+																	href="${pageContext.request.contextPath}/editPurchaseOrder/${poList.poId}/0"><abbr
+																	title="Edit"><i class="fa fa-edit"></i></abbr></a>
+															</c:when>
+														</c:choose> <c:choose>
+															<c:when test="${isDelete==1}">
+																<c:choose>
+																	<c:when
+																		test="${poList.poStatus==9 or poList.poStatus==7}">
+																		<a
+																			href="${pageContext.request.contextPath}/deletePurchaseOrder/${poList.poId}"
+																			onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a>
+																	</c:when>
+																</c:choose>
+															</c:when>
+														</c:choose></td>
+
+												</tr>
+											</c:forEach>
+
+										</tbody>
+
+									</table>
+									<br> <br>
+									<button
+										style="background-color: #008CBA; border: none; color: white; text-align: center; text-decoration: none; display: block; font-size: 12px; cursor: pointer; width: 50px; height: 30px; margin: auto;"
+										onclick="commonPdf()">PDF</button>
+
+
+								</div>
 							</div>
-						</div>
 
-</form>
+						</form>
 
 					</div>
 
@@ -376,156 +390,179 @@
 
 
 	<script type="text/javascript">
-	function search() {
-		  
-		
-		var fromDate = $("#fromDate").val();
-		var toDate = $("#toDate").val();
-		
-		if(fromDate=="" || fromDate == null)
-			alert("Select From Date");
-		else if (toDate=="" || toDate == null)
-			alert("Select To Date");
-		 
-		$('#loader').show();
+		function search() {
 
-		$
-				.getJSON(
-						'${getPoListByDate}',
+			var fromDate = $("#fromDate").val();
+			var toDate = $("#toDate").val();
 
-						{
-							 
-							fromDate : fromDate,
-							toDate : toDate, 
-							ajax : 'true'
+			if (fromDate == "" || fromDate == null)
+				alert("Select From Date");
+			else if (toDate == "" || toDate == null)
+				alert("Select To Date");
 
-						},
-						function(data) {
+			$('#loader').show();
 
-							$('#table1 td').remove();
-							$('#loader').hide();
+			$
+					.getJSON(
+							'${getPoListByDate}',
 
-							if (data == "") {
-								alert("No records found !!");
+							{
 
-							}
-						 
+								fromDate : fromDate,
+								toDate : toDate,
+								ajax : 'true'
 
-						  $.each(
-										data,
-										function(key, itemList) {
-										
+							},
+							function(data) {
 
-											var tr = $('<tr></tr>');
-											
-											 tr.append($('<td style="width:2%;"></td>')
-														.html('<input type="checkbox"  name="name1" value="'+itemList.poId +'"/>'));
-											
-										  	tr.append($('<td></td>').html(key+1));
-										  	tr.append($('<td></td>').html(itemList.poDate));
-										  	tr.append($('<td></td>').html(itemList.poNo));
-										  	
-										  	var type;
-										  	
-										  	if(itemList.poType==1){
-										  		
-										  		type="Regular";
-										  		
-										  	}
-										  	else if(itemList.poType==2){
-										  		type="Job Work";
-										  	}
-											else if(itemList.poType==3){
-												type="General";
-										  	}
-											else{
-												type="Other";
-										  	}
-										  	tr.append($('<td></td>').html(type));
-										  	tr.append($('<td></td>').html(itemList.vendorName));
-										  	tr.append($('<td></td>').html(itemList.indNo));
-										  	if(itemList.poStatus==0) {
-										  		tr.append($('<td></td>').html('<a href="javascript:genPdf('+itemList.poId+');"><abbr'+
+								$('#table1 td').remove();
+								$('#loader').hide();
+
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+
+								$
+										.each(
+												data,
+												function(key, itemList) {
+
+													var tr = $('<tr></tr>');
+
+													tr
+															.append($(
+																	'<td style="width:2%;"></td>')
+																	.html(
+																			'<input type="checkbox"  name="name1" value="'+itemList.poId +'"/>'));
+
+													tr.append($('<td></td>')
+															.html(key + 1));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.poDate));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.poNo));
+
+													var type;
+
+													if (itemList.poType == 1) {
+
+														type = "Regular";
+
+													} else if (itemList.poType == 2) {
+														type = "Job Work";
+													} else if (itemList.poType == 3) {
+														type = "General";
+													} else {
+														type = "Other";
+													}
+													tr.append($('<td></td>')
+															.html(type));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.vendorName));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			itemList.indNo));
+													if (itemList.poStatus == 0) {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				'<a href="javascript:genPdf('
+																						+ itemList.poId
+																						+ ');"><abbr'+
 														'title="PDF"><i class="glyphicon glyphicon glyphicon-file"></i></abbr></a> <a href="${pageContext.request.contextPath}/editPurchaseOrder/0'+itemList.poId+'"><abbr'+
-														'title="Edit"><i class="fa fa-edit"></i></abbr></a> <a href="${pageContext.request.contextPath}/deletePurchaseOrder/'+itemList.poId+'"'+
-														'onClick="return confirm("Are you sure want to delete this record");"><span class="glyphicon glyphicon-remove"></span></a>'));
-										  		}
-										  	else
-										  		{
-										  		tr.append($('<td></td>').html('<a href="javascript:genPdf('+itemList.poId+');"><abbr'+
+														'title="Edit"><i class="fa fa-edit"></i></abbr></a> <a href="${pageContext.request.contextPath}/deletePurchaseOrder/'
+																						+ itemList.poId
+																						+ '"'
+																						+ 'onClick="return confirm("Are you sure want to delete this record");"><span class="glyphicon glyphicon-remove"></span></a>'));
+													} else {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				'<a href="javascript:genPdf('
+																						+ itemList.poId
+																						+ ');"><abbr'+
 														'title="PDF"><i class="glyphicon glyphicon glyphicon-file"></i></abbr></a> <a href="${pageContext.request.contextPath}/editPurchaseOrder/0'+itemList.poId+'"><abbr'+
 														'title="Edit"><i class="fa fa-edit"></i></abbr></a> '));
-										  		}
-										  	
-										    $('#table1 tbody').append(tr); 
-										})  
-										
-							 
-						}); 
-}
+													}
+
+													$('#table1 tbody').append(
+															tr);
+												})
+
+							});
+		}
 	</script>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
+		function genPdf(id) {
 
-function genPdf(id) {
+			window.open('pdfForReport?url=pdf/poPdf/' + id);
 
-	window.open('pdfForReport?url=pdf/poPdf/' + id);
-
-}
-			/* function genPdf(id) {
-				//alert(id);
+		}
+		/* function genPdf(id) {
+			//alert(id);
 		
-				window.open('poPdf/'
-						+ id );
+			window.open('poPdf/'
+					+ id );
 
-			} */
-			
-			function commonPdf() {
+		} */
 
-				var list = [];
+		function commonPdf() {
 
-				$("input:checkbox[name=name1]:checked").each(function() {
-					list.push($(this).val());
-				});
+			var list = [];
 
-				window.open('pdfForReport?url=pdf/poPdf/' + list);
+			$("input:checkbox[name=name1]:checked").each(function() {
+				list.push($(this).val());
+			});
+
+			window.open('pdfForReport?url=pdf/poPdf/' + list);
+
+		}
+	</script>
+
+	<script>
+		function myFunction() {
+			var input, filter, table, tr, td, td1, td2, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("table1");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[5];
+				td1 = tr[i].getElementsByTagName("td")[3];
+				td2 = tr[i].getElementsByTagName("td")[4];
+				if (td || td1 || td2) {
+
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+
+				}
 
 			}
-			
-		</script>
-
-<script>
-function myFunction() {
-  var input, filter, table, tr, td ,td1,td2, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("table1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[5];
-    td1 = tr[i].getElementsByTagName("td")[3];
-    td2 = tr[i].getElementsByTagName("td")[4];
-    if (td || td1 || td2) {
-    	
-    	 if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-    	        tr[i].style.display = "";
-    	      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-    	        tr[i].style.display = "";
-    	      }else if (td2.innerHTML.toUpperCase().indexOf(filter) > -1) {
-    	        tr[i].style.display = "";
-    	      }
-    	      else {
-    	        tr[i].style.display = "none";
-    	      }
-       
-    }  
-    
-     
-  }
-}
- 
-</script>
+		}
+	</script>
 
 </body>
 </html>
