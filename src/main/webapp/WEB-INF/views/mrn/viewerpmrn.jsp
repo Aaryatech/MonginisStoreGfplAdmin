@@ -259,6 +259,18 @@
 <td >
 													<c:forEach items="${mrn.poNosList}" var="po">
 													<a href="${pageContext.request.contextPath}/editPurchaseOrder/${po.poId}/${mrn.mrnId}" target="_blank">${po.poNo}</a>&nbsp;
+											
+											<c:choose>
+									<c:when
+										test="${sessionScope.userInfo.deptId==1 }">
+										<a href="${pageContext.request.contextPath}/editPurchaseOrderForChagneRate?poId=${po.poId}" target="_blank">Change PO Rate</a>
+									</c:when>
+								</c:choose>
+											
+											
+											
+											
+											
 													</c:forEach>
 													</td>
 
