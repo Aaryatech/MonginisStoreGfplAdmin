@@ -861,7 +861,7 @@ public class PurchaseOrderController {
 			String poRemark = request.getParameter("poRemark");
 
 			// ----------------------------Inv No---------------------------------
-			DocumentBean docBean = null;
+			/*DocumentBean docBean = null;
 			try {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -889,7 +889,15 @@ public class PurchaseOrderController {
 				docBean.getSubDocument().setCounter(docBean.getSubDocument().getCounter() + 1);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
+			}*/
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("docType", 3);
+			map.add("date", DateConvertor.convertToYMD(poDate)); 
+			RestTemplate restTemplate = new RestTemplate(); 
+			ErrorMessage getpono = restTemplate.postForObject(Constants.url + "generateIssueNoAndMrnNo", map,
+					ErrorMessage.class); 
+			PoHeader.setPoNo("" + getpono.getMessage());
 			// ----------------------------Inv No---------------------------------
 			PoHeader.setVendId(vendId);
 			PoHeader.setVendQuation(quotation);
@@ -915,8 +923,7 @@ public class PurchaseOrderController {
 			if (save != null) {
 				try {
 
-					SubDocument subDocRes = rest.postForObject(Constants.url + "/saveSubDoc", docBean.getSubDocument(),
-							SubDocument.class);
+					//SubDocument subDocRes = rest.postForObject(Constants.url + "/saveSubDoc", docBean.getSubDocument(), SubDocument.class);
 
 				} catch (Exception e) {
 					e.printStackTrace();
