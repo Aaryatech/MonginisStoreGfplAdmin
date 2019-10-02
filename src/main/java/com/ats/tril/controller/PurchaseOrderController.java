@@ -1969,7 +1969,7 @@ public class PurchaseOrderController {
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("status", "7");
+			map.add("status", "7,9");
 			GetPoHeaderList[] list = rest.postForObject(Constants.url + "/getPoHeaderListForApprove", map,
 					GetPoHeaderList[].class);
 			List<GetPoHeaderList> poList = new ArrayList<GetPoHeaderList>(Arrays.asList(list));
@@ -2342,7 +2342,7 @@ public class PurchaseOrderController {
 
 			}
 
-			String url = Constants.ReportURL+"/pdf/poPdf/"+poHeaderForApprove.getPoId();
+			String url = Constants.ReportURL+"pdf/poPdf/"+poHeaderForApprove.getPoId();
 			doConversion(url, Constants.REPORT_SAVE);
 			// doConversion(Constants.ReportURL+"/pdf/poPdf/"+poHeaderForApprove.getPoId(),Constants.REPORT_SAVE);
 			
@@ -2355,8 +2355,8 @@ public class PurchaseOrderController {
 			final String emailSMTPserver = "smtp.gmail.com";
 			final String emailSMTPPort = "587";
 			final String mailStoreType = "imaps";
-			final String username = "atsinfosoft@gmail.com";
-			final String password = "atsinfosoft@123";
+			final String username = "purchase.monginis1@gmail.com";
+			final String password = "sachin1234#";
 
 			System.out.println("username" + username);
 			System.out.println("password" + password);

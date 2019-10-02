@@ -211,7 +211,7 @@
 										<input id="vendorEmail" class="form-control"
 									placeholder="Vendor Email" style="text-align: left;"
 									name="vendorEmail" value="${editVendor.vendorEmail}"
-									type="email" required>
+									type="text" required>
 
 
 									</div>
