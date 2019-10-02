@@ -2166,8 +2166,8 @@ public class PurchaseOrderController {
 						if (poHeaderForApprove.getPoDetailList().get(i).getIgst() > 0) {
 
 							poHeaderForApprove.getPoDetailList().get(i)
-									.setTaxValue((poHeaderForApprove.getPoDetailList().get(i).getIgst() / 100)
-											* (poHeaderForApprove.getPoDetailList().get(i).getBasicValue()
+									.setTaxValue((poHeaderForApprove.getPoDetailList().get(i).getIgst() / 100)*
+											 (poHeaderForApprove.getPoDetailList().get(i).getBasicValue()
 													- poHeaderForApprove.getPoDetailList().get(i).getDiscValue()
 													+ poHeaderForApprove.getPoDetailList().get(i).getPackValue()
 													+ poHeaderForApprove.getPoDetailList().get(i).getInsu()
@@ -2176,8 +2176,8 @@ public class PurchaseOrderController {
 						} else {
 							poHeaderForApprove.getPoDetailList().get(i)
 									.setTaxValue(((poHeaderForApprove.getPoDetailList().get(i).getCgst()
-											+ poHeaderForApprove.getPoDetailList().get(i).getSgst()) / 100)
-											* (poHeaderForApprove.getPoDetailList().get(i).getBasicValue()
+											+ poHeaderForApprove.getPoDetailList().get(i).getSgst()) / 100)*
+											 (poHeaderForApprove.getPoDetailList().get(i).getBasicValue()
 													- poHeaderForApprove.getPoDetailList().get(i).getDiscValue()
 													+ poHeaderForApprove.getPoDetailList().get(i).getPackValue()
 													+ poHeaderForApprove.getPoDetailList().get(i).getInsu()
@@ -2342,10 +2342,16 @@ public class PurchaseOrderController {
 
 			}
 
-			String url = request.getContextPath();
-			doConversion("http://localhost:8081/tril/pdf/poPdf/" + poHeaderForApprove.getPoId(), Constants.REPORT_SAVE);
+			String url = Constants.ReportURL+"/pdf/poPdf/"+poHeaderForApprove.getPoId();
+			doConversion(url, Constants.REPORT_SAVE);
 			// doConversion(Constants.ReportURL+"/pdf/poPdf/"+poHeaderForApprove.getPoId(),Constants.REPORT_SAVE);
-
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("vendorId", poHeaderForApprove.getVendId());
+			Vendor vendorList = rest.postForObject(Constants.url + "/getVendorByVendorId", map, Vendor.class);
+			 
+			
 			final String emailSMTPserver = "smtp.gmail.com";
 			final String emailSMTPPort = "587";
 			final String mailStoreType = "imaps";
@@ -2376,7 +2382,7 @@ public class PurchaseOrderController {
 
 				Message mimeMessage = new MimeMessage(session);
 				mimeMessage.setFrom(new InternetAddress(username));
-				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse("akshaykasar72@gmail.com,sumitmashalkar@gmail.com"));
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
 				mimeMessage.setSubject(subject);
 				mimeMessage.setText("file");
 				mimeMessage.setFileName("PO Print");
