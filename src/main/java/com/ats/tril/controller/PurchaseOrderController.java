@@ -2364,6 +2364,9 @@ public class PurchaseOrderController {
 			final String mailStoreType = "imaps";
 			final String username = "purchase.monginis1@gmail.com";
 			final String password = "sachin1234#";
+			
+			/*final String username = "akshaykasar72@gmail.com";
+			final String password = "mh151772@123";*/
 
 			System.out.println("username" + username);
 			System.out.println("password" + password);
@@ -2385,13 +2388,12 @@ public class PurchaseOrderController {
 				Store mailStore = session.getStore(mailStoreType);
 				mailStore.connect(emailSMTPserver, username, password);
 
-				String subject = "PO Approval";
+				String subject = " Order For "+vendorList.getVendorName();
 
 				Message mimeMessage = new MimeMessage(session);
 				mimeMessage.setFrom(new InternetAddress(username));
 				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
-				mimeMessage.setSubject(subject);
-				mimeMessage.setText("file");
+				mimeMessage.setSubject(subject); 
 				mimeMessage.setFileName("PO Print");
 				BodyPart mbodypart = new MimeBodyPart();
 				Multipart multipart = new MimeMultipart();
@@ -2401,6 +2403,36 @@ public class PurchaseOrderController {
 				// mbodypart.setFileName(Constants.REPORT_SAVE);
 				multipart.addBodyPart(mbodypart);
 				mimeMessage.setContent(multipart);
+				
+				 
+				   
+				MimeBodyPart messageBodyPart = new MimeBodyPart(); 
+				messageBodyPart = new MimeBodyPart();
+				messageBodyPart.setContent("Dear Sir,<br>" + 
+						"Kindly dispatch the goods as per attached PO. Kindly follow following instructions while dispatching the material.<br>" + 
+						"1. COA-Chemical Analysis Report shall be sent with all the raw materials. Kindly note that if COA is not sent, there might be delay in the payment.<br>" + 
+						"2. New Software has been installed at our end, so send material as per PO quantity only. If excess material is sent we will not be able to accept it, as there is no facility in new software to inward excess material.<br>" + 
+						"3. All bills shall compulsory carry our PO number.<br>" + 
+						"<br>" + 
+						"डिअर सर<br>" + 
+						"माल पाठविताना खालील पॉईंट्स वर कृपया लक्ष द्यावे-- <br>" + 
+						"1 ) मटेरियल सोबात COA  (केमिकल अनेलीसिस ) रिपोर्ट पाठवणे. COA मटेरियल सोबत नाही आला तर, पेमेंट मध्ये दिरंगाई होईल याची नोंद घ्यावी.<br>" + 
+						"2 ) परचेस ऑर्डर मध्ये जि Quantity आहे  त्यानुसार बिल बनवणे, Quantity जर परचेस ऑर्डर  नुसार जास्त आली तर माल परत केला जाईल ,कारण लक्षात घ्या आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल केला आहे व त्या मध्ये परचेस ऑर्डर च्या जास्त माल इनवॉर्ड करता येत नाही.<br>" + 
+						"३)आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल झाल्या कारणाने,  बिल बनवतानी  परचेसे ऑर्डर नंबर टाकणे आवश्यक आहे<br>"
+						+ "Regards.<br>" + 
+						"<br>" + 
+						"Mr. Sachin Waghmare,<br>" + 
+						"Purchase and Store Incharge,<br>" + 
+						"Galdhar Foods --Monginis Aurangabad.<br>" + 
+						"Plot 48, Chikalthana MIDC,Aurangabad-431006<br>" + 
+						"<br>" + 
+						"Cell-8446464667<br>" + 
+						"Landline/ Factory-844-60-600-50/ Ext-303 ", "text/html; charset=utf-8");
+				multipart.addBodyPart(messageBodyPart);
+				mimeMessage.setContent(multipart);
+ 
+				
+				
 				Transport.send(mimeMessage);
 			} catch (Exception e) {
 				e.printStackTrace();
