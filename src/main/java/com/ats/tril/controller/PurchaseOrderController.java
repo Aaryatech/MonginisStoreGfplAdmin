@@ -2362,11 +2362,11 @@ public class PurchaseOrderController {
 			final String emailSMTPserver = "smtp.gmail.com";
 			final String emailSMTPPort = "587";
 			final String mailStoreType = "imaps";
-			/*final String username = "purchase.monginis1@gmail.com";
-			final String password = "sachin1234#";*/
+			final String username = "purchase.monginis1@gmail.com";
+			final String password = "sachin1234#";
 			
-			final String username = "akshaykasar72@gmail.com";
-			final String password = "mh151772@123";
+			/*final String username = "akshaykasar72@gmail.com";
+			final String password = "mh151772@123";*/
 
 			System.out.println("username" + username);
 			System.out.println("password" + password);
