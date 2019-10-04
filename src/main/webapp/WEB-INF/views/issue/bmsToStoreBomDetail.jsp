@@ -20,8 +20,8 @@
 	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 	<c:url var="withPoRef" value="/withPoRef"></c:url>
 	<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
-
-
+	<c:url var="getSubDeptList" value="/getSubDeptList"></c:url>
+	<c:url var="genrateNo" value="/genrateNo" />
 
 	<div class="container" id="main-container">
 
@@ -73,7 +73,7 @@
 								action="${pageContext.request.contextPath}/approvedBomFromStore"
 								method="post">
 								<div class="box-content">
-									<div class="col-md-3">Bill Of Material Request Date</div>
+									<div class="col-md-2">BOM Request Date</div>
 
 									<div class="col-md-3">
 										<input type="text" id="mix_date" name="mix_date"
@@ -88,7 +88,7 @@
 
 								<div class="box-content">
 
-									<div class="col-md-3">Status</div>
+									<div class="col-md-2">Status</div>
 									<div class="col-md-3">
 										<c:choose>
 											<c:when test="${billOfMaterialHeader.status==0}">
@@ -116,7 +116,7 @@
 								<div class="box-content">
 
 
-									<div class="col-md-3">From Department</div>
+									<div class="col-md-2">From Department</div>
 									<div class="col-md-3">
 										<input class="form-control" id="time_slot" size="16"
 											type="text" name="time_slot"
@@ -129,7 +129,7 @@
 								<div class="box-content">
 
 
-									<div class="col-md-3">To Department</div>
+									<div class="col-md-2">To Department</div>
 									<div class="col-md-3">
 										<input class="form-control" id="time_slot" size="16"
 											type="text" name="time_slot"
@@ -143,7 +143,88 @@
 								</div>
 								<br>
 
+								<div class="box-content">
 
+									<div class="col-md-2">Issue No*</div>
+									<div class="col-md-3">
+
+										<input id="issueNo" class="form-control"
+											placeholder="Issue No" value="1" name="issueNo" type="text"
+											readonly> <input id="poTyped" value="1"
+											name="poTyped" id="poTyped" type="hidden" readonly> <input
+											type="hidden" value="1" id="type" name="type">
+									</div>
+
+									<%-- <div class="col-md-2">Type*</div>
+									<div class="col-md-3">
+									
+											<select name="poTyped" id="poTyped"   class="form-control chosen" onchange="getInvoiceNo()"    >
+												  <option value="" >Select  Type</option>
+														<c:forEach items="${typeList}" var="typeList">
+															 
+																	<option value="${typeList.typeId}"  >${typeList.typeName}</option>
+															 
+														</c:forEach>
+														</select>
+								 </div> --%>
+
+								</div>
+								<br>
+
+								<div class="box-content">
+
+									<div class="col-md-2">Issue Date*</div>
+									<div class="col-md-3">
+										<input id="issueDate" class="form-control"
+											placeholder="Issue Date" name="issueDate" type="date"
+											value="${date}" onchange="getInvoiceNo()" required> <input
+											id="stockDateDDMMYYYY" value="${stockDateDDMMYYYY}"
+											name="stockDateDDMMYYYY" type="hidden">
+									</div>
+
+									<div class="col-md-2">Select Account Head</div>
+									<div class="col-md-3">
+										<select class="form-control chosen" name="acc" id="acc"
+											required>
+											<option value="">Select Account Head</option>
+
+											<c:forEach items="${accountHeadList}" var="accountHeadList">
+												<option value="${accountHeadList.accHeadId}"><c:out
+														value="${accountHeadList.accHeadDesc}"></c:out>
+												</option>
+											</c:forEach>
+										</select>
+									</div>
+
+
+								</div>
+								<br>
+								<div class="box-content">
+
+									<div class="col-md-2">Select Department</div>
+									<div class="col-md-3">
+										<select class="form-control chosen" name="deptId"
+											onchange="getSubDeptListByDeptId()" id="deptId" required>
+											<option value="">Select Department</option>
+
+											<c:forEach items="${deparmentList}" var="deparmentList">
+												<option value="${deparmentList.deptId}">${deparmentList.deptCode}
+													&nbsp;&nbsp;&nbsp; ${deparmentList.deptDesc}</option>
+											</c:forEach>
+										</select>
+									</div>
+
+									<div class="col-md-2">Select Sub Department</div>
+									<div class="col-md-3">
+										<select class="form-control chosen" name="subDeptId"
+											id="subDeptId" required>
+
+										</select>
+									</div>
+
+								</div>
+								<br> <input id=issueSlipNo name="issueSlipNo" type="hidden"
+									value="1" required><br>
 
 
 
@@ -155,10 +236,11 @@
 												style="width: 100%" id="table_grid">
 												<thead>
 													<tr>
-														<th>Sr.No.</th>
+														<th width="7%">Sr.No.</th>
 														<th>Name</th>
-														<th>request Qty</th>
-														<th>issue Qty</th>
+														<th width="10%">request Qty</th>
+														<th width="20%">Available Qty</th>
+														<th width="10%">issue Qty</th>
 														<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
 																<th>Return Qty</th>
@@ -181,15 +263,21 @@
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
 
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
+															<td>${bomwithdetaild.totalAvaiQty}<input
+																type="hidden"
+																name="availableQty${bomwithdetaild.reqDetailId}"
+																id="availableQty${bomwithdetaild.reqDetailId}"
+																class="form-control"
+																value="${bomwithdetaild.totalAvaiQty}"></td>
 
 															<c:choose>
 																<c:when test="${billOfMaterialHeader.status==0}">
 																	<td><input type="text"
-																		name='issue_qty<c:out
-																value="${bomwithdetaild.reqDetailId}" />'
-																		class="form-control"
-																		value=<c:out
-																value="${bomwithdetaild.rmIssueQty}" />></td>
+																		name="issue_qty${bomwithdetaild.reqDetailId}"
+																		class="form-control rate1"
+																		value="${bomwithdetaild.rmIssueQty}"
+																		onchange="qtyValidation(${bomwithdetaild.reqDetailId})"
+																		id="issue_qty${bomwithdetaild.reqDetailId}" /></td>
 																</c:when>
 																<c:otherwise>
 																	<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
@@ -226,7 +314,7 @@
 												<c:choose>
 													<c:when test="${flag==1}">
 														<input type="submit" class="btn btn-primary"
-															value="Approved">
+															value="Approved" onclick="check();">
 													</c:when>
 												</c:choose>
 											</div>
@@ -265,7 +353,7 @@
 
 
 									</c:when> --%>
- 
+
 
 								</c:choose>
 
@@ -333,10 +421,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -358,5 +442,101 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script type="text/javascript">
+	
+	$('.rate1').on('input', function() {
+		 this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+		});
+	
+		function qtyValidation(id) {
+			 
+			
+			var issue_qty = parseFloat(document.getElementById("issue_qty"+id).value);
+			
+			var availableQty = parseFloat(document
+					.getElementById("availableQty"+id).value);
+			  
+			if (issue_qty > availableQty) {
+				alert("enter valid Qty");
+				document.getElementById("issue_qty"+id).value = 0;
+			}
+
+		}
+	</script>
+
+
+	<script type="text/javascript">
+		function getInvoiceNo() {
+
+			var date = $("#issueDate").val();
+			var toDateValue = date.split('-');
+			var type = $("#poTyped").val();
+			var min = toDateValue[2] + "-" + (toDateValue[1]) + "-"
+					+ toDateValue[0];
+
+			$.getJSON('${genrateNo}', {
+
+				catId : 1,
+				docId : 2,
+				date : min,
+				typeId : type,
+				ajax : 'true',
+
+			}, function(data) {
+
+				document.getElementById("issueNo").value = data.message;
+				document.getElementById("type").value = type;
+				getBatchByItemId();
+			});
+
+		}
+
+		function check() {
+
+			var acc = $("#acc").val();
+			var deptId = $("#deptId").val();
+			var subDeptId = $("#subDeptId").val();
+
+			if (acc == "" || acc == null) {
+
+				alert("Please Select Account Head ");
+			}
+
+			else if (deptId == "" || deptId == null) {
+
+				alert("Please Select Department ");
+			}
+
+			else if (subDeptId == "" || subDeptId == null) {
+
+				alert("Please Select Sub Department  ");
+			}
+
+		}
+		
+		function getSubDeptListByDeptId() {
+
+			var deptId = document.getElementById("deptId").value;
+
+			$.getJSON('${getSubDeptList}', {
+
+				deptId : deptId,
+				ajax : 'true'
+			}, function(data) {
+
+				var html = '<option value="">Select Sub Department</option>';
+
+				var len = data.length;
+				for (var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].subDeptId + '">'
+							+ data[i].subDeptCode + ' &nbsp;&nbsp;&nbsp; '
+							+ data[i].subDeptDesc + '</option>';
+				}
+				html += '</option>';
+				$('#subDeptId').html(html);
+				$("#subDeptId").trigger("chosen:updated");
+			});
+		}
+	</script>
 </body>
 </html>

@@ -22,6 +22,8 @@ public class BillOfMaterialDetailed {
 	private float autoRmReqQty; 
 	private float rejectedQty; 
 	private float returnQty;
+	private float totalAvaiQty;
+	
 	public int getReqDetailId() {
 		return reqDetailId;
 	}
@@ -136,6 +138,12 @@ public class BillOfMaterialDetailed {
 	public void setReturnQty(float returnQty) {
 		this.returnQty = returnQty;
 	}
+	public float getTotalAvaiQty() {
+		return totalAvaiQty;
+	}
+	public void setTotalAvaiQty(float totalAvaiQty) {
+		this.totalAvaiQty = totalAvaiQty;
+	}
 	@Override
 	public String toString() {
 		return "BillOfMaterialDetailed [reqDetailId=" + reqDetailId + ", reqId=" + reqId + ", rmType=" + rmType
@@ -143,7 +151,7 @@ public class BillOfMaterialDetailed {
 				+ rmIssueQty + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVarchar1=" + exVarchar1
 				+ ", exVarchar2=" + exVarchar2 + ", exVarchar3=" + exVarchar3 + ", exBool1=" + exBool1 + ", exBool2="
 				+ exBool2 + ", delStatus=" + delStatus + ", autoRmReqQty=" + autoRmReqQty + ", rejectedQty="
-				+ rejectedQty + ", returnQty=" + returnQty + "]";
+				+ rejectedQty + ", returnQty=" + returnQty + ", totalAvaiQty=" + totalAvaiQty + "]";
 	}
 	
 	
