@@ -1,5 +1,6 @@
 package com.ats.tril.controller;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -19,20 +21,24 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-
+ 
 import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
 import com.ats.tril.model.AccountHead;
+import com.ats.tril.model.BillOfMaterialDetailed;
 import com.ats.tril.model.BillOfMaterialHeader;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Dept;
 import com.ats.tril.model.ErrorMessage;
+import com.ats.tril.model.FrItemStockConfigure;
+import com.ats.tril.model.FrItemStockConfigureList;
 import com.ats.tril.model.GetBillOfMaterialList;
 import com.ats.tril.model.GetIssueDetail;
 import com.ats.tril.model.GetIssueHeader;
 import com.ats.tril.model.GetItemGroup;
 import com.ats.tril.model.GetSubDept;
 import com.ats.tril.model.GetpassHeader;
+import com.ats.tril.model.Info;
 import com.ats.tril.model.IssueDetail;
 import com.ats.tril.model.IssueHeader;
 import com.ats.tril.model.StockHeader;
@@ -42,6 +48,7 @@ import com.ats.tril.model.doc.SubDocument;
 import com.ats.tril.model.indent.IndentTrans;
 import com.ats.tril.model.item.GetItem;
 import com.ats.tril.model.item.ItemList;
+import com.ats.tril.model.login.UserResponse;
 import com.ats.tril.model.mrn.GetMrnHeader;
 import com.ats.tril.model.mrn.MrnDetail;
 import com.sun.org.apache.bcel.internal.generic.NEWARRAY; 
@@ -1455,6 +1462,208 @@ List<MrnDetail> updateMrnDetail = new ArrayList<MrnDetail>();
 		}
 
 		return errorMessage;
+	}
+	
+	
+	
+	public List<BillOfMaterialHeader> getbomList = new ArrayList<BillOfMaterialHeader>();
+	private List<BillOfMaterialHeader> getBOMListall;
+	List<BillOfMaterialDetailed> bomwithdetaild = new ArrayList<BillOfMaterialDetailed>();
+	
+	@RequestMapping(value = "/getBomListBmsToStores", method = RequestMethod.GET)
+	public ModelAndView getBomLists(HttpServletRequest request, HttpServletResponse response) {
+		 Constants.mainAct =8;
+		Constants.subAct=47; 
+		
+		ModelAndView model = new ModelAndView("issue/bmsToStoreBomHeader");//
+		getbomList = new ArrayList<BillOfMaterialHeader>();
+		HttpSession session=request.getSession();
+		 
+		 
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate rest = new RestTemplate();
+		int fromDept=0;
+		try
+		{
+			String settingKey = new String(); 
+			settingKey = "BMS" + "," + "STORE"; 
+			map.add("settingKeyList", settingKey);
+			
+			// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+			
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.adminUrl + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			 
+			 
+			
+			int toDeptId=0;
+			
+			 
+			List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
+			
+			
+			for (int i = 0; i < settingKeyList.size(); i++) {
+
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("BMS")) {
+
+					fromDept = settingKeyList.get(i).getSettingValue();
+
+				}
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("STORE")) {
+
+					toDeptId = settingKeyList.get(i).getSettingValue();
+					 
+				}
+				 
+
+			}
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDept",fromDept);         
+			map.add("toDept",toDeptId);           
+			map.add("status","0"); 
+			System.out.println("map "+map);
+			GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.adminUrl + "/getBOMHeaderBmsAndStore",map, GetBillOfMaterialList.class); 
+			 
+			getbomList=getBillOfMaterialList.getBillOfMaterialHeader(); 
+			
+		}catch(Exception e)
+		{
+			System.out.println("error in controller "+e.getMessage());
+		}
+		model.addObject("settingvalue",fromDept) ;
+		model.addObject("deptId",17) ;
+		model.addObject("getbomList",getbomList) ;
+		model.addObject("flag",1) ;
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getBomListBmsToStoreWithDate", method = RequestMethod.GET)
+	@ResponseBody
+	public List<BillOfMaterialHeader> getBomAllListWithDate(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		System.out.println("in controller");
+		String frmdate=request.getParameter("from_date");
+		String todate=request.getParameter("to_date");
+		  
+		
+		try {
+			     
+			System.out.println("in getMixingListWithDate   "+frmdate+todate);
+			String frdate=DateConvertor.convertToYMD(frmdate);
+			String tdate=DateConvertor.convertToYMD(todate);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey = new String(); 
+			settingKey = "STORE"; 
+			map.add("settingKeyList", settingKey);
+			
+			RestTemplate rest = new RestTemplate();
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.adminUrl + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			String settingKey2 = new String(); 
+			settingKey2 = "BMS"; 
+			map.add("settingKeyList", settingKey2);
+			
+			
+			FrItemStockConfigureList settingList2 = rest.postForObject(Constants.adminUrl + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDept",settingList2.getFrItemStockConfigure().get(0).getSettingValue());         
+			map.add("toDept",settingList.getFrItemStockConfigure().get(0).getSettingValue());   
+			map.add("frmdate",frdate);
+			map.add("todate",tdate); 
+
+			//System.out.println("in getBOMListWithDate   "+frdate+tdate);
+			
+			GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.adminUrl + "/getBOMHeaderListBmsAndStore",map, GetBillOfMaterialList.class);
+			getBOMListall  = getBillOfMaterialList.getBillOfMaterialHeader();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return getBOMListall;
+	
+
+	}
+	
+	@RequestMapping(value = "/viewDetailBOMBmsToStoreRequest", method = RequestMethod.GET)
+	public ModelAndView viewDetailBOMRequest(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		ModelAndView model = new ModelAndView("issue/bmsToStoreBomDetail");
+		
+		HttpSession session=request.getSession();
+		 
+		
+		//String mixId=request.getParameter("mixId");
+		int reqId=Integer.parseInt(request.getParameter("reqId"));
+		System.out.println(reqId);
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("reqId",reqId);
+		RestTemplate rest = new RestTemplate();
+		billOfMaterialHeader=rest.postForObject(Constants.adminUrl + "/getDetailedwithreqId",map, BillOfMaterialHeader.class);
+		bomwithdetaild =billOfMaterialHeader.getBillOfMaterialDetailed();
+		 
+		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
+		model.addObject("bomwithdetaild", bomwithdetaild);
+		model.addObject("flag", 1);
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/approvedBomFromStore", method = RequestMethod.POST)
+	public String approvedBom(HttpServletRequest request, HttpServletResponse response) {
+		Constants.mainAct = 17;
+		Constants.subAct=184;
+		Date date= new Date();
+		SimpleDateFormat ymdSDF = new SimpleDateFormat("dd-MM-yyyy");
+		
+		HttpSession session=request.getSession(); 
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		
+		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
+		{
+			System.out.println(12);
+			 
+			 
+				System.out.println(13);
+				String issue_qty=request.getParameter("issue_qty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
+				
+				if(issue_qty!=null) {
+					//System.out.println("issue_qty Qty   :"+issue_qty);
+					float issueqty= Float.parseFloat(issue_qty);
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRmIssueQty(issueqty);
+					//System.out.println("productionQty  :"+issueqty);
+				}
+				else
+				{
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRmIssueQty(0);
+				}
+				//System.out.println(2);
+			 
+		}
+		billOfMaterialHeader.setStatus(1);
+		billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());
+		billOfMaterialHeader.setApprovedDate(ymdSDF.format(date));
+		
+		System.out.println(billOfMaterialHeader.toString());
+		
+		RestTemplate rest = new RestTemplate();
+		
+		Info info = rest.postForObject(Constants.adminUrl + "saveBom", billOfMaterialHeader, Info.class);	
+		//System.out.println(info);
+		
+		return "redirect:/getBomListBmsToStores";
 	}
 
 }
