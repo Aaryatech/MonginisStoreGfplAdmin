@@ -144,6 +144,7 @@
 
 												<th class="col-md-5">Item Description</th>
 												<th class="col-md-1">Item UOM</th>
+												<th class="col-md-1">Tax %</th>
 												<th class="col-md-1">Action</th>
 											</tr>
 										</thead>
@@ -160,6 +161,25 @@
 															value="${itemList.itemDesc}" /></td>
 													<td class="col-md-1"><c:out
 															value="${itemList.itemUom}" /></td>
+												
+												<c:forEach items="${taxFormList}" var="taxFormList"
+												varStatus="count">
+												
+												<c:choose>
+															<c:when test="${itemList.itemIsCapital==taxFormList.taxId}">
+																<td class="col-md-1"><c:out
+															value="${taxFormList.taxDesc}" /></td>
+															</c:when>
+															
+														</c:choose> 
+												
+												
+												
+												
+												</c:forEach>
+												
+												
+															
 													<td><c:choose>
 															<c:when test="${isEdit==1}">
 																<a

@@ -973,7 +973,8 @@ public class MasterController {
 				 model.addObject("catId", catId);
 				
 			}
-			 
+			TaxForm[] taxFormList = rest.getForObject(Constants.url + "/getAllTaxForms", TaxForm[].class);
+			model.addObject("taxFormList", taxFormList);
 
 		} catch (Exception e) {
 			e.printStackTrace();
