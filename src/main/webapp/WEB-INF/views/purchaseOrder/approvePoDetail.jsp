@@ -220,18 +220,18 @@
 																		varStatus="count">
 																		<tr>
 																		<td  > 
-																		<c:choose>
+																		<%-- <c:choose>
 																			<c:when test="${poDetailList.status==9}">
 																			<input type="checkbox" id="select_to_approve${poDetailList.poDetailId}"
 															name="select_to_approve" value="${poDetailList.poDetailId}" disabled/>
 																			</c:when>
-																			<c:otherwise>
+																			<c:otherwise> --%>
 																			<input type="checkbox" id="select_to_approve${poDetailList.poDetailId}"
 															name="select_to_approve" value="${poDetailList.poDetailId}" checked/>
 																			
-																			</c:otherwise>
+																			<%-- </c:otherwise>
 																		
-																		</c:choose></td>
+																		</c:choose> --%></td>
 																			<td  ><c:out value="${count.index+1}" /></td>
 				 
 																			<td  ><c:out
