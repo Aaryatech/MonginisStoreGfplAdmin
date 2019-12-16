@@ -2357,7 +2357,7 @@ public class PurchaseOrderController {
 			final String emailSMTPPort = "587";
 			final String mailStoreType = "imaps";
 			final String username = "purchase.monginis1@gmail.com";
-			final String password = "sachin1234#";
+			final String password = "purchase1234#";
 
 			/*
 			 * final String username = "akshaykasar72@gmail.com"; final String password =
