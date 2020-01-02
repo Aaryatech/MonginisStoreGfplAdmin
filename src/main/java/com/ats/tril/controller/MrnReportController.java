@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +35,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
+import com.ats.tril.model.Category;
 import com.ats.tril.model.ExportToExcel;
+import com.ats.tril.model.MrnInfo;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.Vendor;
 import com.ats.tril.model.doc.DocumentBean;
@@ -512,6 +515,262 @@ public class MrnReportController {
 
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+
+	}
+	/**********************************************************************************/
+	//Mahendra
+	//02-01-2020
+	
+	List<MrnInfo> mrnList = null;
+	@RequestMapping(value = "/mrnReportList", method = RequestMethod.GET)
+	public ModelAndView indetReportList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("report/mrnDetailReport");
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+
+			MrnInfo[] mrnRes = restTemplate.getForObject(Constants.url + "/getMrnDetails", MrnInfo[].class);
+			mrnList = new ArrayList<MrnInfo>(Arrays.asList(mrnRes));
+			System.out.println("Lisrt------------"+mrnList);
+			// export to excel
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No");
+			rowData.add("MRN Date");
+			rowData.add("MRN No.");
+			rowData.add("Venor Name");
+			rowData.add("Bill No.");
+			rowData.add("Item Name");
+			rowData.add("Qty.");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			int cnt = 0;
+			for (int i = 0; i < mrnList.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				cnt = cnt+1;
+				rowData.add("" + (cnt));
+				rowData.add("" + mrnList.get(i).getMrnDate());
+				rowData.add("" + mrnList.get(i).getMrnNo());
+				rowData.add("" + mrnList.get(i).getVendorName());
+				rowData.add("" + mrnList.get(i).getBillNo());				
+				rowData.add("" + mrnList.get(i).getItemDesc());
+				rowData.add("" + mrnList.get(i).getApproveQty());
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "MRNDetailReport");
+
+			
+			model.addObject("mrnList", mrnList);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/showMrnDetailPdf", method = RequestMethod.GET)
+	public void showIndentPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf showMrnDetailPdf");
+
+		// moneyOutList = prodPlanDetailList;
+		Document document = new Document(PageSize.A4);
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(7);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 2.4f,  3.2f, 3.2f, 3.2f, 3.2f, 3.2f, 3.2f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			hcell.setPadding(3);
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("MRN Date", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("MRN No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Vendor Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Bill No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Qty.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			int index = 0;
+			for (MrnInfo mrn : mrnList) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPadding(3);
+				cell.setPaddingRight(2);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(mrn.getMrnDate(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + mrn.getMrnNo(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + mrn.getVendorName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + mrn.getBillNo(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + mrn.getItemDesc(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				
+				cell = new PdfPCell(new Phrase("" + mrn.getApproveQty(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+			}
+			document.open();
+			
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("MRN List Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");			
+			document.add(new Paragraph("\n"));
+			document.add(table);
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: BOm Prod  View Prod" + ex.getMessage());
+
+			ex.printStackTrace();
+
 		}
 
 	}
