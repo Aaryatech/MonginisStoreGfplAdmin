@@ -29,6 +29,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,9 +38,12 @@ import com.ats.tril.common.Constants;
 import com.ats.tril.common.DateConvertor;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.ExportToExcel;
+import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.MrnInfo;
+import com.ats.tril.model.RateVerificationList;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.Vendor;
+import com.ats.tril.model.VendorItemPurchaseReport;
 import com.ats.tril.model.doc.DocumentBean;
 import com.ats.tril.model.indent.IndentReport;
 import com.ats.tril.model.mrn.GetMrnHeader;
@@ -730,6 +734,373 @@ public class MrnReportController {
 			document.add(new Paragraph(" "));
 
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");			
+			document.add(new Paragraph("\n"));
+			document.add(table);
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: BOm Prod  View Prod" + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+	}
+	
+	@RequestMapping(value = "/showVendorItemPurchaseReport", method = RequestMethod.GET)
+	public ModelAndView showVendorItemPurchaseReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = null;
+		try {
+			RestTemplate rest = new RestTemplate();
+			model = new ModelAndView("mrn/report/vendorItemPurchase");
+			Vendor[] vendorRes = rest.getForObject(Constants.url + "/getAllVendorByIsUsed", Vendor[].class);
+			List<Vendor> vendorList = new ArrayList<Vendor>(Arrays.asList(vendorRes));
+
+			model.addObject("vendorList", vendorList);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/getVendorItems", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RateVerificationList> getVendorItems(HttpServletRequest request, HttpServletResponse response, @RequestParam int vendrId ) {
+		List<RateVerificationList> itemlist = new ArrayList<RateVerificationList>();
+		try {
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			//int vendrId = Integer.parseInt(request.getParameter("vendrId"));
+			System.out.println("Vender Id Found--------"+ vendrId);
+			
+			map.add("vendrId", vendrId);
+			
+			RateVerificationList[] itemArr= rest.postForObject(Constants.url + "/getAllVendorItem", map, RateVerificationList[].class);
+			itemlist = new ArrayList<RateVerificationList>(Arrays.asList(itemArr));
+			
+			System.out.println("List--------"+itemlist);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return itemlist;
+		
+	}
+	List<VendorItemPurchaseReport> viplist = null;
+	@RequestMapping(value = "/getVendorItemPurchaseList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<VendorItemPurchaseReport> getVendorItems(HttpServletRequest request, HttpServletResponse response) {
+		viplist = new ArrayList<VendorItemPurchaseReport>();
+		try {
+			RestTemplate rest = new RestTemplate();
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			int vendrId = Integer.parseInt(request.getParameter("vendrId"));
+			String[] rmItemList = request.getParameterValues("rmItemList[]");
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < rmItemList.length; i++) {
+				sb = sb.append(rmItemList[i] + ",");
+
+			}
+			String items = sb.toString();
+			items = items.substring(0, items.length() - 1);
+
+			System.out.println(fromDate+ " "+toDate+" "+vendrId+" "+ items);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("itemsList", items);
+			map.add("vendrId", vendrId);
+			
+			VendorItemPurchaseReport[] itemArr= rest.postForObject(Constants.url + "/getVendorItemPuchaseList", map, VendorItemPurchaseReport[].class);
+			viplist = new ArrayList<VendorItemPurchaseReport>(Arrays.asList(itemArr));
+			
+			System.out.println("List-----------"+viplist);
+			
+			// export to excel
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No");
+			rowData.add("MRN No.");
+			rowData.add("Vendor Name");
+			rowData.add("MRN Date");
+			rowData.add("Bill No");
+			rowData.add("Item Name");
+			rowData.add("Qty");
+			rowData.add("Taxable Amt");
+			rowData.add("Total Tax Amt");
+			rowData.add("Grand Total Amt");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			int cnt = 1;
+			for (int i = 0; i < viplist.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				cnt = cnt + i;
+				rowData.add("" + (cnt));
+				rowData.add("" + viplist.get(i).getMrnNo());
+				rowData.add("" + viplist.get(i).getVendorName());
+				rowData.add("" + viplist.get(i).getMrnDate());				
+				rowData.add("" + viplist.get(i).getBillNo());
+				rowData.add("" + viplist.get(i).getItemDesc());
+				rowData.add("" + viplist.get(i).getApproveQty());
+				rowData.add("" + viplist.get(i).getBasicValue());
+				rowData.add("" + viplist.get(i).getTaxValue());
+				rowData.add("" + viplist.get(i).getLandingCost());
+
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "VendorItemPurchaseReport");
+
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return viplist;
+	}
+	
+	@RequestMapping(value = "/getVendorItemPurchaseList/{fromDate}/{toDate}", method = RequestMethod.GET)
+	public void showPOPdf(@PathVariable("fromDate") String fromDate, @PathVariable("toDate") String toDate,
+			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf showDatewiseConsumptionPdf");
+
+		// moneyOutList = prodPlanDetailList;
+		Document document = new Document(PageSize.A4);
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(10);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 2.4f, 4.0f, 5.2f, 4.2f, 3.2f, 5.2f, 3.2f, 3.2f, 3.2f, 3.2f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			hcell.setPadding(3);
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("MRN No", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Vendor Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("MRN Date", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Bill No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Qty.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Taxable Amt", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Total Tax Amt", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("Grand Total", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			int index = 0;
+			for (VendorItemPurchaseReport list : viplist) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPadding(3);
+				cell.setPaddingRight(2);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(list.getMrnNo(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + list.getVendorName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + list.getMrnDate(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + list.getBillNo(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + list.getItemDesc(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + list.getApproveQty(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("" + list.getBasicValue(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("" + list.getTaxValue(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("" + list.getLandingCost(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				
+
+				}
+			document.open();
+			/*Paragraph name = new Paragraph("Trimbak Rubber\n", f);
+			name.setAlignment(Element.ALIGN_CENTER);
+			document.add(name);*/
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("Vendor Item Purchase Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			Paragraph p1 = new Paragraph("From Date:" + fromDate + "  To Date:" + toDate, headFont);
+			p1.setAlignment(Element.ALIGN_CENTER);
+			document.add(p1);
 			document.add(new Paragraph("\n"));
 			document.add(table);
 
