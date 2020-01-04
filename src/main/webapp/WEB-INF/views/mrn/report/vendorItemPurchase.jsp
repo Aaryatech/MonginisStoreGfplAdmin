@@ -3,7 +3,6 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 
@@ -179,7 +178,23 @@
 											</tr>
 										</c:forEach>
  --%>
+
+										
 									</tbody>
+									<thead>
+										<tr class="bgpink">
+											<th class="col-sm-1"></th>
+											<th class="col-md-1"></th>
+											<th class="col-md-1"></th>
+											<th class="col-md-1"></th>
+											<th class="col-md-1"></th>
+											<th class="col-md-2"></th>
+											<th class="col-md-1">Total</th>
+											<th class="col-md-1" ><input type="text" id="ttl_taxable" disabled="disabled"></th>
+											<th class="col-md-1" ><input type="text" id="ttl_tax" disabled="disabled"></th>
+											<th class="col-md-1" ><input type="text" id="grand_ttl" disabled="disabled"></th>
+										</tr>
+									</thead>
 
 								</table>
 
@@ -270,7 +285,7 @@
 	<script type="text/javascript">
 	$( "#vendId" ).change(function() {
 		  var vendrId = $("#vendId").val();
-		  alert(vendrId);
+		  //alert(vendrId);
 			
 		  $.getJSON('${getVendorItems}', {
 
@@ -295,7 +310,7 @@
 	$( "#rm_item_list" ).change(function() {
 		  var item = $("#rm_item_list").val();
 		  var vendrId = $("#vendId").val();
-		  alert(item);
+		 // alert(item);
 			if(item==-1){
 		  $.getJSON('${getVendorItems}', {
 
@@ -323,7 +338,9 @@
 			var toDate = $("#toDate").val();
 			var vendrId = $("#vendId").val();
 			var rmItemList = $("#rm_item_list").val();
-
+			var taxableAmt=0;
+			var taxAmt=0;
+			var totalAmt=0;
 			$('#loader').show();
 
 			$
@@ -352,12 +369,14 @@
 								}
 								document.getElementById("PDFButton").disabled = false;
 								document.getElementById("expExcel").disabled = false;
-
+								
 								$
 										.each(
 												data,
 												function(key, mrnList) {
-
+													taxableAmt =  taxableAmt + parseFloat(mrnList.basicValue.toFixed(2));
+													taxAmt = taxAmt + parseFloat(mrnList.taxValue.toFixed(2));
+													totalAmt = totalAmt + parseFloat(mrnList.landingCost.toFixed(2));
 													var tr = $('<tr></tr>');
 													
 															tr
@@ -424,8 +443,13 @@
 													$('#table1 tbody').append(
 															tr);
 													
-												})
-
+													
+											
+													
+												});
+								document.getElementById("ttl_taxable").value = taxableAmt.toFixed(2);
+								document.getElementById("ttl_tax").value = taxAmt.toFixed(2);
+								document.getElementById("grand_ttl").value = totalAmt.toFixed(2);
 							});
 		}
 	</script>
