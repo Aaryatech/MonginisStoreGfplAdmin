@@ -93,9 +93,22 @@
 									</select>
 
 								</div>
-								<div class="col-md-1"></div>
+							<!-- 	<div class="col-md-1"></div>
 								<div class="col-md-2">Select Items</div>
 								<div class="col-md-3">
+
+									<select name="rm_item_list1" id="rm_item_list1"
+										class="form-control chosen" tabindex="6" multiple="multiple">
+										<option value="-1">All</option>
+									</select>
+
+								</div> -->
+							</div>
+							
+							<br>
+							<div class="box-content" style="margin-top:1%; margin-bottom: 2%;">
+								<div class="col-lg-2">Select Items</div>
+								<div class="col-lg-10">
 
 									<select name="rm_item_list" id="rm_item_list"
 										class="form-control chosen" tabindex="6" multiple="multiple">
@@ -104,6 +117,7 @@
 
 								</div>
 							</div>
+							
 							<br>
 							
 							<div class="form-group">
