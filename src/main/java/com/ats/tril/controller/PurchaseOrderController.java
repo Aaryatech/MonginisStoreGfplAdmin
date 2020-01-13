@@ -2389,10 +2389,7 @@ public class PurchaseOrderController {
 
 				Message mimeMessage = new MimeMessage(session);
 				mimeMessage.setFrom(new InternetAddress(username));
-				String mail="mahendra941213@gmail.com";//
-				vendorList.setVendorEmail(mail);
-				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));//
-				//mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
 				mimeMessage.setSubject(subject);
 				mimeMessage.setFileName("PO Print");
 				BodyPart mbodypart = new MimeBodyPart();
