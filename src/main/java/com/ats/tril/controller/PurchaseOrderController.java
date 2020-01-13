@@ -2389,7 +2389,10 @@ public class PurchaseOrderController {
 
 				Message mimeMessage = new MimeMessage(session);
 				mimeMessage.setFrom(new InternetAddress(username));
-				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
+				String mail="mahendra941213@gmail.com";//
+				vendorList.setVendorEmail(mail);
+				mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));//
+				//mimeMessage.setRecipients(Message.RecipientType.TO, InternetAddress.parse(vendorList.getVendorEmail()));
 				mimeMessage.setSubject(subject);
 				mimeMessage.setFileName("PO Print");
 				BodyPart mbodypart = new MimeBodyPart();
@@ -2403,21 +2406,25 @@ public class PurchaseOrderController {
 
 				MimeBodyPart messageBodyPart = new MimeBodyPart();
 				messageBodyPart = new MimeBodyPart();
-				messageBodyPart.setContent("Dear Sir,\r\n" + 
-						"Kindly dispatch the goods as per attached PO. We have changed our system as per FSSAI gudlines. Kindly follow following instructions while dispatching the material.\r\n" + 
-						"1. COA-Chemical Analysis Report is compulsory with all the raw materials. Kindly note that if COA is not sent, payment will be delayed.\r\n" + 
-						"2. New Software has been installed at our end, so send material as per PO quantity only. If excess material is sent we will not be able to accept it, as there is no facility in new software to inward excess material.\r\n" + 
-						"3. All bills shall compulsory carry our PO number.  \r\n" + 
-						"4. All bills shall compulsory carry your FDA/ FSSAI license no. (This is important if your are supplying edible raw material which is used as raw material in our manufacturing process). Note that if your bill is without FSSAI no your payment will be put on hold.\r\n" + 
-						"\r\n" + 
-						"\r\n" + 
-						"डिअर सर\r\n" + 
-						"माल पाठविताना खालील पॉईंट्स वर कृपया लक्ष द्यावे-- \r\n" + 
-						"1 ) मटेरियल सोबात COA (केमिकल अनेलीसिस ) रिपोर्ट पाठवणे. COA मटेरियल सोबत नाही आला तर, पेमेंट मध्ये दिरंगाई होईल याची नोंद घ्यावी.\r\n" + 
-						"2 ) परचेस ऑर्डर मध्ये जि Quantity आहे त्यानुसार बिल बनवणे, Quantity जर परचेस ऑर्डर नुसार जास्त आली तर माल परत केला जाईल ,कारण लक्षात घ्या आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल केला आहे व त्या मध्ये परचेस ऑर्डर च्या जास्त माल इनवॉर्ड करता येत नाही.\r\n" + 
-						"३)आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल झाल्या कारणाने, बिल बनवतानी परचेसे ऑर्डर नंबर टाकणे आवश्यक आहे  \r\n" + 
-						"4) तुम्ही जर आम्हाला खाद्य पदार्थ पाठवत/ सप्लाय  असाल तर तुमचा FSSAI license no तुमच्या बिलावर येणे अनिवार्य आहे.बिना FSSAI license नो च्या बिल आल्यास पेमेंट होल्ड वर जाईल.",
-						"text/html; charset=utf-8");
+				StringBuilder sb = new StringBuilder();
+				sb.append("<html><body style='color : blue;'>");
+				sb.append("Dear Sir, <br>" + 
+						"	Kindly dispatch the goods as per attached PO. We have changed our system as per FSSAI gudlines. Kindly follow following instructions while dispatching the material.<br>" + 
+						"	1. COA-Chemical Analysis Report is compulsory with all the raw materials. Kindly note that if COA is not sent, payment will be delayed.<br>" + 
+						"	2. New Software has been installed at our end, so send material as per PO quantity only. If excess material is sent we will not be able to accept it, as there is no facility in new software to inward excess material.<br>" + 
+						"	3. All bills shall compulsory carry our PO number. <br>" + 
+						"	4. All bills shall compulsory carry your FDA/ FSSAI license no. (This is important if your are supplying edible raw material which is used as raw material in our manufacturing process). Note that if your bill is without FSSAI no your payment will be put on hold.<br>\r\n" + 
+						"	<br>" + 
+						"	<br>" + 
+						"	डिअर सर, <br>" + 
+						"	माल पाठविताना खालील पॉईंट्स वर कृपया लक्ष द्यावे-- <br>" + 
+						"	1. मटेरियल सोबात COA (केमिकल अनेलीसिस ) रिपोर्ट पाठवणे. COA मटेरियल सोबत नाही आला तर, पेमेंट मध्ये दिरंगाई होईल याची नोंद घ्यावी.<br>" + 
+						"	2. परचेस ऑर्डर मध्ये जि Quantity आहे त्यानुसार बिल बनवणे, Quantity जर परचेस ऑर्डर नुसार जास्त आली तर माल परत केला जाईल ,कारण लक्षात घ्या आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल केला आहे व त्या मध्ये परचेस ऑर्डर च्या जास्त माल इनवॉर्ड करता येत नाही.<br>" + 
+						"	३. आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल झाल्या कारणाने, बिल बनवतानी परचेसे ऑर्डर नंबर टाकणे आवश्यक आहे  <br>" + 
+						"	4. तुम्ही जर आम्हाला खाद्य पदार्थ पाठवत/ सप्लाय  असाल तर तुमचा FSSAI license no तुमच्या बिलावर येणे अनिवार्य आहे.बिना FSSAI license नो च्या बिल आल्यास पेमेंट होल्ड वर जाईल.");
+				
+				sb.append("</body></html>");
+				messageBodyPart.setContent(""+sb,"text/html; charset=utf-8");
 				multipart.addBodyPart(messageBodyPart);
 				mimeMessage.setContent(multipart);
 
