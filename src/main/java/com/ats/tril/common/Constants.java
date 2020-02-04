@@ -14,12 +14,13 @@ public class Constants {
 	//public static String REPORT_SAVE = "/home/lenovo/Documents/pdf/Report.pdf";
 	
 	//GFpl
-	public static final String url="http://132.148.151.41:8080/storewebapi/";
-	public static final String adminUrl="http://132.148.151.41:8080/webapi/";
+	public static final String url="http://107.180.95.11:8080/storewebapi/";
+	public static final String adminUrl="http://107.180.95.11:8080/webapi/";
 	
-	public static final String Item_Image_URL = "http://132.148.151.41:8080/uploads/mongistoreuploads/";
+	public static final String Item_Image_URL = "http://107.180.95.11:8080/uploads/mongistoreuploads/";
 	public static final int ItemImage = 1;  
-	public static final String ReportURL = "http://132.148.151.41:8080/storeadmin/";//gfpl
+	public static final String ReportURL = "http://107.180.95.11:8080/storeadmin/";//gfpl
+	//	public static final String ReportURL = "http://localhost:8999/tril/";
 	public static String REPORT_SAVE = "/opt/tomcat-latest/webapps/uploads/store.pdf";//gfpl
 	public static int delStatus = 1;
 	public static int subAct=0;
