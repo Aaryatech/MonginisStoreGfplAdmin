@@ -56,7 +56,7 @@
 						</div>
 						 
 								<div class="box-content">
-								<form action="${pageContext.request.contextPath}/issueList"
+								<form action="${pageContext.request.contextPath}/getSelIssueList"
 								class="form-horizontal" id="validation-form" method="get">
 								<div class="box-content">
 							
@@ -141,11 +141,14 @@
 										<th	style="width:2%;"><input type="checkbox" name="name1"
 														value="0" />All</th>
 										<th style="width:2%;">Sr no.</th> 
-										<th class="col-md-1">Issue No</th> 
 										<th class="col-md-1">Issue Date</th>
-										<th class="col-md-3">Department</th> 
-										<th class="col-md-3">Sub Department</th>  
-										<th class="col-md-1">Action</th>
+										<th class="col-md-1">Issue Slip No.</th> 
+										<th class="col-md-3">Item Description</th>
+										<th class="col-md-1">Item Qty</th>
+										<th class="col-md-1">Item UOM</th>  
+										<th class="col-md-3">Item MRN Ref</th>  
+										<th class="col-md-1">Item Rate</th>  
+										<!-- <th class="col-md-1">Action</th> -->
 									</tr>
 								</thead>
 								<tbody>
@@ -154,26 +157,36 @@
 										varStatus="count">
 										<tr>
 										
-										<td ><input type="checkbox" id="name1"
-															name="name1" value="${issueHeaderList.issueId}" /></td>
+										<%-- <td ><input type="checkbox"
+															name="name1" value="${issueHeaderList.issueId}" /></td> --%>
+											<td ><input type="checkbox"
+															name="name1" value="${issueHeaderList.issueDetailId}" /></td>
 										
 											<td ><c:out value="${count.index+1}" /></td>
 
 
 											<td ><c:out
-													value="${issueHeaderList.issueNo}" /></td>
+													value="${issueHeaderList.issueDate}" /></td>
 													
 											<td ><c:out
-													value="${issueHeaderList.issueDate}" /></td> 
+													value="${issueHeaderList.issueSlipNo}" /></td> 
 											
 											<td ><c:out
-													value="${issueHeaderList.deptCode}" /></td> 
+													value="${issueHeaderList.itemDesc}" /></td> 
 											
 											<td ><c:out
-													value="${issueHeaderList.subDeptCode}" /> </td>  
+													value="${issueHeaderList.itemIssueQty}" /> </td> 
+													
+											<td ><c:out
+													value="${issueHeaderList.itemUom}" /> </td> 
+													
+											<td ><c:out
+													value="${issueHeaderList.batchNo}" /> </td>  
  
+ 											<td ><c:out
+													value="${issueHeaderList.itemRate}" /> </td>  
  
-											<td>
+											<%-- <td>
 											 
 											<a href="javascript:genPdf(${issueHeaderList.issueId});"><abbr title="PDF"><i
 															class="glyphicon glyphicon glyphicon-file"></i></abbr></a>
@@ -197,7 +210,7 @@
 												</c:when></c:choose>
 												 
 												 </td>
-
+ --%>
 										</tr>
 									</c:forEach>
 
@@ -207,14 +220,18 @@
 								
 								
 									<br>
+									
+									<div class="col-sm-3  controls">
 										<input type="button" id="expExcel" class="btn btn-primary"
-											 value="EXPORT TO Excel"
-											onclick="genExcel();">
+										value="EXPORT TO Excel"
+											onclick="genExcel()">
+									</div>
+									
 									
 									 <br>
-										<button
+									<!-- 	<button
 											style="background-color: #008CBA; border: none; color: white; text-align: center; text-decoration: none; display: block; font-size: 12px; cursor: pointer; width: 50px; height: 30px; margin: auto;"
-											onclick="commonPdf()">PDF</button>
+											onclick="commonPdf()">PDF</button> -->
 
 								
   
@@ -304,13 +321,7 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-	<script type="text/javascript">
-		function exportToExcel() {
 
-			window.open("${pageContext.request.contextPath}/exportToExcel");
-			document.getElementById("expExcel").disabled = true;
-		}
-	</script>
 	<script type="text/javascript">
 	function search() {
 		  
@@ -408,14 +419,80 @@ function myFunction() {
 }
  
 </script>
-	
+		<script type="text/javascript">
+		function genExcel() {	
+			
+			var fromDate = $("#fromDate").val();
+			var toDate = $("#toDate").val();
+		
+			var list = [];
+
+			$("input:checkbox[name=name1]:checked").each(function() {
+				list.push($(this).val());
+			});
+
+			alert(list)
+		//	window.open('pdfForReport?url=pdf/issueListDoc/' + list);
+			
+			//alert("hii");
+			//alert(vendorIdList);
+			$('#loader').show();				
+				
+				$.getJSON('${getIssueDetails}',
+
+						{
+							list : JSON.stringify(list),
+							ajax : 'true'
+
+						}, function(data) {
+				$('#table1 td').remove();
+				$('#loader').hide();
+				/* document.getElementById("expExcel").disabled = false; */				
+				if (data == "") {
+					alert("No records found !!");
+					/* document.getElementById("expExcel").disabled = true; */
+					
+				}
+
+				$.each(data, function(key, itemList) {
+
+							var tr = $('<tr></tr>');
+							tr.append($('<td></td>').html(key + 1));
+							tr.append($('<td></td>').html(itemList.issueDate));
+							tr.append($('<td></td>').html(itemList.issueSlipNo));
+							tr.append($('<td></td>').html(itemList.itemDesc));
+							tr.append($('<td></td>').html(itemList.itemIssueQty));
+							tr.append($('<td></td>').html(itemList.itemUom));
+							tr.append($('<td></td>').html(itemList.batchNo));
+							tr.append($('<td></td>').html(itemList.itemRate));
+		
+							$('#table1 tbody').append(tr);
+						})
+				
+				});
+
+			
+			
+			
+			
+			
+			
+			/* alert("hiii");
+			var fromDate = document.getElementById("fromDate").value;
+			var toDate = document.getElementById("toDate").value;
+
+			window.open('${pageContext.request.contextPath}/showPOPdf/'
+					+ fromDate + '/' + toDate);
+			document.getElementById("expExcel").disabled = true; */
+
+		}
+	</script>
 	
 	
 <script type="text/javascript">
 			function genPdf(id) {
 				//alert(id);
-			var fromDate = $("#fromDate").val();
-			var toDate = $("#toDate").val();
+		
 				window.open('pdfForReport?url=pdf/issueListDoc/'
 						+ id );
 
@@ -430,60 +507,13 @@ function myFunction() {
 				$("input:checkbox[name=name1]:checked").each(function() {
 					list.push($(this).val());
 				});
-		//alert(list)
+
 				window.open('pdfForReport?url=pdf/issueListDoc/' + list);
 
 			}
-			
+																			
 		</script>
-	<script type="text/javascript">
-		function genExcel() {	
-			var fromDate = $("#fromDate").val();
-			var toDate = $("#toDate").val();
-		
-			var list = [];
-			$("input:checkbox[name=name1]:checked").each(function() {
-				list.push($(this).val());
-			});
-
-			//alert(list)
-			if(list.length==''){
-				alert("Please select at least one option to proceed !")
-				$('#loader').hide();	
-			}else{	
-			$('#loader').show();				
-				
-				$.getJSON('${getIssueDetails}',
-
-						{
-							list : JSON.stringify(list),
-							fromDate : fromDate,
-							toDate : toDate,
-							ajax : 'true'
-
-						}, function(data) {
-				$('#loader').hide();
-				/* document.getElementById("expExcel").disabled = false; */				
-				if (data == "") {
-					alert("No records found !!");
-					/* document.getElementById("expExcel").disabled = true; */
-					
-				}
-
-			
-					window.open("${pageContext.request.contextPath}/exportToExcel");
-							
-						
-				
-				});
-
-			
-		}
-			
-			
-
-		}
-	</script>
+	
 
 </body>
 </html>

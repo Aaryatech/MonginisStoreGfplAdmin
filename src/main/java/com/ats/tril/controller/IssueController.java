@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,12 +32,15 @@ import com.ats.tril.model.BillOfMaterialHeader;
 import com.ats.tril.model.Category;
 import com.ats.tril.model.Dept;
 import com.ats.tril.model.ErrorMessage;
+import com.ats.tril.model.ExportToExcel;
 import com.ats.tril.model.FrItemStockConfigure;
 import com.ats.tril.model.FrItemStockConfigureList;
 import com.ats.tril.model.GetBillOfMaterialList;
 import com.ats.tril.model.GetIssueDetail;
+import com.ats.tril.model.GetIssueExcelList;
 import com.ats.tril.model.GetIssueHeader;
 import com.ats.tril.model.GetItemGroup;
+import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.GetSubDept;
 import com.ats.tril.model.GetpassHeader;
 import com.ats.tril.model.Info;
@@ -481,6 +486,59 @@ public class IssueController {
 
 				model.addObject("fromDate", fromDate);
 				model.addObject("toDate", toDate);
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				GetIssueExcelList[] issueArr = rest.postForObject(Constants.url + "/getIssueExcelList", map,
+						GetIssueExcelList[].class);
+				List<GetIssueExcelList> issueList  = new ArrayList<GetIssueExcelList>(Arrays.asList(issueArr));
+				
+				// export to excel
+
+							List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+							ExportToExcel expoExcel = new ExportToExcel();
+							List<String> rowData = new ArrayList<String>();
+
+							rowData.add("Sr. No");
+							rowData.add("iss_m_id");
+							rowData.add("iss_m_date");
+							rowData.add("iss_slip_no");
+							rowData.add("iss_d_id");
+							rowData.add("Item_id");
+							rowData.add("item_description");
+							rowData.add("item_qty");
+							rowData.add("item_uom");
+							rowData.add("Item_mrn_ref");
+							rowData.add("item_rate");
+
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+							int cnt = 1;
+							for (int i = 0; i < issueList.size(); i++) {
+								expoExcel = new ExportToExcel();
+								rowData = new ArrayList<String>();
+								cnt = cnt + i;
+								rowData.add("" + (cnt));
+								rowData.add("" + issueList.get(i).getIssueId());
+								rowData.add("" + issueList.get(i).getIssueDate());
+								rowData.add("" + issueList.get(i).getIssueSlipNo());
+								rowData.add("" + issueList.get(i).getIssueDetailId());
+								rowData.add("" + issueList.get(i).getItemId());
+
+								rowData.add("" + issueList.get(i).getItemDesc());
+								rowData.add("" + issueList.get(i).getItemIssueQty());
+								rowData.add("" + issueList.get(i).getItemUom());
+								rowData.add("" + issueList.get(i).getBatchNo());
+								rowData.add("" + issueList.get(i).getItemRate());
+								
+								expoExcel.setRowData(rowData);
+								exportToExcelList.add(expoExcel);
+
+							}
+
+							HttpSession session = request.getSession();
+							session.setAttribute("exportExcelList", exportToExcelList);
+							session.setAttribute("excelName", "GetPoHeaderList");
 
 			}
 
@@ -1810,4 +1868,144 @@ public class IssueController {
 		return "redirect:/getBomListBmsToStores";
 	}
 
+	/*********************************************************************************/
+	//02-03-2020 Mahendra
+	@RequestMapping(value = "/getSelIssueList", method = RequestMethod.GET)
+	public ModelAndView getSelIssueList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("issue/issueExcelList");
+		try {
+
+			Date date = new Date();
+			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat disply = new SimpleDateFormat("dd-MM-yyyy");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			if (request.getParameter("fromDate") == null || request.getParameter("toDate") == null) {
+
+				map.add("fromDate", sf.format(date));
+				map.add("toDate", sf.format(date));
+
+				GetIssueExcelList[] IssueHeader = rest.postForObject(Constants.url + "/getIssueExcelList", map,
+						GetIssueExcelList[].class);
+				List<GetIssueExcelList> issueHeaderList = new ArrayList<GetIssueExcelList>(Arrays.asList(IssueHeader));
+				model.addObject("issueHeaderList", issueHeaderList);
+
+				model.addObject("fromDate", disply.format(date));
+				model.addObject("toDate", disply.format(date));
+
+			} else {
+
+				String fromDate = request.getParameter("fromDate");
+				String toDate = request.getParameter("toDate");
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+				GetIssueExcelList[] IssueHeader = rest.postForObject(Constants.url + "/getIssueExcelList", map,
+						GetIssueExcelList[].class);
+				List<GetIssueExcelList> issueHeaderList = new ArrayList<GetIssueExcelList>(Arrays.asList(IssueHeader));
+				model.addObject("issueHeaderList", issueHeaderList);
+
+				model.addObject("fromDate", fromDate);
+				model.addObject("toDate", toDate);
+
+			}
+
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/getIssueDetails", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GetIssueExcelList> getPoListReport(HttpServletRequest request, HttpServletResponse response) {
+		List<GetIssueExcelList> issueList = null;
+		try {
+			List<GetIssueExcelList> getPoList = new ArrayList<>();
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String list = request.getParameter("list");
+			list = list.substring(1, list.length() - 1);
+			list = list.replaceAll("\"", "");
+
+			List<Integer> headIdList = Stream.of(list.split(",")).map(Integer::parseInt).collect(Collectors.toList());
+
+			System.out.println("Val---------" + fromDate + " " + toDate + " " + headIdList);
+			StringBuilder sb = new StringBuilder();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+			GetIssueExcelList[] issueArr = rest.postForObject(Constants.url + "/getIssueExcelList", map,
+					GetIssueExcelList[].class);
+			issueList = new ArrayList<GetIssueExcelList>(Arrays.asList(issueArr));
+			System.out.println(issueList);
+			// export to excel
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			//rowData.add("Sr. No");
+			rowData.add("iss_m_id");
+			rowData.add("iss_m_date");
+			rowData.add("iss_slip_no");
+			rowData.add("iss_d_id");
+			rowData.add("Item_id");
+			rowData.add("item_description");
+			rowData.add("item_qty");
+			rowData.add("item_uom");
+			rowData.add("Item_mrn_ref");
+			rowData.add("item_rate");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			int cnt = 1;
+			for (int j = 0; j < issueList.size(); j++) {
+				System.err.println(issueList.get(j).getIssueId());
+
+				for (int i = 0; i < headIdList.size(); i++) {
+
+					if (issueList.get(j).getIssueId() == headIdList.get(i)) {
+
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+						
+						//rowData.add("" + (cnt));
+						//cnt = cnt + 1;
+						rowData.add("" + issueList.get(j).getIssueId());
+						rowData.add("" + issueList.get(j).getIssueDate());
+						rowData.add("" + issueList.get(j).getIssueSlipNo());
+						rowData.add("" + issueList.get(j).getIssueDetailId());
+						rowData.add("" + issueList.get(j).getItemId());
+	
+						rowData.add("" + issueList.get(j).getItemDesc());
+						rowData.add("" + issueList.get(j).getItemIssueQty());
+						rowData.add("" + issueList.get(j).getItemUom());
+						rowData.add("" + issueList.get(j).getBatchNo());
+						rowData.add("" + issueList.get(j).getItemRate());
+	
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+					}
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "IssueDetailList");
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return issueList;
+	}
 }
