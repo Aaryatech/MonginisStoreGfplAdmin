@@ -282,7 +282,7 @@ body {
 
 					<form id="submitList"
 						action="${pageContext.request.contextPath}/submitMrnInspectionList"
-						method="post">
+						method="post" onsubmit="return validateChkbox()">
 						<div id="myModal" class="modal">
 							<input type="hidden" value="0" name="mrnId" id="mrnId">
 
@@ -331,14 +331,16 @@ body {
 																	value="${getMrnDetail.itemUom}" /></td>
 															<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
 															<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
+															
 															<td align="right"><input
 																style="text-align: right; width: 100px" type="text"
 																id="approveQty${getMrnDetail.mrnDetailId}"
 																name="approveQty${getMrnDetail.mrnDetailId}" value=""
 																min="0" class="form-control"
-																pattern="[+-]?([0-9]*[.])?[0-9]+"
-																onchange="changeApproveQty(this.value,${getMrnDetail.mrnDetailId},${getMrnDetail.mrnQty})"
+																pattern="[+-]?([0-9]*[.])?[0-9]+"																
 																max="${getMrnDetail.mrnQty}" required></td>
+																
+															
 															<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
 														</tr>
 													</c:forEach>
@@ -351,7 +353,7 @@ body {
 								<br>
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit">
+										<input type="submit" class="btn btn-info" value="Submit" id="btnsub">
 
 
 									</div>
@@ -373,6 +375,28 @@ body {
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
+<script>
+ function validateChkbox(){
+	//alert("HHH")
+	 var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
+	  if(!checkbox) {
+	    alert('Please select item!');
+	    return false;
+	  }
+  	
+}
+
+
+/* $("#btnsub").click(function(){
+	alert("HHH")
+	 var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
+	  if(!checkbox) {
+	    alert('Please select item!');
+	    return false;
+	  }
+	  else return confirm('confirm submit?'); *
+});  */
+</script>
 
 	<!--   <script>
     /*

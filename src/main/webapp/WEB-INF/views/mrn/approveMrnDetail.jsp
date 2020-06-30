@@ -150,8 +150,8 @@
 														<th style="width: 2%;">Sr.No.</th>
 														<th>Item Name</th>
 														<th class="col-md-1">UOM</th>
-														<th class="col-md-2">MRN Qty</th>
-														<th class="col-md-2">Approved Qty</th>
+														<th class="col-md-2">MRN Gate Qty</th>
+														<th class="col-md-2">Store Approved Qty</th>
 														<th class="col-md-2">Rejected Qty</th>
 
 													</tr>

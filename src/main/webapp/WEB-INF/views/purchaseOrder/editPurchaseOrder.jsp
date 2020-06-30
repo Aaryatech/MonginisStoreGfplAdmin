@@ -404,7 +404,7 @@ body {
 												<th width="6%">Ind Qty</th>
 												<th width="6%">PO Qty</th>
 												<c:if test="${mrnId>0}">
-													<th width="6%">MRN Qty</th>
+													<th width="6%">MRN Gate Qty</th>
 												</c:if>
 												<th width="6%">Bal QTY</th>
 												<th width="6%">Rate</th>
