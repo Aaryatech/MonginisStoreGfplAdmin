@@ -11,7 +11,7 @@ public class VendorItemPurchaseReport {
 	private float basicValue;
 	private float taxValue;
 	private float landingCost;
-	private int billNo;
+	private String billNo;
 	public int getItemId() {
 		return itemId;
 	}
@@ -60,10 +60,10 @@ public class VendorItemPurchaseReport {
 	public void setLandingCost(float landingCost) {
 		this.landingCost = landingCost;
 	}
-	public int getBillNo() {
+	public String getBillNo() {
 		return billNo;
 	}
-	public void setBillNo(int billNo) {
+	public void setBillNo(String billNo) {
 		this.billNo = billNo;
 	}
 	public String getVendorName() {
