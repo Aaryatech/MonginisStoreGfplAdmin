@@ -42,7 +42,8 @@
 
 					</h1>
 				</div>
-			</div> --><br>
+			</div> -->
+			<br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -67,98 +68,105 @@
 
 						<div class=" box-content">
 							<form id="addSupplier"
-								action="${pageContext.request.contextPath}/insertItem" enctype="multipart/form-data"
-								onsubmit="return confirm('Do you really want to submit the form?');" method="post">
-								
+								action="${pageContext.request.contextPath}/insertItem"
+								enctype="multipart/form-data"
+								onsubmit="return confirm('Do you really want to submit the form?');"
+								method="post">
+
 								<div class="box-content">
 
 									<div class="col-md-2">Select Category*</div>
 									<div class="col-md-3">
-									
-									<c:choose>
-										<c:when test="${isEdit==1}">
-										<input id="catId" value="${editItem.catId}" name="catId" type="hidden" >
-										<select class="form-control chosen"  name="catIde" id="catIde" disabled>
-											<option value="">select</option>
-											<c:forEach items="${categoryList}" var="categoryList">
-												<c:choose>
-													<c:when test="${categoryList.catId==editItem.catId}">
-														<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${categoryList.catId}">${categoryList.catDesc}</option>
-													</c:otherwise>
-												</c:choose>
+
+										<c:choose>
+											<c:when test="${isEdit==1}">
+												<input id="catId" value="${editItem.catId}" name="catId"
+													type="hidden">
+												<select class="form-control chosen" name="catIde"
+													id="catIde" disabled>
+													<option value="">select</option>
+													<c:forEach items="${categoryList}" var="categoryList">
+														<c:choose>
+															<c:when test="${categoryList.catId==editItem.catId}">
+																<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${categoryList.catId}">${categoryList.catDesc}</option>
+															</c:otherwise>
+														</c:choose>
 
 
-											</c:forEach>
-										</select>
-										</c:when>
-										<c:otherwise>
-										<select class="form-control"
-											onchange="getgroupIdByCatId()" name="catId" id="catId"
-											required>
-											<option value="">select</option>
-											<c:forEach items="${categoryList}" var="categoryList">
-												<c:choose>
-													<c:when test="${categoryList.catId==editItem.catId}">
-														<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${categoryList.catId}">${categoryList.catDesc}</option>
-													</c:otherwise>
-												</c:choose>
+													</c:forEach>
+												</select>
+											</c:when>
+											<c:otherwise>
+												<select class="form-control" onchange="getgroupIdByCatId()"
+													name="catId" id="catId" required>
+													<option value="">select</option>
+													<c:forEach items="${categoryList}" var="categoryList">
+														<c:choose>
+															<c:when test="${categoryList.catId==editItem.catId}">
+																<option value="${categoryList.catId}" selected>${categoryList.catDesc}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${categoryList.catId}">${categoryList.catDesc}</option>
+															</c:otherwise>
+														</c:choose>
 
 
-											</c:forEach>
-										</select>
-										</c:otherwise>
-									</c:choose>
-									 
+													</c:forEach>
+												</select>
+											</c:otherwise>
+										</c:choose>
+
 
 									</div>
 									<div class="col-md-1"></div>
 									<div class="col-md-2">Select Group*</div>
 									<div class="col-md-3">
-									
-									<c:choose>
-										<c:when test="${isEdit==1}">
-										<input id="grpId" value="${editItem.grpId}" name="grpId" type="hidden" >
-										<select class="form-control chosen"
-											onchange="getSubGroupIdByGroupId()" name="grpIde" id="grpIde" disabled>
-											<c:forEach items="${getItemGroupList}" var="getItemGroupList">
-												<c:choose>
-													<c:when test="${getItemGroupList.grpId==editItem.grpId}">
-														<option value="${getItemGroupList.grpId}" selected>${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${getItemGroupList.grpId}">${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
-													</c:otherwise>
-												</c:choose> 
-											</c:forEach> 
-										</select>
-										</c:when>
-										<c:otherwise>
-										<select class="form-control chosen"
-											onchange="getSubGroupIdByGroupId()" name="grpId" id="grpId"
-											required>
-											<c:forEach items="${getItemGroupList}" var="getItemGroupList">
-												<c:choose>
-													<c:when test="${getItemGroupList.grpId==editItem.grpId}">
-														<option value="${getItemGroupList.grpId}" selected>${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
-													</c:when>
-													<c:otherwise>
-														<option value="${getItemGroupList.grpId}">${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
-													</c:otherwise>
-												</c:choose>
+
+										<c:choose>
+											<c:when test="${isEdit==1}">
+												<input id="grpId" value="${editItem.grpId}" name="grpId"
+													type="hidden">
+												<select class="form-control chosen"
+													onchange="getSubGroupIdByGroupId()" name="grpIde"
+													id="grpIde" disabled>
+													<c:forEach items="${getItemGroupList}"
+														var="getItemGroupList">
+														<c:choose>
+															<c:when test="${getItemGroupList.grpId==editItem.grpId}">
+																<option value="${getItemGroupList.grpId}" selected>${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${getItemGroupList.grpId}">${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+												</select>
+											</c:when>
+											<c:otherwise>
+												<select class="form-control chosen"
+													onchange="getSubGroupIdByGroupId()" name="grpId" id="grpId"
+													required>
+													<c:forEach items="${getItemGroupList}"
+														var="getItemGroupList">
+														<c:choose>
+															<c:when test="${getItemGroupList.grpId==editItem.grpId}">
+																<option value="${getItemGroupList.grpId}" selected>${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
+															</c:when>
+															<c:otherwise>
+																<option value="${getItemGroupList.grpId}">${getItemGroupList.grpCode}&nbsp;&nbsp;${getItemGroupList.grpDesc}</option>
+															</c:otherwise>
+														</c:choose>
 
 
-											</c:forEach>
+													</c:forEach>
 
-										</select>
-										</c:otherwise>
-									</c:choose>
-									 
+												</select>
+											</c:otherwise>
+										</c:choose>
+
 									</div>
 
 								</div>
@@ -168,25 +176,27 @@
 
 									<div class="col-md-2">Item Code*</div>
 									<div class="col-md-3">
-									<c:choose>
-										<c:when test="${isEdit==1}">
-										<input id="itemCode" class="form-control"
-											placeholder="Item Code" value="${editItem.itemCode}"
-											style="text-align: left;" name="itemCode" type="text"
-											readonly>
-										</c:when>
-										<c:otherwise>
-										<input id="itemCode" class="form-control"
-											placeholder="Item Code" value="${editItem.itemCode}"
-											style="text-align: left;" maxlength="6" onchange="checkItemCodeExist()" onkeydown="upperCaseF(this)" name="itemCode" type="text"
-											readonly>
-										</c:otherwise>
-									</c:choose>
-										 <input id="itemId" class="form-control"
-											name="itemId" value="${editItem.itemId}" type="hidden">
+										<c:choose>
+											<c:when test="${isEdit==1}">
+												<input id="itemCode" class="form-control"
+													placeholder="Item Code" value="${editItem.itemCode}"
+													style="text-align: left;" name="itemCode" type="text"
+													readonly>
+											</c:when>
+											<c:otherwise>
+												<input id="itemCode" class="form-control"
+													placeholder="Item Code" value="${editItem.itemCode}"
+													style="text-align: left;" maxlength="6"
+													onchange="checkItemCodeExist()"
+													onkeydown="upperCaseF(this)" name="itemCode" type="text"
+													readonly>
+											</c:otherwise>
+										</c:choose>
+										<input id="itemId" class="form-control" name="itemId"
+											value="${editItem.itemId}" type="hidden">
 
 									</div>
-									 
+
 									<div class="col-md-1"></div>
 									<div class="col-md-2">Select Sub-Group*</div>
 									<div class="col-md-3">
@@ -211,15 +221,15 @@
 										</select>
 
 
-									</div>  
-									
-									 
+									</div>
+
+
 								</div>
 								<br>
-								
+
 								<div class="box-content">
 
-									  
+
 									<div class="col-md-2">Item Description*</div>
 									<div class="col-md-10">
 										<input id="itemDesc" class="form-control"
@@ -236,36 +246,34 @@
 
 									<div class="col-md-2">UOM*</div>
 									<div class="col-md-3">
-									
-									<select class="form-control chosen" name="uom"
-											id="uom" required>
+
+										<select class="form-control chosen" name="uom" id="uom"
+											required>
 											<option value="">Select UOM</option>
-											  <c:forEach items="${uomList}"
-												var="uomList">
-												  <c:set var="uomString" value="${uomList.uomId}"></c:set>  
-												  <c:choose>
-													<c:when
-														test="${editItem.itemUom2 eq uomString}">
+											<c:forEach items="${uomList}" var="uomList">
+												<c:set var="uomString" value="${uomList.uomId}"></c:set>
+												<c:choose>
+													<c:when test="${editItem.itemUom2 eq uomString}">
 														<option value="${uomList.uomId}" selected>${uomList.uom}</option>
 													</c:when>
-													<c:otherwise>  
+													<c:otherwise>
 														<option value="${uomList.uomId}">${uomList.uom}</option>
-													  </c:otherwise>
-												</c:choose>  
+													</c:otherwise>
+												</c:choose>
 
 
-											</c:forEach>  
+											</c:forEach>
 
 										</select>
-										 
+
 
 									</div>
 									<div class="col-md-1"></div>
 									<!-- <div class="col-md-2">Item Date*</div> -->
 									<div class="col-md-3">
 										<input id="itemDate" class="form-control date-picker"
-											placeholder="Item Date" value="${date}"
-											name="itemDate" type="hidden" readonly>
+											placeholder="Item Date" value="${date}" name="itemDate"
+											type="hidden" readonly>
 
 
 									</div>
@@ -273,7 +281,7 @@
 								</div>
 								<br>
 
-								
+
 
 								<%-- <div class="box-content">
 								
@@ -305,16 +313,17 @@
 									</div>  
 
 								</div> --%>
-								 
+
 								<div class="box-content">
- 
-									
+
+
 									<div class="col-md-2">MIN Qty*</div>
 									<div class="col-md-3">
 										<input id="opQty" class="form-control"
 											placeholder="Item OP Qty" name="opQty"
 											value="${editItem.itemOpQty}" style="text-align: left;"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" title="Enter in Number Formate" type="text" required>
+											pattern="[+-]?([0-9]*[.])?[0-9]+"
+											title="Enter in Number Formate" type="text" required>
 
 
 									</div>
@@ -333,56 +342,57 @@
 								</div>
 								<br>
 
-								<div class="box-content"> 
-								
-								<c:choose>
+								<div class="box-content">
+
+									<c:choose>
 										<c:when test="${isEdit==1}">
-										<div class="col-md-2">MAX Qty*</div>
-									<div class="col-md-3">
-										<input id="clQty" class="form-control"
-											placeholder="Item OP Qty" name="clQty"
-											value="${editItem.itemClQty}" style="text-align: left;"
-											title="Enter in Number Formate" type="number" readonly>
+											<div class="col-md-2">MAX Qty*</div>
+											<div class="col-md-3">
+												<input id="clQty" class="form-control"
+													placeholder="Item OP Qty" name="clQty"
+													value="${editItem.itemClQty}" style="text-align: left;"
+													title="Enter in Number Formate" type="number" readonly>
 
 
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Item CL Rate*</div>
-									<div class="col-md-3">
-										<input id="clRate" class="form-control"
-											placeholder="Item CL Rate" name="clRate"
-											value="${editItem.itemClRate}"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" style="text-align: left;"
-											title="Enter in Number Formate" type="text" readonly>
+											</div>
+											<div class="col-md-1"></div>
+											<div class="col-md-2">Item CL Rate*</div>
+											<div class="col-md-3">
+												<input id="clRate" class="form-control"
+													placeholder="Item CL Rate" name="clRate"
+													value="${editItem.itemClRate}"
+													pattern="[+-]?([0-9]*[.])?[0-9]+" style="text-align: left;"
+													title="Enter in Number Formate" type="text" readonly>
 
 
-									</div>
+											</div>
 										</c:when>
 										<c:otherwise>
-										<div class="col-md-2">MAX Qty*</div>
-									<div class="col-md-3">
-										<input id="clQty" class="form-control"
-											placeholder="Item OP Qty" name="clQty"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" value="${editItem.itemClQty}" style="text-align: left;"
-											title="Enter in Number Formate" type="text" required>
+											<div class="col-md-2">MAX Qty*</div>
+											<div class="col-md-3">
+												<input id="clQty" class="form-control"
+													placeholder="Item OP Qty" name="clQty"
+													pattern="[+-]?([0-9]*[.])?[0-9]+"
+													value="${editItem.itemClQty}" style="text-align: left;"
+													title="Enter in Number Formate" type="text" required>
 
 
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Item CL Rate*</div>
-									<div class="col-md-3">
-										<input id="clRate" class="form-control"
-											placeholder="Item CL Rate" name="clRate"
-											value="${editItem.itemClRate}"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" style="text-align: left;"
-											title="Enter in Number Formate" type="text" required>
+											</div>
+											<div class="col-md-1"></div>
+											<div class="col-md-2">Item CL Rate*</div>
+											<div class="col-md-3">
+												<input id="clRate" class="form-control"
+													placeholder="Item CL Rate" name="clRate"
+													value="${editItem.itemClRate}"
+													pattern="[+-]?([0-9]*[.])?[0-9]+" style="text-align: left;"
+													title="Enter in Number Formate" type="text" required>
 
 
-									</div>
+											</div>
 										</c:otherwise>
 									</c:choose>
-									
-									
+
+
 
 
 								</div>
@@ -394,7 +404,8 @@
 									<div class="col-md-3">
 										<input id="minLevel" class="form-control"
 											placeholder="Item Min Level" name="minLevel"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" value="${editItem.itemMinLevel}" style="text-align: left;"
+											pattern="[+-]?([0-9]*[.])?[0-9]+"
+											value="${editItem.itemMinLevel}" style="text-align: left;"
 											title="Enter in Number Formate" type="text" required>
 
 
@@ -405,7 +416,8 @@
 									<div class="col-md-3">
 										<input id="maxLevel" class="form-control"
 											placeholder="Item Max Level" name="maxLevel"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" value="${editItem.itemMaxLevel}" style="text-align: left;"
+											pattern="[+-]?([0-9]*[.])?[0-9]+"
+											value="${editItem.itemMaxLevel}" style="text-align: left;"
 											title="Enter in Number Formate" type="text" required>
 
 
@@ -421,7 +433,8 @@
 									<div class="col-md-3">
 										<input id="rodLevel" class="form-control"
 											placeholder="Item Rod Level" name="rodLevel"
-											pattern="[+-]?([0-9]*[.])?[0-9]+" value="${editItem.itemRodLevel}" style="text-align: left;"
+											pattern="[+-]?([0-9]*[.])?[0-9]+"
+											value="${editItem.itemRodLevel}" style="text-align: left;"
 											title="Enter in Number Formate" type="text" required>
 
 
@@ -526,21 +539,23 @@
 										<select class="form-control chosen" title="Please Select"
 											name="isCapital" id="isCapital" required>
 											<option value="">Select HSN Code</option>
-											<c:forEach items="${taxFormList}" var="taxFormList" >
-											<c:choose>
-											
-												<c:when test="${editItem.itemIsCapital==taxFormList.taxId}">
-													<option value="${taxFormList.taxId}" selected><c:out value="${taxFormList.taxDesc}"/></option>
-												</c:when>
-												 
-												<c:otherwise>
-													<option value="${taxFormList.taxId}"><c:out value="${taxFormList.taxDesc}"/></option>
-												</c:otherwise>
+											<c:forEach items="${taxFormList}" var="taxFormList">
+												<c:choose>
 
-											</c:choose>
-												
+													<c:when test="${editItem.itemIsCapital==taxFormList.taxId}">
+														<option value="${taxFormList.taxId}" selected><c:out
+																value="${taxFormList.taxDesc}" /></option>
+													</c:when>
+
+													<c:otherwise>
+														<option value="${taxFormList.taxId}"><c:out
+																value="${taxFormList.taxDesc}" /></option>
+													</c:otherwise>
+
+												</c:choose>
+
 											</c:forEach>
-											
+
 
 										</select>
 
@@ -578,11 +593,42 @@
 									</div>
 
 									<div class="col-md-1"></div>
+									<div class="col-md-2">Account Level Item*</div>
+									<div class="col-md-3">
+										<select class="form-control chosen" name="accountLevel"
+											id="accountLevel" required>
+
+
+											<c:choose>
+												<c:when test="${editItem.itemId==0}">
+													<option value="1" selected>NO</option>
+													<option value="0">YES</option>
+												</c:when>
+
+												<c:when test="${editItem.createdIn==0}">
+													<option value="1">NO</option>
+													<option value="0" selected>YES</option>
+												</c:when>
+												<c:when test="${editItem.createdIn==1}">
+													<option value="1" selected>NO</option>
+													<option value="0">YES</option>
+												</c:when>
+												<c:otherwise>
+													<option value="1" selected>NO</option>
+													<option value="0">YES</option>
+												</c:otherwise>
+
+											</c:choose>
+
+										</select>
+
+									</div>
 
 								</div>
 
+
 								<br>
-								
+
 								<div class="box-content">
 									<div class="form-group">
 										<div class="col-md-2">Image</div>
@@ -610,7 +656,8 @@
 
 												</div>
 											</div>
-											<input class="form-control" id="imageName" value="${editItem.itemDesc3}"  type="hidden" name="imageName" />
+											<input class="form-control" id="imageName"
+												value="${editItem.itemDesc3}" type="hidden" name="imageName" />
 										</div>
 
 									</div>
@@ -622,16 +669,16 @@
 								<div class=" box-content">
 									<div class="col-md-12" style="text-align: center">
 
-								<c:choose>
-										<c:when test="${isEdit==1}">
-										<input type="submit" class="btn btn-info" onclick="check()" value="Submit"
-											id="submit">
-										</c:when>
-										<c:otherwise>
-										<input type="submit" class="btn btn-info" onclick="check()" value="Submit"
-											id="submit"  >
-										</c:otherwise>
-									</c:choose> 
+										<c:choose>
+											<c:when test="${isEdit==1}">
+												<input type="submit" class="btn btn-info" onclick="check()"
+													value="Submit" id="submit">
+											</c:when>
+											<c:otherwise>
+												<input type="submit" class="btn btn-info" onclick="check()"
+													value="Submit" id="submit">
+											</c:otherwise>
+										</c:choose>
 
 									</div>
 								</div>
@@ -722,35 +769,29 @@
 
 
 	<script type="text/javascript">
-	
-	function checkItemCodeExist() {
-		
-		var itemCode = $("#itemCode").val(); 
+		function checkItemCodeExist() {
 
-		$.getJSON('${checkItemCodeExist}', {
+			var itemCode = $("#itemCode").val();
 
-			itemCode : itemCode,
-			ajax : 'true',
+			$.getJSON('${checkItemCodeExist}', {
 
-		}, function(data) {
-			
-			if(data==0) 
-			{
-				document.getElementById("submit").disabled = false;  
-			}
-			else if(itemCode=="" || itemCode==null)
-			{
-				document.getElementById("submit").disabled = true; 
-			}
-			else
-			{
-				alert("Code Is Available ");
-				document.getElementById("submit").disabled = true;
-			}
-	 
-		});
+				itemCode : itemCode,
+				ajax : 'true',
 
-	}
+			}, function(data) {
+
+				if (data == 0) {
+					document.getElementById("submit").disabled = false;
+				} else if (itemCode == "" || itemCode == null) {
+					document.getElementById("submit").disabled = true;
+				} else {
+					alert("Code Is Available ");
+					document.getElementById("submit").disabled = true;
+				}
+
+			});
+
+		}
 		function passwordValidation() {
 
 			var pass = document.getElementById("password").value;
@@ -767,7 +808,7 @@
 
 			}
 		}
-		    
+
 		function check() {
 
 			var uom = document.getElementById("uom").value;
@@ -779,11 +820,9 @@
 				alert("Select UOM");
 			} else if (catId == "" || catId == null) {
 				alert("Select Category");
-			}
-			else if (grpId == "" || grpId == null) {
+			} else if (grpId == "" || grpId == null) {
 				alert("Select Group ");
-			}
-			else if (subGrpId == "" || subGrpId == null) {
+			} else if (subGrpId == "" || subGrpId == null) {
 				alert("Select Sub Group");
 			}
 		}
@@ -805,7 +844,7 @@
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
 					html += '<option value="' + data[i].grpId + '">'
-							+data[i].grpDesc+'</option>';
+							+ data[i].grpDesc + '</option>';
 				}
 				html += '</option>';
 				$('#grpId').html(html);
@@ -816,7 +855,7 @@
 		function getSubGroupIdByGroupId() {
 
 			var grpId = document.getElementById("grpId").value;
-			
+
 			getNextItemCode();
 
 			$.getJSON('${getSubGroupIdByGroupId}', {
@@ -825,7 +864,7 @@
 				ajax : 'true'
 			}, function(data) {
 
-				  var html = '<option value="">Select Sub-Category</option>';
+				var html = '<option value="">Select Sub-Category</option>';
 
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
@@ -834,10 +873,10 @@
 				}
 				html += '</option>';
 				$('#subGrpId').html(html);
-				$("#subGrpId").trigger("chosen:updated"); 
+				$("#subGrpId").trigger("chosen:updated");
 			});
 		}
-		
+
 		function getNextItemCode() {
 
 			var grpId = document.getElementById("grpId").value;
@@ -847,18 +886,17 @@
 				grpId : grpId,
 				ajax : 'true'
 			}, function(data) {
-				 document.getElementById("itemCode").value = data.message;
+				document.getElementById("itemCode").value = data.message;
 			});
 		}
-		
-		function upperCaseF(a){
-		    setTimeout(function(){
-		        a.value = a.value.toUpperCase();
-		    }, 1);
+
+		function upperCaseF(a) {
+			setTimeout(function() {
+				a.value = a.value.toUpperCase();
+			}, 1);
 		}
-		function FocusOnInput()
-		{
-		document.getElementById("catId").focus();
+		function FocusOnInput() {
+			document.getElementById("catId").focus();
 		}
 	</script>
 
