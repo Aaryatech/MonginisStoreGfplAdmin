@@ -78,13 +78,16 @@ import com.ats.tril.model.GetPODetail;
 import com.ats.tril.model.GetPoDetailList;
 import com.ats.tril.model.GetPoHeaderList;
 import com.ats.tril.model.ImportExcelForPo;
+import com.ats.tril.model.Info;
 import com.ats.tril.model.IssueDetail;
 import com.ats.tril.model.IssueHeader;
+import com.ats.tril.model.Item;
 import com.ats.tril.model.PaymentTerms;
 import com.ats.tril.model.PoDetail;
 import com.ats.tril.model.RmRateVerificationList;
 import com.ats.tril.model.SettingValue;
 import com.ats.tril.model.TaxForm;
+import com.ats.tril.model.TransModel;
 import com.ats.tril.model.Type;
 import com.ats.tril.model.Vendor;
 import com.ats.tril.model.doc.DocumentBean;
@@ -92,8 +95,10 @@ import com.ats.tril.model.doc.POReport;
 import com.ats.tril.model.doc.SubDocument;
 import com.ats.tril.model.getqueryitems.GetPoQueryItem;
 import com.ats.tril.model.indent.GetIndentByStatus;
+import com.ats.tril.model.indent.GetIndentDetail;
 import com.ats.tril.model.indent.GetIntendDetail;
 import com.ats.tril.model.indent.IndentTrans;
+import com.ats.tril.model.indent.TempIndentDetail;
 import com.ats.tril.model.mrn.GetMrnDetail;
 import com.ats.tril.model.mrn.MrnDetail;
 import com.ats.tril.model.mrn.MrnHeader;
@@ -479,7 +484,7 @@ public class PurchaseOrderController {
 		return intendDetailList;
 	}
 
-	@RequestMapping(value = "/submitList", method = RequestMethod.POST)
+	@RequestMapping(value = "/submitList", method = RequestMethod.POST) // Sachin cp
 	public ModelAndView submitEditEnquiry(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("purchaseOrder/addPurchaseOrder");
@@ -1124,6 +1129,7 @@ public class PurchaseOrderController {
 					}
 				}
 			}
+			System.err.println("Po detail  " +getPoHeader.getPoDetailList().toString());
 
 			Vendor[] vendorRes = rest.getForObject(Constants.url + "/getAllVendorByIsUsed", Vendor[].class);
 			List<Vendor> vendorList = new ArrayList<Vendor>(Arrays.asList(vendorRes));
@@ -2405,23 +2411,21 @@ public class PurchaseOrderController {
 				messageBodyPart = new MimeBodyPart();
 				StringBuilder sb = new StringBuilder();
 				sb.append("<html><body style='color : blue;'>");
-				sb.append("Dear Sir, <br>" + 
-						"	Kindly dispatch the goods as per attached PO. We have changed our system as per FSSAI gudlines. Kindly follow following instructions while dispatching the material.<br>" + 
-						"	1. COA-Chemical Analysis Report is compulsory with all the raw materials. Kindly note that if COA is not sent, payment will be delayed.<br>" + 
-						"	2. New Software has been installed at our end, so send material as per PO quantity only. If excess material is sent we will not be able to accept it, as there is no facility in new software to inward excess material.<br>" + 
-						"	3. All bills shall compulsory carry our PO number. <br>" + 
-						"	4. All bills shall compulsory carry your FDA/ FSSAI license no. (This is important if your are supplying edible raw material which is used as raw material in our manufacturing process). Note that if your bill is without FSSAI no your payment will be put on hold.<br>\r\n" + 
-						"	<br>" + 
-						"	<br>" + 
-						"	डिअर सर, <br>" + 
-						"	माल पाठविताना खालील पॉईंट्स वर कृपया लक्ष द्यावे-- <br>" + 
-						"	1. मटेरियल सोबात COA (केमिकल अनेलीसिस ) रिपोर्ट पाठवणे. COA मटेरियल सोबत नाही आला तर, पेमेंट मध्ये दिरंगाई होईल याची नोंद घ्यावी.<br>" + 
-						"	2. परचेस ऑर्डर मध्ये जि Quantity आहे त्यानुसार बिल बनवणे, Quantity जर परचेस ऑर्डर नुसार जास्त आली तर माल परत केला जाईल ,कारण लक्षात घ्या आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल केला आहे व त्या मध्ये परचेस ऑर्डर च्या जास्त माल इनवॉर्ड करता येत नाही.<br>" + 
-						"	३. आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल झाल्या कारणाने, बिल बनवतानी परचेसे ऑर्डर नंबर टाकणे आवश्यक आहे  <br>" + 
-						"	4. तुम्ही जर आम्हाला खाद्य पदार्थ पाठवत/ सप्लाय  असाल तर तुमचा FSSAI license no तुमच्या बिलावर येणे अनिवार्य आहे.बिना FSSAI license नो च्या बिल आल्यास पेमेंट होल्ड वर जाईल.");
-				
+				sb.append("Dear Sir, <br>"
+						+ "	Kindly dispatch the goods as per attached PO. We have changed our system as per FSSAI gudlines. Kindly follow following instructions while dispatching the material.<br>"
+						+ "	1. COA-Chemical Analysis Report is compulsory with all the raw materials. Kindly note that if COA is not sent, payment will be delayed.<br>"
+						+ "	2. New Software has been installed at our end, so send material as per PO quantity only. If excess material is sent we will not be able to accept it, as there is no facility in new software to inward excess material.<br>"
+						+ "	3. All bills shall compulsory carry our PO number. <br>"
+						+ "	4. All bills shall compulsory carry your FDA/ FSSAI license no. (This is important if your are supplying edible raw material which is used as raw material in our manufacturing process). Note that if your bill is without FSSAI no your payment will be put on hold.<br>\r\n"
+						+ "	<br>" + "	<br>" + "	डिअर सर, <br>"
+						+ "	माल पाठविताना खालील पॉईंट्स वर कृपया लक्ष द्यावे-- <br>"
+						+ "	1. मटेरियल सोबात COA (केमिकल अनेलीसिस ) रिपोर्ट पाठवणे. COA मटेरियल सोबत नाही आला तर, पेमेंट मध्ये दिरंगाई होईल याची नोंद घ्यावी.<br>"
+						+ "	2. परचेस ऑर्डर मध्ये जि Quantity आहे त्यानुसार बिल बनवणे, Quantity जर परचेस ऑर्डर नुसार जास्त आली तर माल परत केला जाईल ,कारण लक्षात घ्या आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल केला आहे व त्या मध्ये परचेस ऑर्डर च्या जास्त माल इनवॉर्ड करता येत नाही.<br>"
+						+ "	३. आमच्या कडे नवीन सॉफ्टवेअर इन्स्टॉल झाल्या कारणाने, बिल बनवतानी परचेसे ऑर्डर नंबर टाकणे आवश्यक आहे  <br>"
+						+ "	4. तुम्ही जर आम्हाला खाद्य पदार्थ पाठवत/ सप्लाय  असाल तर तुमचा FSSAI license no तुमच्या बिलावर येणे अनिवार्य आहे.बिना FSSAI license नो च्या बिल आल्यास पेमेंट होल्ड वर जाईल.");
+
 				sb.append("</body></html>");
-				messageBodyPart.setContent(""+sb,"text/html; charset=utf-8");
+				messageBodyPart.setContent("" + sb, "text/html; charset=utf-8");
 				multipart.addBodyPart(messageBodyPart);
 				mimeMessage.setContent(multipart);
 
@@ -2997,4 +3001,221 @@ public class PurchaseOrderController {
 		return getPoHeader;
 	}
 
+	List<Item> itemList = null;
+
+	@RequestMapping(value = "/getAccLevelItemList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<Item> getAccLevelItemList(HttpServletRequest request, HttpServletResponse response) {
+		itemList = new ArrayList<>();
+		MultiValueMap<String, Object> map = null;
+		try {
+
+			map = new LinkedMultiValueMap<>();
+			map.add("createdIn", 0);
+
+			Item[] itemArray = rest.postForObject(Constants.url + "/getAccLevelItemList", map, Item[].class);
+
+			itemList = new ArrayList<Item>(Arrays.asList(itemArray));
+
+		} catch (Exception e) {
+
+		}
+
+		return itemList;
+
+	}
+
+	@RequestMapping(value = "/postAccLevelItem", method = RequestMethod.POST)
+	public String postAccLevelItems(HttpServletRequest request, HttpServletResponse response) {
+		List<PoDetail> poDetailList = new ArrayList<>();
+		List<MrnDetail> mrnDetailList = new ArrayList<MrnDetail>();
+		int mrnId = Integer.parseInt(request.getParameter("mrnIdInAccLevelItems"));
+
+		TransModel transModel = new TransModel();
+		try {
+			float poBasicValue = 0;
+			float discValue = 0;
+			float taxValue = 0;
+			MultiValueMap<String, Object> map = null;
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("vendorId", getPoHeader.getVendId());
+			Vendor vendor = rest.postForObject(Constants.url + "/getVendorByVendorId", map, Vendor.class);
+			Integer isSameState=Integer.compare(vendor.getVendorStateId(),1);
+		/*	This method returns the value zero if (x==y), 
+			if (x < y) then it returns a value less than zero ie negative 
+			and if (x > y) then it returns a value greater than zero. ie positive */
+			
+			for (int i = 0; i < itemList.size(); i++) {
+
+				float rate = 0.0f;
+
+				try {
+					rate = Float.parseFloat(request.getParameter("acc_lev_item_rate" + itemList.get(i).getItemId()));
+					System.err.println("Rate " + rate);
+
+					Calendar c = Calendar.getInstance();
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					SimpleDateFormat dmy = new SimpleDateFormat("dd-MM-yyyy");
+
+					if (rate > 0.0f) {
+
+						System.err.println("In Rate > 0.of ");
+						// saveIndentDetail
+
+						IndentTrans transDetail = new IndentTrans();
+
+						transDetail.setIndDStatus(2);// As per conversation with Sumit Sir Decided for setting 2
+
+						transDetail.setIndItemCurstk(0);
+						transDetail.setIndItemDesc(itemList.get(i).getItemDesc());
+						transDetail.setIndItemSchd(0);
+						transDetail.setIndItemSchddt(DateConvertor.convertToSqlDate(dmy.format(c.getTime()))); // cur
+																												// date
+						transDetail.setIndItemUom(itemList.get(i).getItemUom());
+						transDetail.setIndMDate(sdf.format(c.getTime()));
+						transDetail.setIndMNo(getPoHeader.getIndNo()); // pk table header no
+						transDetail.setIndQty(1);
+						transDetail.setIndRemark("na");
+						transDetail.setItemId(itemList.get(i).getItemId());
+						transDetail.setIndFyr(0);
+
+						transDetail.setIndMId(getPoHeader.getIndId());// pk of indent Head
+						transDetail.setDelStatus(Constants.delStatus);
+						transDetail.setIndApr1Date(sdf.format(c.getTime())); // cur date
+						transDetail.setIndApr2Date(sdf.format(c.getTime())); // cur date
+
+						// indTrasList.add(transDetail);
+
+						IndentTrans indentDetailSaveRes = rest.postForObject(Constants.url + "/saveIndentDetail",
+								transDetail, IndentTrans.class);
+						
+						// Add Entry in PO Detail
+
+						PoDetail poDetail = new PoDetail();
+						// getPoHeader
+						poDetail.setVendId(getPoHeader.getVendId());
+						poDetail.setMrnQty(1);
+						poDetail.setPoDetailId(0);
+						poDetail.setPoId(getPoHeader.getPoId());
+						poDetail.setIndId(indentDetailSaveRes.getIndDId());
+						poDetail.setSchDays(indentDetailSaveRes.getIndItemSchd());
+						poDetail.setItemCode(itemList.get(i).getItemCode());
+						poDetail.setItemId(indentDetailSaveRes.getItemId());
+						poDetail.setIndedQty(indentDetailSaveRes.getIndQty());
+						poDetail.setItemUom(indentDetailSaveRes.getIndItemUom());
+						poDetail.setStatus(2); //Sumit Sir disc.
+						poDetail.setItemQty(1);
+						poDetail.setPendingQty(0);
+						poDetail.setDiscPer(0);
+						poDetail.setItemRate(rate);
+						poDetail.setSchRemark("na");
+						poDetail.setSchDate(sdf.format(c.getTime()));
+						poDetail.setBalanceQty(0);
+						c.setTime(sdf.parse(poDetail.getSchDate()));
+						c.add(Calendar.DAY_OF_MONTH, poDetail.getSchDays());
+						//poDetail.setSchDate(sdf.format(c.getTime()));
+
+						
+
+						/*
+						 * map = new LinkedMultiValueMap<String, Object>(); RestTemplate rest = new
+						 * RestTemplate(); map.add("indentId", indentDetailSaveRes.getIndMId());
+						 * 
+						 * String indentNo = rest.postForObject(Constants.url +
+						 * "/getIndentNoByIndentId", map, String.class);
+						 */
+
+						poDetail.setIndMNo(getPoHeader.getIndNo());// get indent header invoice no
+						poDetail.setBasicValue(
+								Float.parseFloat(df.format(poDetail.getItemQty() * poDetail.getItemRate())));
+						poDetail.setDiscValue(
+								Float.parseFloat(df.format((poDetail.getDiscPer() / 100) * poDetail.getBasicValue())));
+
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("taxId", itemList.get(i).getItemIsCapital());
+						TaxForm taxForm = rest.postForObject(Constants.url + "/getTaxFormByTaxId", map, TaxForm.class);
+
+						if (isSameState.equals(0)) {
+							poDetail.setCgst(taxForm.getCgstPer());
+							poDetail.setSgst(taxForm.getSgstPer());
+
+							poDetail.setIgst(0);
+						} else {
+							poDetail.setIgst(taxForm.getIgstPer());
+
+							poDetail.setCgst(0);
+							poDetail.setSgst(0);
+						}
+
+						poDetail.setTaxValue(Float.parseFloat(df.format((taxForm.getIgstPer() / 100)
+								* (poDetail.getItemQty() * poDetail.getItemRate() - poDetail.getDiscValue()))));
+						/*poDetail.setLandingCost(
+								Float.parseFloat(df.format(poDetail.getItemQty() * poDetail.getItemRate()
+										- poDetail.getDiscValue() + taxForm.getIgstPer())));*/
+						
+						
+						poDetail.setLandingCost(Float.parseFloat(df.format(poDetail.getBasicValue()
+								- poDetail.getDiscValue()
+								+ poDetail.getPackValue()
+								+ poDetail.getInsu()
+								+ poDetail.getFreightValue()
+								+ poDetail.getTaxValue()
+								+ poDetail.getOtherChargesAfter())));
+
+						poBasicValue = poBasicValue + poDetail.getBasicValue();
+						discValue = discValue + poDetail.getDiscValue();
+						taxValue = taxValue + poDetail.getTaxValue();
+						poDetailList.add(poDetail);
+
+						// Add Entry in MRN Detail
+
+						MrnDetail mrnDetail = new MrnDetail();
+
+						mrnDetail.setMrnId(mrnId);
+						mrnDetail.setIndentQty(1);
+						mrnDetail.setPoQty(1);
+						mrnDetail.setMrnQty(1);
+						mrnDetail.setItemId(poDetail.getItemId());
+						mrnDetail.setPoId(poDetail.getPoId());
+						mrnDetail.setPoNo(getPoHeader.getPoNo());
+						mrnDetail.setMrnDetailStatus(4); //?
+						mrnDetail.setBatchNo("Default Batch KKKK-00456");// set it in webapi
+						mrnDetail.setDelStatus(Constants.delStatus);
+						mrnDetail.setPoDetailId(0);// to be set in web api after po saved
+						mrnDetail.setMrnQtyBeforeEdit(-1);
+						mrnDetail.setRemainingQty(0);
+						mrnDetail.setApproveQty(1);
+						mrnDetail.setChalanQty(1);
+						mrnDetail.setIssueQty(1);
+						mrnDetail.setRejectQty(0);
+						mrnDetail.setRejectRemark(0);
+						mrnDetailList.add(mrnDetail);
+
+					} // emd of if rate is>0
+
+
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			} // end of for loop
+			
+			getPoHeader.setPoBasicValue(poBasicValue+getPoHeader.getPoBasicValue());
+			getPoHeader.setPoTaxValue(getPoHeader.getPoTaxValue()+taxValue);
+			
+			transModel.setPoDetailList(poDetailList);
+			transModel.setMrnDetailList(mrnDetailList);
+			transModel.setPoHeader(getPoHeader);
+			
+			Info savePoMrnCommonRes = rest.postForObject(Constants.url + "/savePoMrnCommon",
+					transModel, Info.class);
+			System.err.println("savePoMrnCommonRes " +savePoMrnCommonRes.toString());
+			// That's end of code test it.
+
+		} catch (Exception e) {
+			System.err.println("In Lats Catch " + e.getMessage());
+		}
+		return "redirect:/editPurchaseOrder/"+getPoHeader.getPoId()+"/"+mrnId;
+	}
 }

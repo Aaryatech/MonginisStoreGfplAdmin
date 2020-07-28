@@ -102,6 +102,11 @@ body {
 
 	<c:url var="getPreviousRecordOfPoItem"
 		value="/getPreviousRecordOfPoItem" />
+		
+		<c:url var="getAccLevelItemList"
+		value="/getAccLevelItemList" />
+		
+		
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -368,7 +373,8 @@ body {
 									class="form-control">
 
 							</div>
-							<div class="col-md-1"></div>
+							<div class="col-md-1">	<input type="button" class="btn btn-info"
+											value="Account Level Items" id="accLevelItemBtn"></div>
 							<c:choose>
 								<c:when
 									test="${getPoHeader.poStatus==9 or getPoHeader.poStatus==7}">
@@ -521,12 +527,28 @@ body {
 
 														</c:when>
 														<c:otherwise>
-															<td align="right"><input
+														<c:choose>
+														<c:when test="${poDetailList.itemDesc == 0}">
+														
+														<td align="right"><input
+																style="text-align: right; width: 95px"
+																onchange="changeItemRate(${count.index})" type="text"
+																id="rate${count.index}" name="rate${count.index}"
+																value="${poDetailList.itemRate}" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+" ></td>
+														</c:when>
+														<c:otherwise>
+														<td align="right"><input
 																style="text-align: right; width: 95px"
 																onchange="changeItemRate(${count.index})" type="text"
 																id="rate${count.index}" name="rate${count.index}"
 																value="${poDetailList.itemRate}" class="form-control"
 																pattern="[+-]?([0-9]*[.])?[0-9]+" readonly></td>
+														
+														</c:otherwise>
+														
+														</c:choose>
+															
 															<td><c:out value="${poDetailList.schDate}" /></td>
 															<td align="right" id="value${count.index}"><c:out
 																	value="${poDetailList.basicValue}" /></td>
@@ -696,11 +718,11 @@ body {
 									class="form-control" value="${getPoHeader.poFrtVal}"
 									pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 							</div>
-							<div class="col-md-2">Remark</div>
-							<div class="col-md-2">
-								<input type="text" name="freghtRemark" id="freghtRemark"
-									class="form-control" value="${getPoHeader.poFrtRemark}">
-							</div>
+							<div class="col-md-4"></div>
+						<%-- 	<div class="col-md-2">
+								<textarea name="freghtRemark" id="freghtRemark" rows="3" cols="2"
+									class="form-control">${getPoHeader.poFrtRemark}</textarea>
+							</div> --%>
 						</div>
 						<br>
 
@@ -806,8 +828,15 @@ body {
 							</div>
 							<br> <br>
 						</c:if>
-
-						<div class="row">
+<div class="box-content">
+<div class="col-md-2">Narration</div>
+							<div class="col-md-10">
+								<textarea name="freghtRemark" id="freghtRemark" rows="3" cols="2"
+									class="form-control">${getPoHeader.poFrtRemark}</textarea>
+							</div>
+							</div>
+<br>
+<div class="box-content">
 							<div class="col-md-12" style="text-align: center">
 								<c:choose>
 									<c:when
@@ -931,6 +960,58 @@ body {
 						</div>
 
 					</div>
+					
+					
+					<!-- Sachin s -->
+					<form id="submitList"
+						action="${pageContext.request.contextPath}/postAccLevelItem"
+						method="post">
+						
+							<input type="hidden" id="mrnIdInAccLevelItem" name="mrnIdInAccLevelItems" value="${mrnId}">
+					<div id="accLevelModal" class="modal">
+
+						<div class="modal-content" style="color: black;">
+							<span class="close" id="close10">&times;</span>
+							<h5 style="text-align: center;" id="itmeNameHeadeing10">ADD Account Level Item(s)</h5>
+
+							<div class=" box-content">
+								<div class="row">
+									<div class="col-md-9"></div>
+									<label for="search" class="col-md-3" id="search10"> <i
+										class="fa fa-search" style="font-size: 20px"></i> <input
+										type="text" id="myInput10" onkeyup="myFunction10()"
+										placeholder="Search.." title="Type in a name">
+									</label>
+									<div
+										style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
+										<table width="100%" border="0"
+											class="table table-bordered table-striped fill-head "
+											style="width: 70%; font-size: 14px;" id="table_grid10">
+											<thead>
+												<tr>
+													<th>SR</th>
+													<th>Item Code</th>
+													<th>UOM</th>
+													<th>Item Quantity</th>
+													<th style="width:50%;">Item Rate</th>
+												</tr>
+											</thead>
+											<tbody>
+
+											</tbody>
+										</table>
+									</div>
+								</div>
+							<input type="submit" style="margin-left: 40%;" class="button btn-primary"/>
+
+							</div>
+							<br>
+						</div>
+
+					</div>
+					</form>
+					
+					<!--End Sac  -->
 				</div>
 			</div>
 		</div>
@@ -1023,8 +1104,75 @@ jQuery(document).ready(function() {
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
 
+	<script>
+// Get the modal
+var accLevelModal = document.getElementById('accLevelModal');
+// Get the button that opens the modal
+var accLevelItemBtn = document.getElementById("accLevelItemBtn");
+
+// Get the <span> element that closes the modal
+ var span2 = document.getElementById("close10");
+// When the user clicks the button, open the modal 
+accLevelItemBtn.onclick = function() {
+	accLevelModal.style.display = "block";
+   // itemByIntendId(); 
+   getAccLevelItemList();
+   
+    //getValue();
+}
+var close10 = document.getElementById("close10");
+
+close10.onclick = function() {
+	accLevelModal.style.display = "none"; 
+}
+
+function getAccLevelItemList(){
+	//alert("OK")
+	  $
+		.getJSON(
+				'${getAccLevelItemList}',
+				{
+					ajax : 'true'
+				},
+				function(data) {
+					
+					$('#table_grid10 td').remove(); 
+
+					if (data == "") {
+						alert("No records found !!");
+
+					}
+					 
+
+				  $.each(
+								data,
+								function(key, itemList) {
+									 
+									var tr = $('<tr></tr>'); 
+									 
+								  	tr.append($('<td></td>').html(key+1)); 
+								  	tr.append($('<td></td>').html(itemList.itemCode)); 
+								  	tr.append($('<td></td>').html(itemList.itemUom)); 
+								  	tr.append($('<td></td>').html("1"));  //Qty
+tr.append($('<td></td>').html('<input type="text" name="acc_lev_item_rate'+itemList.itemId+'" style="width:50%;" class="form-control numbersOnly" onchange="getItemData('+itemList.itemId+',this.value)"  value="0" >'));  
+								  	 $('#table_grid10 tbody').append(tr);
+								  	
+								})
+								
+								//poPreviousRecord.style.display = "block";
+					
+				});
+	
+	
+}
+function getItemData(itemId,qty){
+	//alert("qty " +qty);
+	console.log("obj" , itemId);
+}
 
 
+
+</script>
 	<script type="text/javascript">
  
 var specialKeys = new Array();
@@ -1070,6 +1218,10 @@ function check()
 </script>
 
 	<script>
+	jQuery('.numbersOnly').keyup(function() {
+		alert("Ok")
+		this.value = this.value.replace(/[^0-9\.]/g, '');
+		});
 // Get the modal
 var modal = document.getElementById('myModal');
 var poPreviousRecord = document.getElementById('poPreviousRecord');
@@ -1522,6 +1674,36 @@ function myFunction() {
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("table_grid3");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[3];
+    td1 = tr[i].getElementsByTagName("td")[1];
+    if (td ) {
+    	
+    	 if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+    	        tr[i].style.display = "";
+    	      }
+    	 else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+ 	        tr[i].style.display = "";
+	      }else {
+    	        tr[i].style.display = "none";
+    	      }
+       
+    }  
+    
+     
+  }
+}
+ 
+</script>
+
+
+	<script>
+function myFunction10() {
+  var input, filter, table, tr, td ,td1,td2, i;
+  input = document.getElementById("myInput10");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table_grid10");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[3];

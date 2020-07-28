@@ -1,6 +1,7 @@
 package com.ats.tril.model;
 
 public class VendorItemPurchaseReport {
+private String id;
 
 	private int itemId;
 	private String itemDesc;
@@ -72,12 +73,22 @@ public class VendorItemPurchaseReport {
 	public void setVendorName(String vendorName) {
 		this.vendorName = vendorName;
 	}
+	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	@Override
 	public String toString() {
-		return "VendorItemPurchaseReport [itemId=" + itemId + ", itemDesc=" + itemDesc + ", mrnNo=" + mrnNo
-				+ ", mrnDate=" + mrnDate + ", vendorName=" + vendorName + ", approveQty=" + approveQty + ", basicValue="
-				+ basicValue + ", taxValue=" + taxValue + ", landingCost=" + landingCost + ", billNo=" + billNo + "]";
+		return "VendorItemPurchaseReport [id=" + id + ", itemId=" + itemId + ", itemDesc=" + itemDesc + ", mrnNo="
+				+ mrnNo + ", mrnDate=" + mrnDate + ", vendorName=" + vendorName + ", approveQty=" + approveQty
+				+ ", basicValue=" + basicValue + ", taxValue=" + taxValue + ", landingCost=" + landingCost + ", billNo="
+				+ billNo + "]";
 	}
+	
+	
 	
 	
 }
