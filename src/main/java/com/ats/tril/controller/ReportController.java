@@ -2745,7 +2745,7 @@ public class ReportController {
 				rowData.add(""+roundUp(billTotal));//Bill Total
 				rowData.add(""+Math.round(billTotal));//Bill Total
 				rowData.add(roundUp(Math.round(billTotal)-roundUp(billTotal))+"");//calc
-				rowData.add("");//remark==blnk
+				rowData.add(""+mrnExcelListRes.get(i).getRemark());//remark==blnk
 				rowData.add("");//Erp Link==blnk
 				if(billNo==0)
 					rowData.add(""+mrnExcelListRes.get(i).getBillNo());
