@@ -357,7 +357,7 @@ public class MrnController {
 	// insertMrnProcess final Mrn Insert Call Ajax;
 
 	@RequestMapping(value = { "/insertMrnProcess" }, method = RequestMethod.GET)
-	public @ResponseBody MrnHeader insertMrnProcess(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody Object insertMrnProcess(HttpServletRequest request, HttpServletResponse response) {
 		MrnHeader mrnHeaderRes = null;
 		try {
 			System.err.println("inside /insertMrnProcess");
@@ -381,8 +381,22 @@ public class MrnController {
 			String lrNo = request.getParameter("lorry_no");
 			String transport = request.getParameter("transport");
 			String lorryRemark = request.getParameter("lorry_remark");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
+			RestTemplate restTemplate = new RestTemplate();
+			map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("billNo", billNo);
+			map.add("billDate", DateConvertor.convertToYMD(billDate));
+			map.add("vendrId", vendorId);
+			
+			Integer mrnCount = restTemplate.postForObject(Constants.url + "getMrnHeadCountForBillNoAndDateVendId", map,
+					Integer.class);
+			System.err.println("mrnCount"+mrnCount);
+			
+			if(mrnCount.equals(0)) {
 			MrnHeader mrnHeader = new MrnHeader();
+System.err.println("Mrn Count eq 0");
 			// ----------------------------Inv No---------------------------------
 			// DocumentBean docBean=null;
 
@@ -405,11 +419,10 @@ public class MrnController {
 				 * code.append(String.valueOf(counter));
 				 */
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map = new LinkedMultiValueMap<String, Object>();
 				map.add("docType", 1);
 				map.add("date", DateConvertor.convertToYMD(grnDate));
 
-				RestTemplate restTemplate = new RestTemplate();
 
 				ErrorMessage errorMessage = restTemplate.postForObject(Constants.url + "generateIssueNoAndMrnNo", map,
 						ErrorMessage.class);
@@ -484,6 +497,7 @@ public class MrnController {
 			mrnHeaderRes = restTemp.postForObject(Constants.url + "/saveMrnHeadAndDetail", mrnHeader, MrnHeader.class);
 			if (mrnHeaderRes != null) {
 				try {
+					System.err.println("mrnHeaderRes " + mrnHeaderRes.toString());
 
 					// SubDocument subDocRes = restTemp.postForObject(Constants.url + "/saveSubDoc",
 					// docBean.getSubDocument(), SubDocument.class);
@@ -492,15 +506,19 @@ public class MrnController {
 					e.printStackTrace();
 				}
 			}
-			System.err.println("mrnHeaderRes " + mrnHeaderRes.toString());
-
+			}//end of if MrnCount for Same bill No Eq zero
+			else {
+				
+				System.err.println("In Else of Mrn count > 0");
+				return mrnCount;
+			}
 		} catch (Exception e) {
 
 			System.err.println("Exception in insertMrnProcess " + e.getMessage());
 			e.printStackTrace();
 
 		}
-
+		
 		return mrnHeaderRes;
 	}
 

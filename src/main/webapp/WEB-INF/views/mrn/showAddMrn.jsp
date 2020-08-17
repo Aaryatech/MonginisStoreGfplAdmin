@@ -330,7 +330,7 @@ body {
 
 													<div class="col-md-3">
 														<input type="text" name="bill_no" id="bill_no"
-															onchange="checkBillNo()" class="form-control"
+														 class="form-control"
 															placeholder="Bill No" data-rule-required="true" />
 													</div>
 												</div>
@@ -1228,6 +1228,7 @@ body {
 
 				else if (isValid == true) {
 					$('#loader').show();
+					
 					on();
 					$
 							.getJSON(
@@ -1257,16 +1258,25 @@ body {
 											document.getElementById('loader').style = "display:none";
 
 											//alert("not null");
+											try{
+												if(data>0){
+													alert("Duplicate BillNo Found ")
+												}else{
+													window
+													.open(
+															"${pageContext.request.contextPath}/getMrnHeaders",
+															"_self");
+												}
+											}catch (e) {
+												//alert(e)
+											}
 
 										}
 										//document.getElementById('loader').style = "display:none";
 										//alert("Res " +data);
 
 										//window.location.reload();
-										window
-												.open(
-														"${pageContext.request.contextPath}/getMrnHeaders",
-														"_self");
+									
 
 										//window.open("${pageContext.request.contextPath}/showAddMrn","_self");
 
@@ -1478,10 +1488,7 @@ body {
 
 		<script type="text/javascript">
 			function callToInvoice() {
-				var poType = $
-				{
-					poType
-				}
+				var poType = ${poType}
 				;
 				//alert(poType);
 				if (poType != 0) {
@@ -1590,9 +1597,10 @@ body {
 					if (data.length != 0) {
 						alert("Bill No Already Exist")
 						document.getElementById("bill_no").value = " ";
+						return false;
 
 					} else {
-
+return true;
 					}
 
 				});
