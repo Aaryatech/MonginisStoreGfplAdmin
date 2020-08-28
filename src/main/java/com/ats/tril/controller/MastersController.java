@@ -179,6 +179,15 @@ public class MastersController {
 
 			System.out.println("res " + res);
 
+			//Sachin 28-08-2020
+			try {
+				if(taxForm.getTaxId()<1) {
+					TaxForm res2 = rest.postForObject(Constants.masterUrl + "/saveTaxForm", taxForm, TaxForm.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addTaxForm";
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -265,7 +274,15 @@ public class MastersController {
 					PaymentTerms.class);
 
 			System.out.println("res " + res);
-
+			//Sachin 28-08-2020
+			try {
+				if(paymentTerms.getPymtTermId()<1) {
+					PaymentTerms res2 = rest.postForObject(Constants.masterUrl + "/savePaymentTerms", paymentTerms,
+							PaymentTerms.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addPaymentTerm";
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -393,7 +410,11 @@ public class MastersController {
 			itemGroup.setDeletedIn(0);
 
 			ItemGroup res = rest.postForObject(Constants.url + "/saveItemGroup", itemGroup, ItemGroup.class);
+//Sachin 28-08-2020
+			if(itemGroup.getGrpId()<1) {
+				ItemGroup res2 = rest.postForObject(Constants.masterUrl + "/saveItemGroup", itemGroup, ItemGroup.class);
 
+			}
 			System.out.println("res " + res);
 
 		} catch (Exception e) {
@@ -496,7 +517,16 @@ public class MastersController {
 
 			ItemSubGroup res = rest.postForObject(Constants.url + "/saveItemSubGroup", itemSubGroup,
 					ItemSubGroup.class);
+			//Sachin 28-08-2020
+			try {
+			if(itemSubGroup.getSubgrpId()<1) {
 
+				ItemSubGroup res2 = rest.postForObject(Constants.masterUrl + "/saveItemSubGroup", itemSubGroup,
+						ItemSubGroup.class);
+			}
+			}catch (Exception e) {
+				return "redirect:/addItemSubGroup";
+			}
 			System.out.println("res " + res);
 
 		} catch (Exception e) {
@@ -698,6 +728,17 @@ public class MastersController {
 			Vendor res = rest.postForObject(Constants.url + "/saveVendor", vendor, Vendor.class);
 
 			System.out.println("res " + res);
+			
+			//Sachin 28-08-2020
+			try {
+				
+				if(vendor.getVendorId()<1) {
+				Vendor res1 = rest.postForObject(Constants.masterUrl + "/saveVendor", vendor, Vendor.class);
+				}
+				
+			}catch (Exception e) {
+				return "redirect:/vendorList";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

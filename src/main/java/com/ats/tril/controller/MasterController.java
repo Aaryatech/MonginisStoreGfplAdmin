@@ -118,6 +118,11 @@ public class MasterController {
 			System.out.println("category" + category);
 
 			Category res = rest.postForObject(Constants.url + "/saveCategory", category, Category.class);
+			//Sachin 28-08-2020
+			if(category.getCatId()<1) {
+			Category res2 = rest.postForObject(Constants.masterUrl + "/saveCategory", category, Category.class);
+			}
+			
 
 			System.out.println("res " + res);
 
@@ -241,6 +246,14 @@ public class MasterController {
 			Dept res = rest.postForObject(Constants.url + "/saveDept", dept, Dept.class);
 
 			System.out.println("res " + res);
+			//Sachin 28-08-2020
+			try {
+				if(dept.getDeptId()<1) {
+					Dept res2 = rest.postForObject(Constants.masterUrl + "/saveDept", dept, Dept.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addDepartment";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -338,6 +351,15 @@ public class MasterController {
 					DispatchMode.class);
 
 			System.out.println("res " + res);
+			//Sachin 28-08-2020
+			try {
+				if(dispatchMode.getDispModeId()<1) {
+					DispatchMode res2 = rest.postForObject(Constants.masterUrl + "/saveDispatchMode", dispatchMode,
+							DispatchMode.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addDispachMode";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -436,6 +458,15 @@ public class MasterController {
 					DeliveryTerms.class);
 
 			System.out.println("res " + res);
+			//Sachin 28-08-2020
+			try {
+				if(deliveryTerms.getDeliveryTermId()<1) {
+				DeliveryTerms res2 = rest.postForObject(Constants.masterUrl + "/saveDeliveryTerms", deliveryTerms,
+						DeliveryTerms.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addDeliveryTerm";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -566,6 +597,15 @@ public class MasterController {
 			SubDept res = rest.postForObject(Constants.url + "/saveSubDept", insert, SubDept.class);
 
 			System.out.println("res " + res);
+			
+			//Sachin 28-08-2020
+			try {
+				if(insert.getSubDeptId()<1) {
+					SubDept res2 = rest.postForObject(Constants.masterUrl + "/saveSubDept", insert, SubDept.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addSubDepartment";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -666,6 +706,14 @@ public class MasterController {
 			AccountHead res = rest.postForObject(Constants.url + "/saveAccountHead", insert, AccountHead.class);
 
 			System.out.println("res " + res);
+			//Sachin 28-08-2020
+			try {
+				if(insert.getAccHeadId()<1) {
+				AccountHead res1 = rest.postForObject(Constants.masterUrl + "/saveAccountHead", insert, AccountHead.class);
+				}
+			}catch (Exception e) {
+				return "redirect:/addAccountHead";
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -930,7 +978,13 @@ public class MasterController {
 			System.out.println("insert" + insert);
 
 			Item res = rest.postForObject(Constants.url + "/saveItem", insert, Item.class);
+			//Sachin 28-08-2020
+			try {
+				Item res2 = rest.postForObject(Constants.masterUrl + "/saveItem", insert, Item.class);
 
+			}catch (Exception e) {
+				return "redirect:/getItemList";
+			}
 			System.out.println("res " + res);
 
 		} catch (Exception e) {
@@ -1150,7 +1204,13 @@ public class MasterController {
 			System.out.println("Uom  " + insert);
 
 			Uom res = rest.postForObject(Constants.url + "/saveUom", insert, Uom.class);
+			//Sachin 28-08-2020
+			try {
+				Uom res2 = rest.postForObject(Constants.masterUrl + "/saveUom", insert, Uom.class);
 
+			}catch (Exception e) {
+				return "redirect:/addUom";
+			}
 			System.out.println("res " + res);
 
 		} catch (Exception e) {
