@@ -8,7 +8,7 @@
 body {
 	font-family: Arial, Helvetica, sans-serif;
 }
-
+ 
 /* The Modal (background) */
 .modal {
 	display: none; /* Hidden by default */
