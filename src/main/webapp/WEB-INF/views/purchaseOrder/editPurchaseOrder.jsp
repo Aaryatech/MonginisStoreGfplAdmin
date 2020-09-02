@@ -410,12 +410,13 @@ body {
 												<th width="6%">Ind Qty</th>
 												<th width="6%">PO Qty</th>
 												<c:if test="${mrnId>0}">
-													<th width="6%">MRN Gate Qty</th>
+													<th width="6%">MRN Apr Qty</th>
+														<th width="6%">MRN Value</th>
 												</c:if>
 												<th width="6%">Bal QTY</th>
 												<th width="6%">Rate</th>
 												<th class="col-md-1">Sch Date</th>
-												<th width="7%">Value</th>
+												<th width="7%">PO Value</th>
 												<!-- <th> Disc% </th> -->
 												<!-- <th> Sch Days </th> -->
 												<th width="3%">Action</th>
@@ -475,12 +476,24 @@ body {
 
 																<c:if
 																	test="${mrnDetailList.itemId==poDetailList.itemId}">
-																	${mrnDetailList.mrnQty} 
+																	${mrnDetailList.approveQty} 
 																	<c:set var="findItem" value="1"></c:set>
 																	<c:set var="mrnBasicValue"
-																		value="${mrnBasicValue+(mrnDetailList.mrnQty*poDetailList.itemRate)}"></c:set>
+																		value="${mrnBasicValue+(mrnDetailList.approveQty*poDetailList.itemRate)}"></c:set>
 																	<c:set var="mrnTaxValue"
-																		value="${mrnTaxValue+((poDetailList.taxValue/poDetailList.itemQty)*mrnDetailList.mrnQty)}"></c:set>
+																		value="${mrnTaxValue+((poDetailList.taxValue/poDetailList.itemQty)*mrnDetailList.approveQty)}"></c:set>
+																</c:if>
+
+															</c:forEach> <c:if test="${findItem==0}">
+															-
+															</c:if></td>
+															
+															<td align="right"><c:forEach items="${mrnDetailList}"
+																var="mrnDetailList">
+
+																<c:if
+																	test="${mrnDetailList.itemId==poDetailList.itemId}">
+																	${mrnDetailList.approveQty*poDetailList.itemRate} 
 																</c:if>
 
 															</c:forEach> <c:if test="${findItem==0}">
