@@ -17,7 +17,10 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,6 +48,7 @@ import com.ats.tril.model.EnquiryDetail;
 import com.ats.tril.model.ExportToExcel;
 import com.ats.tril.model.GetEnquiryHeader;
 import com.ats.tril.model.GetItem;
+import com.ats.tril.model.Info;
 import com.ats.tril.model.MonthCategoryWiseMrnReport;
 import com.ats.tril.model.PoDetail;
 import com.ats.tril.model.Type;
@@ -54,8 +58,10 @@ import com.ats.tril.model.mrn.GetMrnDetail;
 import com.ats.tril.model.mrn.GetMrnHeader;
 import com.ats.tril.model.mrn.MrnDetail;
 import com.ats.tril.model.mrn.MrnHeader;
+import com.ats.tril.model.mrn.TempMrnItemDetail;
 import com.ats.tril.model.po.GetPoHeader;
 import com.ats.tril.model.po.PoHeader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -83,6 +89,7 @@ public class DashboardController {
 
 	String fromDateForPdf;
 	String toDateForPdf;
+	List<TempMrnItemDetail> tempMrnItemDetailList = null;
 
 	@RequestMapping(value = "/showPurchaseDashboard", method = RequestMethod.GET)
 	public ModelAndView showPurchaseDashboard(HttpServletRequest request, HttpServletResponse response) {
@@ -949,6 +956,9 @@ public class DashboardController {
 
 		ModelAndView model = new ModelAndView("mrn/mrnInspectionDetail");
 		getMrnHeader = new GetMrnHeader();
+
+		tempMrnItemDetailList = new ArrayList<TempMrnItemDetail>();
+
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -957,6 +967,7 @@ public class DashboardController {
 			getMrnHeader = rest.postForObject(Constants.url + "getMrnHeader", map, GetMrnHeader.class);
 
 			model.addObject("getMrnHeader", getMrnHeader);
+			model.addObject("mrnId", mrnId);
 			System.out.println("getMrnHeader -------- " + getMrnHeader);
 
 		} catch (Exception e) {
@@ -966,40 +977,48 @@ public class DashboardController {
 		return model;
 	}
 
+//Modal Submit here -Sachin- Store MRN Inspection submit 1 
 	@RequestMapping(value = "/submitMrnInspectionList", method = RequestMethod.POST)
 	public ModelAndView submitMrnInspectionList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("mrn/mrnInspectionDetail");
 
-		try {
-			getMrnDetailList = new ArrayList<>();
+		if (1 == 2) {
+			try {
+				getMrnDetailList = new ArrayList<>();
 
-			int mrnId = Integer.parseInt(request.getParameter("mrnId"));
-			String[] checkbox = request.getParameterValues("select_to_approve");
+				int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+				String[] checkbox = request.getParameterValues("select_to_approve");
 
-			for (int i = 0; i < getMrnHeader.getGetMrnDetailList().size(); i++) {
-				for (int j = 0; j < checkbox.length; j++) {
-					if (Integer.parseInt(checkbox[j]) == getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId()) {
-						getMrnHeader.getGetMrnDetailList().get(i).setApproveQty(Float.parseFloat(request.getParameter(
-								"approveQty" + getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
-						// getMrnHeader.getGetMrnDetailList().get(i).setRejectQty(Float.parseFloat(request.getParameter("rejectQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
-						getMrnHeader.getGetMrnDetailList().get(i).setRemainingQty(Float.parseFloat(request.getParameter(
-								"approveQty" + getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
-						getMrnDetailList.add(getMrnHeader.getGetMrnDetailList().get(i));
+				for (int i = 0; i < getMrnHeader.getGetMrnDetailList().size(); i++) {
+					for (int j = 0; j < checkbox.length; j++) {
+						if (Integer.parseInt(checkbox[j]) == getMrnHeader.getGetMrnDetailList().get(i)
+								.getMrnDetailId()) {
+
+							getMrnHeader.getGetMrnDetailList().get(i)
+									.setApproveQty(Float.parseFloat(request.getParameter("approveQty"
+											+ getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
+							// getMrnHeader.getGetMrnDetailList().get(i).setRejectQty(Float.parseFloat(request.getParameter("rejectQty"+getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
+
+							getMrnHeader.getGetMrnDetailList().get(i)
+									.setRemainingQty(Float.parseFloat(request.getParameter("approveQty"
+											+ getMrnHeader.getGetMrnDetailList().get(i).getMrnDetailId())));
+
+							getMrnDetailList.add(getMrnHeader.getGetMrnDetailList().get(i));
+						}
+
 					}
-
 				}
+
+				System.out.println("getMrnDetailList -------- " + getMrnDetailList);
+				model.addObject("getMrnDetailList", getMrnDetailList);
+				model.addObject("mrnId", mrnId);
+				model.addObject("getMrnHeader", getMrnHeader);
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-
-			System.out.println("getMrnDetailList -------- " + getMrnDetailList);
-			model.addObject("getMrnDetailList", getMrnDetailList);
-			model.addObject("mrnId", mrnId);
-			model.addObject("getMrnHeader", getMrnHeader);
-
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
-
 		return model;
 	}
 
@@ -1008,24 +1027,208 @@ public class DashboardController {
 
 		try {
 
-			RestTemplate restTemp = new RestTemplate();
-			if (!getMrnDetailList.isEmpty()) {
-				for (int i = 0; i < getMrnDetailList.size(); i++) {
+			String storeMrnApprCompl = saveMrnStoreApprovalWithExpDate();
+			if (1 == 2) {
+				RestTemplate restTemp = new RestTemplate();
 
-					getMrnDetailList.get(i).setMrnDetailStatus(2);
+				if (!getMrnDetailList.isEmpty()) {
+					for (int i = 0; i < getMrnDetailList.size(); i++) {
+
+						getMrnDetailList.get(i).setMrnDetailStatus(2);
+					}
+					getMrnHeader.setGetMrnDetailList(getMrnDetailList);
 				}
-				getMrnHeader.setGetMrnDetailList(getMrnDetailList);
+				System.out.println(" final getMrnHeader -------- " + getMrnHeader);
+				List<MrnDetail> mrnDetailList = restTemp.postForObject(Constants.url + "/saveMrnData", getMrnDetailList,
+						List.class);
+
+				System.err.println("mrnDetailList " + mrnDetailList.toString());
+
 			}
-			System.out.println(" final getMrnHeader -------- " + getMrnHeader);
-			List<MrnDetail> mrnDetailList = restTemp.postForObject(Constants.url + "/saveMrnData", getMrnDetailList,
-					List.class);
-
-			System.err.println("mrnDetailList " + mrnDetailList.toString());
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return "redirect:/showMrnForInspection";
+	}
+
+	// Sachin 29-08-2020
+
+	@RequestMapping(value = "/tempSaveMrnItemDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TempMrnItemDetail> tempSaveMrnItemDetail(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+
+			String position = request.getParameter("position");
+
+			if (position.equals("-1")) {
+
+				String mrnDetail = request.getParameter("mrnDetail");
+				String expDate = request.getParameter("expDate");
+				String aprQty = request.getParameter("aprQty");
+				int index=Integer.parseInt(mrnDetail);
+				System.err.println("index "+index);
+				GetMrnDetail mrnObj = getMrnHeader.getGetMrnDetailList().get(index);// mapper.readValue(mrnDetail,
+																											// GetMrnDetail.class);
+				System.err.println("mrn Count" + mrnObj.toString());
+
+				System.err.println("mrnObj" + mrnObj);
+				System.err.println("expDate" + expDate);
+				System.err.println("aprQty" + aprQty);
+
+				TempMrnItemDetail detail = new TempMrnItemDetail();
+				UUID uuid = UUID.randomUUID(); 
+				detail.setMrnDetailId(mrnObj.getMrnDetailId());
+				detail.setApproveQty(Float.parseFloat(aprQty));
+				detail.setDetailStatus(1);
+				detail.setExpDate(DateConvertor.convertToDMY(expDate));
+				detail.setItemCode(mrnObj.getItemCode());
+				detail.setItemId(mrnObj.getItemId());
+				detail.setItemName(mrnObj.getItemName());
+				detail.setItemUom(mrnObj.getItemUom());
+				detail.setMrnId(mrnObj.getMrnId());
+				detail.setMrnQty(mrnObj.getMrnQty());
+				detail.setUuid2(uuid.toString());
+				tempMrnItemDetailList.add(detail);
+			} else {
+				try {
+					if (tempMrnItemDetailList.get(Integer.parseInt(position)).getUuid().equalsIgnoreCase("null")) {
+						
+						tempMrnItemDetailList.remove(Integer.parseInt(position));
+					} else {
+						
+						System.err.println("Hard remove from DB and from list as well ");
+
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						int mrnDetailId = 0;
+						mrnDetailId = tempMrnItemDetailList.get(Integer.parseInt(position)).getMrnDetailId();
+
+						map.add("mrnDetailId", mrnDetailId);
+
+						Info info = rest.postForObject(Constants.url + "deleteMrnItemDetail", map, Info.class);
+						//System.err.println("info " + info.toString());
+						tempMrnItemDetailList.remove(Integer.parseInt(position));
+					}
+				} catch (NullPointerException npe) {
+					System.err.println("In NPE ");
+					System.err.println("UUID Null " + tempMrnItemDetailList.get(Integer.parseInt(position)).getUuid());
+					tempMrnItemDetailList.remove(Integer.parseInt(position));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+System.err.println("List now "+tempMrnItemDetailList.toString());
+		return tempMrnItemDetailList;
+	}
+
+	@RequestMapping(value = "/getTempMrnItemDetail", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TempMrnItemDetail> getTempMrnItemDetail(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			return tempMrnItemDetailList;
+
+		} catch (Exception e) {
+			return tempMrnItemDetailList;
+
+		}
+	}
+
+	public String saveMrnStoreApprovalWithExpDate() {
+		try {
+
+			RestTemplate restTemp = new RestTemplate();
+
+			List<MrnDetail> mrnDetRes = restTemp.postForObject(Constants.url + "/updateStoreMrnInspec",
+					tempMrnItemDetailList, List.class);
+			System.err.println("Ok Here  tempMrnItemDetailList "+tempMrnItemDetailList);
+			tempMrnItemDetailList.clear();
+			if (1 == 2) {
+				List<Integer> mrdDetailIdList = new ArrayList<Integer>();
+
+				for (int i = 0; i < tempMrnItemDetailList.size(); i++) {
+					mrdDetailIdList.add(tempMrnItemDetailList.get(i).getMrnDetailId());
+				}
+
+				Set<Integer> set = new LinkedHashSet<>();
+
+				// Add the elements to set
+				set.addAll(mrdDetailIdList);
+
+				// Clear the list
+				mrdDetailIdList.clear();
+
+				// add the elements of set
+				// with no duplicates to the list
+				mrdDetailIdList.addAll(set);
+				List<MrnDetail> mrnDetailList = new ArrayList<MrnDetail>();
+
+				MultiValueMap<String, Object> map = null;
+
+				for (int a = 0; a < mrdDetailIdList.size(); a++) {
+
+					MrnDetail detail = new MrnDetail();
+					// detail= query//get Mrn Detail by Mrn DetailId
+					map = new LinkedMultiValueMap<String, Object>();
+					map.add("mrnDetailId", mrdDetailIdList.get(a));
+					detail = restTemp.postForObject(Constants.url + "/getMrnDetailObj", map, MrnDetail.class);
+					mrnDetailList.add(detail);
+					System.err.println("detail " + detail);
+					for (int i = 0; i < tempMrnItemDetailList.size(); i++) {
+
+						if (tempMrnItemDetailList.get(i).getMrnDetailId() == (mrdDetailIdList.get(a))) {
+
+							MrnDetail det = new MrnDetail();
+							det = detail;
+
+							det.setMrnDetailId(0);
+							det.setApproveQty(tempMrnItemDetailList.get(i).getApproveQty());
+							det.setExpDate(tempMrnItemDetailList.get(i).getExpDate());
+							det.setIsHeaderItem(0);
+
+							mrnDetailList.add(det);
+
+						}
+
+					}
+
+				}
+			}
+			// System.err.println("mrnDetailList Final " + mrnDetailList.toString());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Sachin";
+
+	}
+
+	@RequestMapping(value = "/getTempMrnItemDetailByMrnId", method = RequestMethod.POST)
+	@ResponseBody
+	public List<TempMrnItemDetail> getTempMrnItemDetailByMrnId(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		try {
+			if(tempMrnItemDetailList.size()<1) {
+				System.err.println("Its onload call");
+			String mrnId = request.getParameter("mrnId");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", Integer.parseInt(mrnId));
+
+			TempMrnItemDetail[] tempArray = rest.postForObject(Constants.url + "/getTempMrnItemDetailByMrnId", map,
+					TempMrnItemDetail[].class);
+			tempMrnItemDetailList = new ArrayList<TempMrnItemDetail>(Arrays.asList(tempArray));
+			
+				
+			return tempMrnItemDetailList;
+			}else {
+				System.err.println("Its after load call");
+				return tempMrnItemDetailList;
+			}
+
+		} catch (Exception e) {
+			return tempMrnItemDetailList;
+		}
 	}
 }

@@ -84,6 +84,11 @@ body {
 	padding-top: 10px;
 	padding-left: 20px;
 }
+th{
+position:sticky;
+top:0;
+background: white; 
+}
 </style>
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -158,7 +163,7 @@ body {
 				<div class="col-md-12">
 					<form id="submitPurchaseOrder"
 						action="${pageContext.request.contextPath}/submitMrnInspection"
-						method="post">
+						method="post" onsubmit="return validateAddedItems()">
 						<div class="box-content">
 							<div class="col-md-2">MRN No.</div>
 							<div class="col-md-3">${getMrnHeader.mrnNo}</div>
@@ -222,20 +227,29 @@ body {
 										style="width: 100%" id="table_grid2">
 										<thead>
 											<tr>
-												<th>Sr.No.</th>
+												<!-- <th>Sr.No.</th>
 												<th>Item Code</th>
 												<th>Item Name</th>
 												<th>UOM</th>
-												<!-- <th>PO Qty</th> -->
+												<th>PO Qty</th>
 												<th>MRN Qty</th>
-												<!-- <th>Approve QTY</th> -->
-												<!-- <th>Reject QTY</th> -->
-
+												<th>Approve QTY</th>
+												<th>Reject QTY</th>
+ -->
+ 														<th>Sr.No.</th>
+														<th>Item Code</th>
+														<th>Item Name</th>
+														<th>UOM</th>
+														<th>Batch</th> 
+														<th>Expire Date</th>
+														<th>Approve QTY</th>
+														<th>Delete</th>
+ 
 											</tr>
 										</thead>
 										<tbody>
 
-											<c:forEach items="${getMrnDetailList}" var="getMrnDetail"
+											<%-- <c:forEach items="${getMrnDetailList}" var="getMrnDetail"
 												varStatus="count">
 
 												<tr>
@@ -249,13 +263,13 @@ body {
 
 													<td align="left"><c:out
 															value="${getMrnDetail.itemUom}" /></td>
-													<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
-													<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
+													<td align="right"><c:out value="${getMrnDetail.poQty}" /></td>
+													<td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td>
 													<td align="right"><c:out
 															value="${getMrnDetail.approveQty}" /></td>
-													<%-- <td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td> --%>
+													<td align="right"><c:out value="${getMrnDetail.rejectQty}" /></td>
 												</tr>
-											</c:forEach>
+											</c:forEach> --%>
 										</tbody>
 									</table>
 								</div>
@@ -282,7 +296,7 @@ body {
 
 					<form id="submitList"
 						action="${pageContext.request.contextPath}/submitMrnInspectionList"
-						method="post" onsubmit="return validateChkbox()">
+						method="post" onsubmit="return validateAddedItems()">
 						<div id="myModal" class="modal">
 							<input type="hidden" value="0" name="mrnId" id="mrnId">
 
@@ -291,29 +305,65 @@ body {
 								<span class="close" id="close">&times;</span>
 								<h3 style="text-align: center;">Item From MRN</h3>
 								<div class="box-content">
+								
+							<div class="col-md-4">
+										<select name="mrnItem" id="mrnItem" class="form-control chosen"
+											tabindex="6">
+											<c:forEach items="${getMrnHeader.getMrnDetailList}" var="mrnDetail"
+												varStatus="count">
+												<option value="${count.index}" data-id="${mrnDetail.mrnDetailId}">${mrnDetail.itemCode}-${mrnDetail.itemName}  </option>
+											</c:forEach>
+										</select>
+									</div>
+									
+<div class="col-md-1">Expire On</div>
+									&nbsp;&nbsp;
+									<div class="col-md-2 ">
+										<input class="form-control" id="exp_date"
+											size="16" type="date" name="exp_date"
+											/>
+									</div>
+									<div class="col-md-1">Quantity</div>
+									
+									<div class="col-md-2">
+									
+									<input style="text-align: right; width: 80px" type="text"
+																id="approveQty"
+																name="approveQty" value=""
+																min="0" class="form-control"
+																pattern="[+-]?([0-9]*[.])?[0-9]+"																
+																>
+									
+									</div>
+									<div class="col-md-1"><input type="button" class="btn btn-info" id="addItem" onclick="addItem1()"  value="Add Item"></div>
+									
+									<div class="form-group row"></div>
 									<div class="row">
 										<div
-											style="overflow: scroll; height: 70%; width: 100%; overflow: auto">
+											style="overflow: scroll; height: 60%; width: 100%; overflow: auto">
 											<table width="100%" border="0"
 												class="table table-bordered table-striped fill-head "
 												style="width: 100%" id="table_grid1">
 												<thead>
 													<tr>
-														<th align="left"><input type="checkbox"
-															onClick="selectAll(this)" /> Select All</th>
+														<!-- <th align="left"><input type="checkbox"
+															onClick="selectAll(this)" /> Select All</th> -->
 														<th>Sr.No.</th>
 														<th>Item Code</th>
 														<th>Item Name</th>
 														<th>UOM</th>
 														<!-- <th>PO Qty</th> -->
-														<!-- 	<th>MRN Qty</th>  -->
+														<th>Batch</th> 
+														<th>Expire Date</th>
 														<th>Approve QTY</th>
+														<th>Delete</th>
+														
 														<!-- <th>Reject QTY</th> -->
 
 													</tr>
 												</thead>
 												<tbody>
-													<c:forEach items="${getMrnHeader.getMrnDetailList}"
+													<%-- <c:forEach items="${getMrnHeader.getMrnDetailList}"
 														var="getMrnDetail" varStatus="count">
 
 														<tr>
@@ -329,8 +379,8 @@ body {
 																	value="${getMrnDetail.itemName}" /></td>
 															<td align="left"><c:out
 																	value="${getMrnDetail.itemUom}" /></td>
-															<%-- <td align="right"><c:out value="${getMrnDetail.poQty}" /></td> --%>
-															<%-- <td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td> --%>
+															<td align="right"><c:out value="${getMrnDetail.poQty}" /></td>
+															<td align="right"><c:out value="${getMrnDetail.mrnQty}" /></td>
 															
 															<td align="right"><input
 																style="text-align: right; width: 100px" type="text"
@@ -341,9 +391,9 @@ body {
 																max="${getMrnDetail.mrnQty}" required></td>
 																
 															
-															<%-- <td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td> --%>
+															<td align="right"><input style="text-align:right; width:100px" type="text" id="rejectQty${getMrnDetail.mrnDetailId}" name="rejectQty${getMrnDetail.mrnDetailId}" value="${getMrnDetail.rejectQty}"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" max="${getMrnDetail.mrnQty}" readonly></td>
 														</tr>
-													</c:forEach>
+													</c:forEach> --%>
 												</tbody>
 											</table>
 										</div>
@@ -353,7 +403,7 @@ body {
 								<br>
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit" id="btnsub">
+										<input type="button" class="btn btn-info" onclick="setItemInTbGrid2()" value="Confirm Items" id="btnsub">
 
 
 									</div>
@@ -375,18 +425,8 @@ body {
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
+		
 <script>
- function validateChkbox(){
-	//alert("HHH")
-	 var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
-	  if(!checkbox) {
-	    alert('Please select item!');
-	    return false;
-	  }
-  	
-}
-
-
 /* $("#btnsub").click(function(){
 	alert("HHH")
 	 var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
@@ -530,8 +570,8 @@ var btn = document.getElementById("myBtn");
 // When the user clicks the button, open the modal 
 btn.onclick = function() {
     modal.style.display = "block";
-   /*  itemByIntendId(); 
-    getValue(); */
+    var mrnId=${mrnId};//03-09-2020
+   getTempMrnItemDetailFunction(mrnId);//03-09-2020
 }
 
 // When the user clicks on <span> (x), close the modal
@@ -543,7 +583,6 @@ span.onclick = function() {
 window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
-        
     }
 }
 
@@ -713,6 +752,187 @@ function itemByIntendId()
 		
 	}
 	</script>
+<script type="text/javascript">
+		
+		function addItem1() {
+			$('#loader').show();
+			var mrnDetail = $("#mrnItem").val();
+			var expDate = $("#exp_date").val();
+			var aprQty = $("#approveQty").val();
+			var isValid=true;
+			
+			if(mrnDetail==null||mrnDetail==""){
+				isValid=false;
+				alert("Please select Item");
+			}
+			
+			if(expDate==null||expDate==""){
+				isValid=false;
+				alert("Please select expiry date");
+			}
+			if(aprQty==null||aprQty==""|| parseFloat(aprQty)<1){
+				isValid=false;
+				alert("Please enter appropriate quantity");
+			}
+			
+			var fd = new FormData();
+			
+			fd.append('mrnDetail', mrnDetail);
+			fd.append('expDate', expDate);
+			fd.append('aprQty', aprQty);
+			fd.append('position', -1);
+			if(isValid)
+			$.ajax({
+			url : '${pageContext.request.contextPath}/tempSaveMrnItemDetail',
+			type : 'post',
+			dataType : 'json',
+			data : fd,
+			contentType : false,
+			processData : false,
+			success : function(responseData) {
+				
+				appendData(responseData);
+ 			}
+			})
+			$('#loader').hide();
+		}//end of function addItem().
+		
+		function deleteItem(position){
+			
+			var fd = new FormData();
+			
+			fd.append('position', position);
+			$.ajax({
+			url : '${pageContext.request.contextPath}/tempSaveMrnItemDetail',
+			type : 'post',
+			dataType : 'json',
+			data : fd,
+			contentType : false,
+			processData : false,
+				success : function(responseData) {
+					appendData(responseData);
+					appendTbGrid2Data(responseData);
+ 				}
+			})
+		}//end of function deleteItem().
+		
+		function appendData(responseData){
+			
+			$('#table_grid1 td').remove();
+				$('#loader').hide();
+				$('#table_grid2 td').remove();
+				$('#table_grid2 tbody').empty();
+				
+			$.each(responseData, function(i, v) {
+ 			
+			var tr = $('<tr></tr>'); 
+			
+ 				tr.append($('<td></td>').html(i+1)); 
+		  		tr.append($('<td></td>').html(v.itemCode)); 
+		 		tr.append($('<td></td>').html(v.itemName)); 
+				tr.append($('<td></td>').html(v.itemUom)); 
+				tr.append($('<td></td>').html(v.batchNo));
+				tr.append($('<td></td>').html(v.expDate));
+		  		tr.append($('<td></td>').html(v.approveQty));
+		  		/* tr.append($('<td></td>').html('<input type="button" class="form-control btn btn-danger" value="Delete" name="remove_item"'+
+				'id="remove_item" onclick="deleteItem('+i+')">'));  */
 
+				tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
+						'id="remove_item" title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
+				  
+				
+		  		$('#table_grid1 tbody').append(tr);
+			})
+			$('#table_grid2 tbody').empty();
+		}//end of function appendData().
+		
+		 function validateAddedItems(){
+				//alert("HHH")
+				var count = $('#table_grid2 tr').length;
+				//alert("count" +count)
+				 //var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
+				  if(count<=1) {
+				    alert('Please add item!');
+				    return false;
+				  }
+			  	
+			}//end of function validateAddedItems //validateChkbox().
+		
+			function setItemInTbGrid2(){
+				var isValid=true;
+				var count = $('#table_grid1 tr').length;
+				//alert("count" +count)
+				 //var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
+				  if(count<=1) {
+				    alert('Please add item!');
+				    isValid=false;
+				  }
+				 
+			if(isValid){
+				  
+				var modal = document.getElementById('myModal');
+				modal.style.display = "none"; 
+				
+				var fd = new FormData();
+				
+				fd.append('position', 10000);
+				$.ajax({
+				url : '${pageContext.request.contextPath}/getTempMrnItemDetail',
+				type : 'post',
+				dataType : 'json',
+				data : fd,
+				contentType : false,
+				processData : false,
+					success : function(responseData) {
+						appendTbGrid2Data(responseData);
+	 				}
+				})
+			}//end of if isValid
+			}//end of function setItemInTbGrid2
+			
+			function appendTbGrid2Data(responseData){
+				
+				$('#table_grid2 td').remove();
+				$('#loader').hide();
+				$('#table_grid2 tbody').empty();
+
+				$.each(responseData, function(i, v) {
+		 			
+					var tr = $('<tr></tr>'); 
+					
+		 				tr.append($('<td></td>').html(i+1)); 
+				  		tr.append($('<td></td>').html(v.itemCode)); 
+				 		tr.append($('<td></td>').html(v.itemName)); 
+						tr.append($('<td></td>').html(v.itemUom)); 
+						tr.append($('<td></td>').html(v.batchNo));
+						tr.append($('<td></td>').html(v.expDate));
+				  		tr.append($('<td></td>').html(v.approveQty));
+				  		tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
+						'id="remove_item"  title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
+				  	//	<i class="far fa-trash-alt"></i>
+				  		$('#table_grid2 tbody').append(tr);
+					})
+			}//end of function appendTbGrid2Data
+			
+			//03-09-2020
+			function getTempMrnItemDetailFunction(mrnId){ 
+				//alert("1")
+
+				var fd = new FormData();
+				
+				fd.append('mrnId', mrnId);
+				$.ajax({
+				url : '${pageContext.request.contextPath}/getTempMrnItemDetailByMrnId',
+				type : 'post',
+				dataType : 'json',
+				data : fd,
+				contentType : false,
+				processData : false,
+					success : function(responseData) {
+						appendData(responseData);
+	 				}
+				});
+			}//end of functio getTempMrnItemDetail(mrnId)
+		</script>
 </body>
 </html>

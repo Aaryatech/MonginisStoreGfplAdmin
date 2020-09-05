@@ -2332,6 +2332,10 @@ public class PurchaseOrderController {
 								mrnDetail.setRemainingQty(detail.getItemQty());
 								mrnDetail.setApproveQty(detail.getItemQty());
 								mrnDetail.setMrnQtyBeforeEdit(-1);
+								
+								//Sachin 02-09-2020
+								mrnDetail.setIsHeaderItem(1);
+								
 								mrnDetailList.add(mrnDetail);
 							}
 

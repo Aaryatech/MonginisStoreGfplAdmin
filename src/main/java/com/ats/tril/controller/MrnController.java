@@ -483,6 +483,10 @@ System.err.println("Mrn Count eq 0");
 					mrnDetail.setMrnQtyBeforeEdit(-1);
 					mrnDetail.setRemainingQty(mrnDetail.getMrnQty());
 					mrnDetail.setApproveQty(mrnDetail.getMrnQty());
+					
+					//Sachin 02-09-2020
+					mrnDetail.setIsHeaderItem(1);
+					
 					mrnDetailList.add(mrnDetail);
 
 				}
@@ -915,6 +919,8 @@ System.err.println("Mrn Count eq 0");
 				mrnDetail.setMrnQtyBeforeEdit(-1);
 				mrnDetail.setApproveQty(mrnDetail.getMrnQty());
 				mrnDetail.setRemainingQty(mrnDetail.getMrnQty());
+				//Sachin 02-09-2020
+				mrnDetail.setIsHeaderItem(1);
 				editMrnDetailList.add(mrnDetail);
 
 			}
@@ -1077,7 +1083,10 @@ System.err.println("Mrn Count eq 0");
 					mrnDetail.setIssueQty(detail.getIssueQty());
 					mrnDetail.setRemainingQty(detail.getMrnQty());
 					mrnDetail.setMrnQtyBeforeEdit(detail.getMrnQtyBeforeEdit());
-
+					
+					//Sachin 02-09-2020
+					mrnDetail.setIsHeaderItem(1);
+					
 					editMrnDetailList.add(mrnDetail);
 
 				}

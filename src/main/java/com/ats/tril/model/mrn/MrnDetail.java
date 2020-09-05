@@ -1,63 +1,87 @@
 package com.ats.tril.model.mrn;
 
-
 public class MrnDetail {
-	
-	
-	private int mrnDetailId;
-	
-	private int mrnId;
-	
-	private int itemId;
-	
-	private float indentQty;
-	
-	private float poQty;
-	
-	private float mrnQty;
-	
-	private float approveQty;
-	
-	private float rejectQty;
-	
-	private int rejectRemark;
-	
-	private String batchNo;
-	
-	private float issueQty;
-	
-	private float remainingQty;
-	
-	private int poId;
-	
-	private int poDetailId;
-	
-	private String poNo;
-	
-	private int mrnDetailStatus;
-	
-	private int delStatus;
-	
-private float mrnQtyBeforeEdit;
-	
-private float chalanQty;//added on 13 aug
 
+	private int mrnDetailId;
+
+	private int mrnId;
+
+	private int itemId;
+
+	private float indentQty;
+
+	private float poQty;
+
+	private float mrnQty;
+
+	private float approveQty;
+
+	private float rejectQty;
+
+	private int rejectRemark;
+
+	private String batchNo;
+
+	private float issueQty;
+
+	private float remainingQty;
+
+	private int poId;
+
+	private int poDetailId;
+
+	private String poNo;
+
+	private int mrnDetailStatus;
+
+	private int delStatus;
+
+	private float mrnQtyBeforeEdit;
+
+	private float chalanQty;// added on 13 aug
+	
+	
+	//Sachin 29-08-2020
+	
+	private String expDate; //29-08-2020
+	//private int itemDetailStatus; //29-08-2020
+	private int isHeaderItem; //31-08-2020
+
+	
+	
+
+	public String getExpDate() {
+		return expDate;
+	}
+
+	public void setExpDate(String expDate) {
+		this.expDate = expDate;
+	}
+
+
+	public int getIsHeaderItem() {
+		return isHeaderItem;
+	}
+
+	public void setIsHeaderItem(int isHeaderItem) {
+		this.isHeaderItem = isHeaderItem;
+	}
 
 	public float getChalanQty() {
-	return chalanQty;
-}
+		return chalanQty;
+	}
 
-public void setChalanQty(float chalanQty) {
-	this.chalanQty = chalanQty;
-}
+	public void setChalanQty(float chalanQty) {
+		this.chalanQty = chalanQty;
+	}
 
 	public float getMrnQtyBeforeEdit() {
-	return mrnQtyBeforeEdit;
-}
+		return mrnQtyBeforeEdit;
+	}
 
-public void setMrnQtyBeforeEdit(float mrnQtyBeforeEdit) {
-	this.mrnQtyBeforeEdit = mrnQtyBeforeEdit;
-}
+	public void setMrnQtyBeforeEdit(float mrnQtyBeforeEdit) {
+		this.mrnQtyBeforeEdit = mrnQtyBeforeEdit;
+	}
 
 	public int getMrnId() {
 		return mrnId;
@@ -119,7 +143,6 @@ public void setMrnQtyBeforeEdit(float mrnQtyBeforeEdit) {
 		return delStatus;
 	}
 
-	
 	public void setMrnId(int mrnId) {
 		this.mrnId = mrnId;
 	}
@@ -187,8 +210,6 @@ public void setMrnQtyBeforeEdit(float mrnQtyBeforeEdit) {
 	public void setPoDetailId(int poDetailId) {
 		this.poDetailId = poDetailId;
 	}
-	
-	
 
 	public int getMrnDetailId() {
 		return mrnDetailId;
@@ -205,8 +226,8 @@ public void setMrnQtyBeforeEdit(float mrnQtyBeforeEdit) {
 				+ rejectQty + ", rejectRemark=" + rejectRemark + ", batchNo=" + batchNo + ", issueQty=" + issueQty
 				+ ", remainingQty=" + remainingQty + ", poId=" + poId + ", poDetailId=" + poDetailId + ", poNo=" + poNo
 				+ ", mrnDetailStatus=" + mrnDetailStatus + ", delStatus=" + delStatus + ", mrnQtyBeforeEdit="
-				+ mrnQtyBeforeEdit + ", chalanQty=" + chalanQty + "]";
+				+ mrnQtyBeforeEdit + ", chalanQty=" + chalanQty + ", expDate=" + expDate + ", isHeaderItem="
+				+ isHeaderItem + "]";
 	}
-
 
 }
