@@ -371,8 +371,14 @@ public class AccessRightController {
 		List<AccessRightModule> accessRightModuleListRes = accessRightModuleList.getAccessRightModuleList();
 
 		for (int i = 0; i < accessRightModuleListRes.size(); i++) {
+			
+			Integer isFound=0; //New Module visible in AccessRight Control
+			
 			for (int j = 0; j < newModuleList.size(); j++) {
 				if (newModuleList.get(j).getModuleId() == accessRightModuleListRes.get(i).getModuleId()) {
+					
+					isFound=1; 	//New Module visible in AccessRight Control
+					
 					for (int l = 0; l < accessRightModuleListRes.get(i).getAccessRightSubModuleList().size(); l++) {
 						boolean flag = false;
 						for (int m = 0; m < newModuleList.get(j).getSubModuleJsonList().size(); m++) {
@@ -406,6 +412,35 @@ public class AccessRightController {
 				}
 
 			}
+			
+			//New Module visible in AccessRight Control
+			if(isFound.equals(0)) {
+				
+				ModuleJson mod=new ModuleJson();
+				mod.setModuleDesc(accessRightModuleListRes.get(i).getModuleDesc());
+				mod.setModuleId(accessRightModuleListRes.get(i).getModuleId());
+				mod.setModuleName(accessRightModuleListRes.get(i).getModuleName());
+				
+				List<SubModuleJson> subModuleJsonList=new ArrayList<SubModuleJson>();
+				
+				   for(int l=0;l<accessRightModuleListRes.get(i).getAccessRightSubModuleList().size();l++)
+				   {
+					   SubModuleJson sub=new SubModuleJson();
+				   sub.setSubModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleId());
+				   sub.setView("hidden");
+				   sub.setSubModuleMapping(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleMapping());
+				   sub.setEditReject("hidden");
+				   sub.setSubModuleDesc(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleDesc());
+				   sub.setSubModulName(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModulName());
+				   sub.setType(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getType());
+				   sub.setModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getModuleId());
+				   sub.setDeleteRejectApprove("hidden");
+				   sub.setAddApproveConfig("hidden");
+				   subModuleJsonList.add(sub);
+				   }
+				   mod.setSubModuleJsonList(subModuleJsonList);
+				   newModuleList.add(mod);	   
+			}
 
 		}
 		model.addObject("moduleJsonList", newModuleList);
@@ -415,6 +450,7 @@ public class AccessRightController {
 
 		return model;
 	}
+	
 
 	@RequestMapping(value = "/showPasswordChange", method = RequestMethod.GET)
 	public ModelAndView showPasswordChange(HttpServletRequest request, HttpServletResponse response) {
