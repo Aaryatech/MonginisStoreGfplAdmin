@@ -124,7 +124,7 @@ body {
 <body>
 
 	<c:url var="getSettledBillsByBillId" value="/getSettledBillsByBillId"></c:url>
-
+	<c:url value="/excelForBillBookExcel" var="excelForBillBookExcel" />
 
 	<div class="container" id="main-container">
 
@@ -223,6 +223,7 @@ body {
 								</label> <br /> <br />
 								<div class="clearfix"></div>
 								<div class="table-responsive" style="border: 0">
+							
 									<table class="table table-advance" id="table1">
 										<thead>
 											<tr class="bgpink">
@@ -231,7 +232,8 @@ body {
 													width="10%"><input type="checkbox" name="name1"
 													value="0" />All</th> -->
 
-												<th style="width: 2%;" class="th">SR</th>
+												<th style="width: 2%;"><input type="checkbox"
+														name="name1" value="0" />All</th>
 												<th class="th">Date</th>
 												<th style="width: 10%;" class="th">Bill No</th>
 												<th class="th">Vendor Name</th>
@@ -251,7 +253,7 @@ body {
 														width="10%">&nbsp;&nbsp;<input type="checkbox"
 														name="name1" value="${billList.billId}" /></td> --%>
 
-													<td style="width: 2%;"><c:out value="${count.index+1}" /></td>
+													<td style="width: 2%;"><input type="checkbox" name="name1" value="${billList.mrnId}" /></td>
 
 
 													<td class="col-md-1" style="text-align: center;"><c:out
@@ -299,7 +301,11 @@ body {
 										</tbody>
 
 									</table>
-									<br>
+									
+										<div class="col-sm-2 col-lg-2 controls">
+											<input type="button" id="expExcel" class="btn btn-primary"
+												value="Export To Excel" onclick="createBillBookExcel();">
+										</div>
 
 
 								</div>
@@ -505,6 +511,44 @@ body {
 			});
 
 		}
+	</script>
+	<script type="text/javascript">
+	function exportToExcel() {
+		window.open("${pageContext.request.contextPath}/exportToExcel");
+	}
+	function createBillBookExcel() {
+
+		var select_to_print = document.forms[0];
+		var txt = "";
+		var i;
+		var flag = 0;
+		var all = 0;
+		for (i = 0; i < select_to_print.length; i++) {
+			if (select_to_print[i].checked
+					&& select_to_print[i].value != "on") {
+				txt = txt + select_to_print[i].value + ",";
+				flag = 1;
+			}
+		}
+		if (flag == 1) {
+			
+			$.getJSON('${excelForBillBookExcel}', {
+				checkboxes : txt,
+
+				ajax : 'true'
+			}, function(data) {
+				//alert(JSON.stringify(data))
+				if(data!=null){
+					//exportToExcel();					
+					window.open("${pageContext.request.contextPath}/exportToExcel");
+				}
+
+			});
+		} else {
+			alert("Please select minimum 1 Bill ");
+		}
+
+	}
 	</script>
 
 
