@@ -126,7 +126,7 @@ body {
 	<c:url var="getSettledBillsByBillId" value="/getSettledBillsByBillId"></c:url>
 	<c:url value="/excelForBillBookExcel" var="excelForBillBookExcel" />
 
-	<div class="container" id="main-container">
+	<!-- <div class="container" id="main-container"> -->
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -154,9 +154,9 @@ body {
 			</div> -->
 			<br>
 			<!-- END Page Title -->
-
-			<div class="row">
-				<div class="col-md-12">
+			<div class="box">
+			<!-- <div class="row">
+				<div class="col-md-12"> -->
 
 					<div class="box" id="todayslist">
 						<div class="box-title">
@@ -170,6 +170,7 @@ body {
 							</div>
 
 						</div>
+						<div class=" box-content">
 						<form action="${pageContext.request.contextPath}/getBillBookList"
 							class="form-horizontal" id="validation-form" method="get">
 							<div class="box-content">
@@ -197,7 +198,7 @@ body {
 
 								</div>
 								<br>
-
+								<div class="box-content">
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -302,18 +303,19 @@ body {
 
 									</table>
 									
-										<div class="col-sm-2 col-lg-2 controls">
+										<div class="col-sm-2">
 											<input type="button" id="expExcel" class="btn btn-primary"
 												value="Export To Excel" onclick="createBillBookExcel();">
 										</div>
-
+									</div>
 
 								</div>
+								<br>
 							</div>
-
+	
 						</form>
 
-
+						</div>
 						<!------------------- ACCOUNT LEVEL ITEMS MODAL-------------------- -->
 
 
@@ -367,13 +369,13 @@ body {
 
 					</div>
 
-				</div>
-
+				<!-- </div>
+				</div> -->
 			</div>		
 		</div>
 
 
-	</div>
+	<!-- </div> -->
 
 	<!-- END Content -->
 
