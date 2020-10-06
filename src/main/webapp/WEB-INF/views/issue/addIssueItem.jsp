@@ -438,6 +438,7 @@
 		function getBatchByItemId() {
 
 			var itemId = document.getElementById("itemId").value;
+			//alert(itemId);
 			var date = $("#issueDate").val();
 			var type = $("#type").val();
 			if (type == "" || type == null) {
@@ -491,6 +492,9 @@
 
 				var len = data.length;
 				for (var i = 0; i < len; i++) {
+					if(parseInt(data[i].itemId)==198){
+						//alert("Yes")
+					}
 					html += '<option value="' + data[i].itemId + '">'
 							+ data[i].itemDesc + "_" + data[i].itemUom
 							+ '</option>';

@@ -1103,8 +1103,15 @@ public class DashboardController {
 						int mrnDetailId = 0;
 						mrnDetailId = tempMrnItemDetailList.get(Integer.parseInt(position)).getMrnDetailId();
 
-						map.add("mrnDetailId", mrnDetailId);
+						map.add("mrnId", tempMrnItemDetailList.get(Integer.parseInt(position)).getMrnId());
+						map.add("aprQty", tempMrnItemDetailList.get(Integer.parseInt(position)).getApproveQty());
+						
+						map.add("itemId", tempMrnItemDetailList.get(Integer.parseInt(position)).getItemId());
 
+						
+						Info updateMrnAprQtyForInspeDetail = rest.postForObject(Constants.url + "updateMrnAprQtyForInspeDetail", map, Info.class);
+						 map = new LinkedMultiValueMap<String, Object>();
+						 map.add("mrnDetailId", mrnDetailId);
 						Info info = rest.postForObject(Constants.url + "deleteMrnItemDetail", map, Info.class);
 						//System.err.println("info " + info.toString());
 						tempMrnItemDetailList.remove(Integer.parseInt(position));
@@ -1144,7 +1151,7 @@ System.err.println("List now "+tempMrnItemDetailList.toString());
 					tempMrnItemDetailList, List.class);
 			System.err.println("Ok Here  tempMrnItemDetailList "+tempMrnItemDetailList);
 			tempMrnItemDetailList.clear();
-			if (1 == 2) {
+			//if (1 == 2) {
 				List<Integer> mrdDetailIdList = new ArrayList<Integer>();
 
 				for (int i = 0; i < tempMrnItemDetailList.size(); i++) {
@@ -1194,7 +1201,7 @@ System.err.println("List now "+tempMrnItemDetailList.toString());
 					}
 
 				}
-			}
+			//}
 			// System.err.println("mrnDetailList Final " + mrnDetailList.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
