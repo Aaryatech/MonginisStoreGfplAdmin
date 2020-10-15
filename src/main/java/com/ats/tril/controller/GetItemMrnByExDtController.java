@@ -153,7 +153,7 @@ public class GetItemMrnByExDtController {
 		Calendar cal = Calendar.getInstance();
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp = dateFormat.format(cal.getTime());
-		String FILE_PATH ="/home/ats_lap11/Documents/AkhileshDemoUploads/store.pdf";
+		String FILE_PATH =Constants.REPORT_SAVE;
  //Constants.REPORT_SAVE;
 		File file = new File(FILE_PATH);
 		
