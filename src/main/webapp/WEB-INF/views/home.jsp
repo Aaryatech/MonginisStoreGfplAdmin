@@ -121,6 +121,7 @@ h6 {
 <body>
 	<c:url var="getPoListRes" value="/getPoListRes"></c:url>
 	<c:url var="getAllType" value="/getAllType"></c:url>
+	<c:url var="getItemMrnbyExListForStoreDashboard" value="/getItemMrnbyExListForStoreDashboard"></c:url>
 
 	<!-- BEGIN Container -->
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -152,12 +153,14 @@ h6 {
 					<a href="#" class="active" onclick="enableDiv(1)"><i
 						class="glyphicon glyphicon-hand-up"></i>Items Below ROL</a> <!-- <a
 						href="#" onclick="enableDiv(2)"><i
-						class="fa fa-question-circle"></i>Indent Pending For PO</a>  --><a
-						href="#" onclick="enableDiv(3)"><i
-						class="fa fa-question-circle"></i>PO Raised Pending For Mrn</a> </nav>
+						class="fa fa-question-circle"></i>Indent Pending For PO</a>  -->
+						<a href="#" onclick="enableDiv(3)"><i
+						class="fa fa-question-circle"></i>PO Raised Pending For Mrn</a> 
+						<a href="#" onclick="enableDiv(4)"><i class="glyphicon glyphicon-list"></i>Exipire MRN Report</a>
+						</nav>
 				</div>
 				<br>
-				<div id="indentReq">
+				<div id="indentReq" >
 					<div class="row">
 
 						<div class="col-md-12">
@@ -638,6 +641,128 @@ h6 {
 					</div>
 				</div>
 			</div>
+			
+			
+			
+			<div id="expireMrn" style="display: none;">
+				<div class="row">
+				<div class="col-md-12">
+								<div class="box" id="todayslist">
+									
+									
+									
+									
+									<div class="box-title">
+										<h3>
+											<i class="fa fa-table"></i>MRN Expiry List
+										</h3>
+										<div class="box-tool">
+											<a href="${pageContext.request.contextPath}/"> </a> <a
+											data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+										</div>
+
+									</div>
+									
+									
+									
+									
+										<div class="box-content">
+										
+										
+												<div class="box-content">
+													
+													<div class="col-md-1"></div>
+													<div class="col-md-2">Select Expiry Date*</div>
+													<div class="col-md-4">
+													<input id="toDate" class="form-control date-picker"
+													placeholder="To Date" name="toDate"
+														type="text" autocomplete="off" required>
+													</div>
+												
+													<input type="button" class="btn btn-primary" value="Search"
+													onclick="search()">
+												
+												</div>
+											
+												
+								<div class="box-content">
+														
+														
+										<!-- <div class="form-group">
+											<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+											<input type="button" class="btn btn-primary" value="Search"
+											onclick="search()">
+										
+											<button class="btn btn-primary" value="PDF" id="PDFButton"
+											disabled="disabled" onclick="genPdf()">PDF</button>
+									
+											<input type="button" id="expExcel" class="btn btn-primary"
+											disabled="disabled" value="EXPORT TO Excel"
+											onclick="exportToExcel();">
+											</div>
+										</div>-->
+								
+
+										<div align="center" id="loader" style="display: none">
+										<span>
+											<h4>
+												<font color="#343690">Loading</font>
+											</h4>
+										</span> 
+										<span class="l-1"></span> 
+										<span class="l-2"></span> 
+										<span class="l-3"></span> 
+										<span class="l-4"></span> 
+										<span class="l-5"></span>
+										<span class="l-6"></span>
+									</div>
+									
+								
+									
+									<div class="clearfix"></div>
+										<div class="table-responsive" style="border: 0">
+											<table class="table table-advance" id="table3">
+												<thead>
+													<tr class="bgpink">
+														<th class="col-sm-1">Sr no.</th>
+														<!--<th class="col-md-1">MRN Detail Id</th> -->
+														<th class="col-md-2">Batch No.</th>
+														<th class="col-md-2">Item Desc.</th>
+														<th class="col-md-1">UOM</th>
+														<th class="col-md-1">Remaining Qty.</th>
+														<th class="col-md-1">Exp.Date</th>
+													</tr>
+												</thead>
+												<tbody>
+												
+												
+												
+												
+												
+												
+												</tbody>
+											</table>
+										</div>
+										
+								</div>
+										
+										
+										
+										
+										
+										</div>
+									
+									
+									
+						
+								</div>
+							</div> 
+				
+				
+				</div>			
+
+			
+			</div>
 		</div>
 		<footer>
 		<p>2019 © MONGINIS</p>
@@ -648,9 +773,11 @@ h6 {
 
 	</div>
 	<!-- END Content -->
-	</div>
+	
 	<!-- END Container -->
 	<!--basic scripts-->
+	<!--Date Picker Script  -->
+	
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script>
@@ -685,6 +812,15 @@ h6 {
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+		
+		<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+		<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+		<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		
+	
 	<script type="text/javascript">
 		function getPoList() {
 
@@ -811,6 +947,7 @@ h6 {
 							});
 		}
 	</script>
+	
 	<script type="text/javascript">
 		var tabs = $('.tabs1');
 		var items = $('.tabs1').find('a').length;
@@ -842,6 +979,8 @@ h6 {
 				y.style.display = "none";
 				var z = document.getElementById("pendingMrn");
 				z.style.display = "none";
+				var w = document.getElementById("expireMrn")
+				w.style.display = "none";
 			} else if (status == 2) {
 				var x = document.getElementById("indentReq");
 				x.style.display = "none";
@@ -849,6 +988,8 @@ h6 {
 				y.style.display = "block";
 				var z = document.getElementById("pendingMrn");
 				z.style.display = "none";
+				var w = document.getElementById("expireMrn")
+				w.style.display = "none";
 			} else if (status == 3) {
 				var x = document.getElementById("indentReq");
 				x.style.display = "none";
@@ -856,6 +997,19 @@ h6 {
 				y.style.display = "none";
 				var z = document.getElementById("pendingMrn");
 				z.style.display = "block";
+				var w = document.getElementById("expireMrn")
+				w.style.display = "none";
+			}else if (status == 4) {
+				
+				var x = document.getElementById("indentReq");
+				x.style.display = "none";
+				var y = document.getElementById("pendingPo");
+				y.style.display = "none";
+				var z = document.getElementById("pendingMrn");
+				z.style.display = "none";
+				var w = document.getElementById("expireMrn")
+				w.style.display = "block";
+			
 			}
 		}
 	</script>
@@ -896,5 +1050,65 @@ h6 {
 			}
 		}
 	</script>
+	
+	
+	<script type="text/javascript">
+function  search() {
+	//alert("Ok")
+	var toDate = $("#toDate").val();
+	if(!toDate){
+		alert("Please Select Date")
+	}else{
+		
+		$('#loader').show();
+		
+		$.getJSON(
+					'${getItemMrnbyExListForStoreDashboard}',
+					{
+						toDate:toDate,
+						ajax:'true',
+					},
+					function(data){
+						//alert(data)
+						$('#table3 td').remove();
+						$('#loader').hide();
+						
+						if(data==""){
+							alert("No Record Found");
+							//document.getElementById("PDFButton").disabled = true;
+							//document.getElementById("expExcel").disabled = true;
+						}
+						//document.getElementById("PDFButton").disabled = false;
+						//document.getElementById("expExcel").disabled = false;
+						
+					
+						$ .each(data,
+								function(key,itemMrnList) {
+							
+									var tr=$('<tr></tr>');
+										
+										tr.append($('<td></td>').html(key+1));
+									/*	tr.append($('<td></td>').html(itemMrnList.mrnDetailId));*/
+										tr.append($('<td></td>').html(itemMrnList.batchNo));
+										tr.append($('<td></td>').html(itemMrnList.itemDesc));
+										tr.append($('<td></td>').html(itemMrnList.itemUom));
+										tr.append($('<td></td>').html(itemMrnList.remainingQty));
+										tr.append($('<td></td>').html(itemMrnList.expDate));
+										$('#table3 tbody').append(tr);
+										
+									
+								}) 
+						
+					});
+		}
+
+	
+	
+	
+	}
+
+</script>
+	
+	
 </body>
 </html>

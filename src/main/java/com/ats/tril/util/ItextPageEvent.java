@@ -82,7 +82,7 @@ public class ItextPageEvent extends PdfPageEventHelper {
             text.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             text.setVerticalAlignment(PdfPCell.ALIGN_CENTER);
             text.setBorder(Rectangle.NO_BORDER);
-            text.addElement(new Phrase(StrHeader, new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.BOLD, BaseColor.BLUE)));
+            text.addElement(new Phrase("\t  \t  \t"+StrHeader, new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.BOLD, BaseColor.BLUE)));
             text.addElement(new Phrase("\n        "+strTitle +"   Date:  "+strDate, new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.BLACK)));
 
             header.addCell(text);
