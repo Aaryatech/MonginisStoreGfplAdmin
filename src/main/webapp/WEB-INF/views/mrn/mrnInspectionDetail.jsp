@@ -278,7 +278,7 @@ background: white;
 						<div class="row">
 							<div class="col-md-12" style="text-align: center">
 								<c:choose>
-									<c:when test="${getMrnHeader.mrnStatus==2}">
+									<c:when test="${getMrnHeader.mrnStatus==3}">
 										<input type="submit" class="btn btn-info"
 											value="Already Inspection Done" disabled>
 									</c:when>
@@ -306,7 +306,7 @@ background: white;
 								<h3 style="text-align: center;">Item From MRN</h3>
 								<div class="box-content">
 								
-							<div class="col-md-4">
+							<div class="col-md-3">
 										<select name="mrnItem" id="mrnItem" class="form-control chosen"
 											tabindex="6">
 											<c:forEach items="${getMrnHeader.getMrnDetailList}" var="mrnDetail"
@@ -318,7 +318,7 @@ background: white;
 									
 <div class="col-md-1">Expire On</div>
 									&nbsp;&nbsp;
-									<div class="col-md-2 ">
+									<div class="col-md-3 ">
 										<input class="form-control" id="exp_date"
 											size="16" type="date" name="exp_date"
 											/>
@@ -760,6 +760,9 @@ function itemByIntendId()
 			var expDate = $("#exp_date").val();
 			var aprQty = $("#approveQty").val();
 			var isValid=true;
+			approveQty.value=0;
+			expDate.value="";
+			
 			
 			if(mrnDetail==null||mrnDetail==""){
 				isValid=false;
@@ -838,7 +841,7 @@ function itemByIntendId()
 				'id="remove_item" onclick="deleteItem('+i+')">'));  */
 
 				tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
-						'id="remove_item" title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
+						'id="remove_item" title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon tab glyphicon-remove text-danger"></i></a>')); 
 				  
 				
 		  		$('#table_grid1 tbody').append(tr);
@@ -908,7 +911,7 @@ function itemByIntendId()
 						tr.append($('<td></td>').html(v.expDate));
 				  		tr.append($('<td></td>').html(v.approveQty));
 				  		tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
-						'id="remove_item"  title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
+						'id="remove_item"  title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon tab glyphicon-remove text-danger"></i></a>')); 
 				  	//	<i class="far fa-trash-alt"></i>
 				  		$('#table_grid2 tbody').append(tr);
 					})

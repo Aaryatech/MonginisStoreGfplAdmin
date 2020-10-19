@@ -482,7 +482,7 @@ System.err.println("Mrn Count eq 0");
 
 					mrnDetail.setMrnQtyBeforeEdit(-1);
 					mrnDetail.setRemainingQty(mrnDetail.getMrnQty());
-					mrnDetail.setApproveQty(mrnDetail.getMrnQty());
+					mrnDetail.setApproveQty(0);
 					
 					//Sachin 02-09-2020
 					mrnDetail.setIsHeaderItem(1);
