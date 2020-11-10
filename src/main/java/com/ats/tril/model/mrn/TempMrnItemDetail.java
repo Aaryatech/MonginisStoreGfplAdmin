@@ -30,8 +30,15 @@ public class TempMrnItemDetail {
 	
 	private String uuid2; //03-09-2020
 
+	private String prodDate; //10-11-2020
 	
-	
+	public String getProdDate() {
+		return prodDate;
+	}
+
+	public void setProdDate(String prodDate) {
+		this.prodDate = prodDate;
+	}
 
 	public String getUuid2() {
 		return uuid2;
@@ -142,7 +149,7 @@ public class TempMrnItemDetail {
 		return "TempMrnItemDetail [mrnDetailId=" + mrnDetailId + ", mrnId=" + mrnId + ", itemId=" + itemId
 				+ ", itemName=" + itemName + ", itemCode=" + itemCode + ", itemUom=" + itemUom + ", mrnQty=" + mrnQty
 				+ ", approveQty=" + approveQty + ", expDate=" + expDate + ", detailStatus=" + detailStatus + ", uuid="
-				+ uuid + ", batchNo=" + batchNo + ", uuid2=" + uuid2 + "]";
+				+ uuid + ", batchNo=" + batchNo + ", uuid2=" + uuid2 + ", prodDate=" + prodDate + "]";
 	}
 
 	

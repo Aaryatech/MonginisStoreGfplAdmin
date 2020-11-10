@@ -49,6 +49,26 @@ public class GetMrnDetail implements Serializable {
 	private float mrnQtyBeforeEdit;// new added on 25-07 2018 Sachin
 
 	private float chalanQty;
+	
+	
+	private int itemSchd; // new added on 09-11 2020 Sachin
+	private int itemIsCritical; // new added on 09-11 2020 Sachin
+	
+	public int getItemSchd() {
+		return itemSchd;
+	}
+
+	public void setItemSchd(int itemSchd) {
+		this.itemSchd = itemSchd;
+	}
+
+	public int getItemIsCritical() {
+		return itemIsCritical;
+	}
+
+	public void setItemIsCritical(int itemIsCritical) {
+		this.itemIsCritical = itemIsCritical;
+	}
 
 	public String getItemUom() {
 		return itemUom;
@@ -242,7 +262,8 @@ public class GetMrnDetail implements Serializable {
 				+ ", rejectRemark=" + rejectRemark + ", batchNo=" + batchNo + ", issueQty=" + issueQty
 				+ ", remainingQty=" + remainingQty + ", poId=" + poId + ", poNo=" + poNo + ", mrnDetailStatus="
 				+ mrnDetailStatus + ", delStatus=" + delStatus + ", poPendingQty=" + poPendingQty + ", poDetailId="
-				+ poDetailId + ", mrnQtyBeforeEdit=" + mrnQtyBeforeEdit + ", chalanQty=" + chalanQty + "]";
+				+ poDetailId + ", mrnQtyBeforeEdit=" + mrnQtyBeforeEdit + ", chalanQty=" + chalanQty + ", itemSchd="
+				+ itemSchd + ", itemIsCritical=" + itemIsCritical + "]";
 	}
 
 }

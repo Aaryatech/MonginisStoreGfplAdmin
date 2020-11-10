@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -889,7 +890,7 @@ public class DashboardController {
 			model.addObject("vendorList", vendorList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("status", "0,1,2");
+			map.add("status", "0,1");
 			map.add("venId", "0");
 			List<GetMrnHeader> getMrnHeaderList = rest.postForObject(Constants.url + "getMrnHeaderList", map,
 					List.class);
@@ -969,7 +970,9 @@ public class DashboardController {
 			model.addObject("getMrnHeader", getMrnHeader);
 			model.addObject("mrnId", mrnId);
 			System.out.println("getMrnHeader -------- " + getMrnHeader);
-
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String  curDate=sdf.format(new  Date());
+			model.addObject("curDate", curDate);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1068,6 +1071,8 @@ public class DashboardController {
 				String aprQty = request.getParameter("aprQty");
 				int index=Integer.parseInt(mrnDetail);
 				System.err.println("index "+index);
+				String prodDate = request.getParameter("prodDate");
+				
 				GetMrnDetail mrnObj = getMrnHeader.getGetMrnDetailList().get(index);// mapper.readValue(mrnDetail,
 																											// GetMrnDetail.class);
 				System.err.println("mrn Count" + mrnObj.toString());
@@ -1089,6 +1094,7 @@ public class DashboardController {
 				detail.setMrnId(mrnObj.getMrnId());
 				detail.setMrnQty(mrnObj.getMrnQty());
 				detail.setUuid2(uuid.toString());
+				detail.setProdDate(DateConvertor.convertToDMY(prodDate));
 				tempMrnItemDetailList.add(detail);
 			} else {
 				try {
@@ -1238,4 +1244,72 @@ System.err.println("List now "+tempMrnItemDetailList.toString());
 			return tempMrnItemDetailList;
 		}
 	}
+	
+	//Sachin 10-11-2020 For Expiry And Production Date change.
+	
+	@RequestMapping(value = "/getExpireAndProdDate", method = RequestMethod.POST)
+	@ResponseBody
+	public List<String> getExpireAndProdDate(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<String> returnStrList=new ArrayList<String>();
+		
+			try {
+				int position=Integer.parseInt(request.getParameter("position"));
+				GetMrnDetail mrnDetail=getMrnHeader.getGetMrnDetailList().get(position);
+				System.err.println("mrnDetail " +mrnDetail.toString());
+				String expDate=null;
+				if(mrnDetail.getItemIsCritical()==1) {
+					String prodDate=request.getParameter("prod_date");
+					System.err.println("prodDate " +prodDate);
+					expDate=incrementDate(prodDate, mrnDetail.getItemSchd());
+					System.err.println("Exp Date " +expDate);
+					
+					returnStrList.add(prodDate);
+					returnStrList.add("0"); //prodDate Not readonly
+					returnStrList.add(expDate);
+					returnStrList.add("1"); //expDate readonly
+					
+				}else {
+					//Set Prod Date as current date
+					//Accept expDate from user manually.
+					System.err.println("In else ");
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String  prodDate=sdf.format(new  Date());
+					
+					returnStrList.add(prodDate);
+					returnStrList.add("1"); //prodDate readonly
+					returnStrList.add("");
+					returnStrList.add("0"); //expDate not readonly
+				}
+				
+				}catch (Exception e) {
+					
+					System.err.println("In Exce " +e.getMessage());
+					e.printStackTrace();
+					
+				}
+		
+		return returnStrList;
+		
+		
+	}
+	//Sachin 10-11-2020
+	public String incrementDate(String date, int day) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		try {
+			c.setTime(sdf.parse(date));
+
+		} catch (ParseException e) {
+			System.out.println("Exception while incrementing date " + e.getMessage());
+			e.printStackTrace();
+		}
+		c.add(Calendar.DATE, day); // number of days to add
+		date = sdf.format(c.getTime());
+
+		return date;
+
+	}
+	
 }

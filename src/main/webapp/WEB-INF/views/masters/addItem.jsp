@@ -495,7 +495,7 @@
 									</div>
 
 									<div class="col-md-1"></div>
-									<div class="col-md-2">Item Schd*</div>
+									<div class="col-md-2">Shelf Life Days*</div>
 									<div class="col-md-3">
 										<input id="itemSchd" class="form-control"
 											placeholder="Item Schd" name="itemSchd"
@@ -510,7 +510,7 @@
 								<br>
 								<div class="box-content">
 
-									<div class="col-md-2">Item Is Critical*</div>
+									<div class="col-md-2">Is Long Shelf Life*</div>
 									<div class="col-md-3">
 										<select class="form-control chosen" title="Please Select"
 											name="isCritical" id="isCritical" required>

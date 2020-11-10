@@ -84,10 +84,11 @@ body {
 	padding-top: 10px;
 	padding-left: 20px;
 }
-th{
-position:sticky;
-top:0;
-background: white; 
+
+th {
+	position: sticky;
+	top: 0;
+	background: white;
 }
 </style>
 
@@ -236,15 +237,15 @@ background: white;
 												<th>Approve QTY</th>
 												<th>Reject QTY</th>
  -->
- 														<th>Sr.No.</th>
-														<th>Item Code</th>
-														<th>Item Name</th>
-														<th>UOM</th>
-														<th>Batch</th> 
-														<th>Expire Date</th>
-														<th>Approve QTY</th>
-														<th>Delete</th>
- 
+												<th>Sr.No.</th>
+												<th>Item Code</th>
+												<th>Item Name</th>
+												<th>UOM</th>
+												<th>Batch</th>
+												<th>Expire Date</th>
+												<th>Approve QTY</th>
+												<th>Delete</th>
+
 											</tr>
 										</thead>
 										<tbody>
@@ -278,7 +279,7 @@ background: white;
 						<div class="row">
 							<div class="col-md-12" style="text-align: center">
 								<c:choose>
-									<c:when test="${getMrnHeader.mrnStatus==3}">
+									<c:when test="${getMrnHeader.mrnStatus==2}">
 										<input type="submit" class="btn btn-info"
 											value="Already Inspection Done" disabled>
 									</c:when>
@@ -305,38 +306,46 @@ background: white;
 								<span class="close" id="close">&times;</span>
 								<h3 style="text-align: center;">Item From MRN</h3>
 								<div class="box-content">
-								
-							<div class="col-md-3">
-										<select name="mrnItem" id="mrnItem" class="form-control chosen"
-											tabindex="6">
-											<c:forEach items="${getMrnHeader.getMrnDetailList}" var="mrnDetail"
-												varStatus="count">
-												<option value="${count.index}" data-id="${mrnDetail.mrnDetailId}">${mrnDetail.itemCode}-${mrnDetail.itemName}  </option>
+
+									<div class="col-md-3">
+										<select name="mrnItem" id="mrnItem"
+											class="form-control chosen" tabindex="6"
+											onchange="setDateCondition()">
+											<c:forEach items="${getMrnHeader.getMrnDetailList}"
+												var="mrnDetail" varStatus="count">
+												<option value="${count.index}"
+													data-id="${mrnDetail.mrnDetailId}">${mrnDetail.itemCode}-${mrnDetail.itemName}
+												</option>
 											</c:forEach>
 										</select>
 									</div>
-									
-<div class="col-md-1">Expire On</div>
+
+									<div class="col-md-1">Production Date</div>
+									<div class="col-md-2 ">
+										<input class="form-control" onchange="setDateCondition()"
+											id="prod_date" size="16" value="${curDate}" type="date" name="prod_date" />
+									</div>
+
+									<div class="col-md-1">Expire On</div>
 									&nbsp;&nbsp;
-									<div class="col-md-3 ">
-										<input class="form-control" id="exp_date"
-											size="16" type="date" name="exp_date"
-											/>
+									<div class="col-md-2 ">
+										<input class="form-control" data-fomrat="dd-MM-yyyy"
+											id="exp_date" size="16" type="date" name="exp_date" />
 									</div>
 									<div class="col-md-1">Quantity</div>
-									
-									<div class="col-md-2">
-									
-									<input style="text-align: right; width: 80px" type="text"
-																id="approveQty"
-																name="approveQty" value=""
-																min="0" class="form-control"
-																pattern="[+-]?([0-9]*[.])?[0-9]+"																
-																>
-									
+
+									<div class="col-md-1">
+
+										<input style="text-align: right; width: 80px" type="text"
+											id="approveQty" name="approveQty" value="" min="0"
+											class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+">
+
 									</div>
-									<div class="col-md-1"><input type="button" class="btn btn-info" id="addItem" onclick="addItem1()"  value="Add Item"></div>
-									
+									<div class="col-md-1">
+										<input type="button" class="btn btn-info" id="addItem"
+											onclick="addItem1()" value="Add Item">
+									</div>
+
 									<div class="form-group row"></div>
 									<div class="row">
 										<div
@@ -353,11 +362,11 @@ background: white;
 														<th>Item Name</th>
 														<th>UOM</th>
 														<!-- <th>PO Qty</th> -->
-														<th>Batch</th> 
+														<th>Batch</th>
 														<th>Expire Date</th>
 														<th>Approve QTY</th>
 														<th>Delete</th>
-														
+
 														<!-- <th>Reject QTY</th> -->
 
 													</tr>
@@ -403,7 +412,9 @@ background: white;
 								<br>
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="button" class="btn btn-info" onclick="setItemInTbGrid2()" value="Confirm Items" id="btnsub">
+										<input type="button" class="btn btn-info"
+											onclick="setItemInTbGrid2()" value="Confirm Items"
+											id="btnsub">
 
 
 									</div>
@@ -425,8 +436,8 @@ background: white;
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-		
-<script>
+
+	<script>
 /* $("#btnsub").click(function(){
 	alert("HHH")
 	 var checkbox= document.querySelector('input[name="select_to_approve"]:checked');
@@ -752,28 +763,107 @@ function itemByIntendId()
 		
 	}
 	</script>
-<script type="text/javascript">
+	<script type="text/javascript">
+		function setDateCondition(){
+			//document.getElementById('prod_date').setAttribute('readonly',false);
+			//document.getElementById('exp_date').setAttribute('readonly',false);
+		    document.getElementById('prod_date').removeAttribute('readonly');
+		    document.getElementById('exp_date').removeAttribute('readonly');
+
+			var prod_date= document.getElementById('prod_date').value;
+			var position=document.getElementById('mrnItem').value;
+			var fd = new FormData();
+		fd.append('position', position);
+		fd.append('prod_date', prod_date);
+		$
+		.ajax({
+		url : '${pageContext.request.contextPath}/getExpireAndProdDate',
+		type : 'post',
+		dataType : 'json',
+		data : fd,
+		contentType : false,
+		processData : false,
+		success : function(data) {
+		document.getElementById('exp_date').value=data[2];	
+		if(parseInt(data[3])==1){
+			document.getElementById('exp_date').setAttribute('readonly',true);
+		}
 		
+		document.getElementById('prod_date').value=data[0];	
+		if(parseInt(data[1])==1){
+			document.getElementById('prod_date').setAttribute('readonly',true);
+		}
+		}//end of function(data).
+	})
+			/* var yesNo="yes";
+			if(yesNo=="yes"){
+				//Build automatic expDate.
+				//Prod Date default todays allow to change.
+				//As per prod date calculate expDate (make expDate Readonly)
+				var today = new Date();
+				var m=today.getMonth()+1;
+				var d=today.getDate();
+				var y=today.getFullYear();
+				var z=y+"-"+m+"-"+d;
+				document.getElementById('prod_date').value=z;
+				
+				var tomorrow = new Date(today);
+				tomorrow.setDate(tomorrow.getDate()+5);
+				var x=new Date(tomorrow);
+				var m=x.getMonth()+1;
+				var d=x.getDate();
+				var y=x.getFullYear();
+				var z=y+"-"+m+"-"+d;
+				document.getElementById('exp_date').value=z;
+				document.getElementById('exp_date').setAttribute('readonly',true);
+			}else{
+				//Keep Prod Date Current date with readonly and ask to enter exp Date by Hand.
+				var today = new Date();
+				var m=today.getMonth()+1;
+				var d=today.getDate();
+				var y=today.getFullYear();
+				var z=y+"-"+m+"-"+d;
+				document.getElementById('prod_date').value=z;
+				document.getElementById('prod_date').setAttribute('readonly',true);
+			} */
+			
+		}//end of Function setDateCondition
+		function prodDateChange(){
+		
+			if(1==4){
+			var prodDate=document.getElementById('prod_date').value;
+			
+			var tomorrow = new Date(prodDate);
+			tomorrow.setDate(tomorrow.getDate()+3);
+			var x=new Date(tomorrow);
+			var m=x.getMonth()+1;
+			var d=x.getDate();
+			var y=x.getFullYear();
+			var z=y+"-"+m+"-"+d;
+			document.getElementById('exp_date').value=z;
+			document.getElementById('exp_date').setAttribute('readonly',true);
+
+			}
+			
+		}//end of Function prodDateChange
 		function addItem1() {
 			$('#loader').show();
 			var mrnDetail = $("#mrnItem").val();
 			var expDate = $("#exp_date").val();
 			var aprQty = $("#approveQty").val();
+			var prodDate = $("#prod_date").val();
+			// document.getElementById('exp_date').value="2019-05-10";
 			var isValid=true;
-			approveQty.value=0;
-			expDate.value="";
-			
 			
 			if(mrnDetail==null||mrnDetail==""){
 				isValid=false;
 				alert("Please select Item");
 			}
-			
 			if(expDate==null||expDate==""){
 				isValid=false;
 				alert("Please select expiry date");
 			}
-			if(aprQty==null||aprQty==""|| parseFloat(aprQty)<1){
+			if(aprQty==null||aprQty==""|| parseFloat(aprQty)<=0){
 				isValid=false;
 				alert("Please enter appropriate quantity");
 			}
@@ -784,6 +874,8 @@ function itemByIntendId()
 			fd.append('expDate', expDate);
 			fd.append('aprQty', aprQty);
 			fd.append('position', -1);
+			fd.append('prodDate', prodDate);
+			
 			if(isValid)
 			$.ajax({
 			url : '${pageContext.request.contextPath}/tempSaveMrnItemDetail',
@@ -793,7 +885,7 @@ function itemByIntendId()
 			contentType : false,
 			processData : false,
 			success : function(responseData) {
-				
+				document.getElementById('approveQty').value=0;
 				appendData(responseData);
  			}
 			})
@@ -841,7 +933,7 @@ function itemByIntendId()
 				'id="remove_item" onclick="deleteItem('+i+')">'));  */
 
 				tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
-						'id="remove_item" title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon tab glyphicon-remove text-danger"></i></a>')); 
+						'id="remove_item" title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
 				  
 				
 		  		$('#table_grid1 tbody').append(tr);
@@ -911,7 +1003,7 @@ function itemByIntendId()
 						tr.append($('<td></td>').html(v.expDate));
 				  		tr.append($('<td></td>').html(v.approveQty));
 				  		tr.append($('<td align="center"></td>').html('<a href="#" name="remove_item"'+
-						'id="remove_item"  title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon tab glyphicon-remove text-danger"></i></a>')); 
+						'id="remove_item"  title="Delete" onclick="deleteItem('+i+')"><i class="glyphicon glyphicon-remove text-danger"></i></a>')); 
 				  	//	<i class="far fa-trash-alt"></i>
 				  		$('#table_grid2 tbody').append(tr);
 					})
