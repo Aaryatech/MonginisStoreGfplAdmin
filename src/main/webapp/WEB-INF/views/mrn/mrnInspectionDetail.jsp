@@ -279,7 +279,7 @@ th {
 						<div class="row">
 							<div class="col-md-12" style="text-align: center">
 								<c:choose>
-									<c:when test="${getMrnHeader.mrnStatus==2}">
+									<c:when test="${getMrnHeader.mrnStatus==3}">
 										<input type="submit" class="btn btn-info"
 											value="Already Inspection Done" disabled>
 									</c:when>
