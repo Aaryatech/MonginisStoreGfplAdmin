@@ -890,7 +890,7 @@ public class DashboardController {
 			model.addObject("vendorList", vendorList);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("status", "0,1");
+			map.add("status", "0,1,2");
 			map.add("venId", "0");
 			List<GetMrnHeader> getMrnHeaderList = rest.postForObject(Constants.url + "getMrnHeaderList", map,
 					List.class);
