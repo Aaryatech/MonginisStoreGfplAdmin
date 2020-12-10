@@ -3,9 +3,9 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
- 
+
 <body onload="disabledDate()">
-<script type="text/javascript">
+	<script type="text/javascript">
 	 function disabledDate () {
 		 var c = document.getElementById("stockDateDDMMYYYY").value; 
 			var toDateValue = c.split('-');
@@ -25,14 +25,14 @@
 	 }
  
  </script>
-<c:url var="genrateNo" value="/genrateNo" />
+	<c:url var="genrateNo" value="/genrateNo" />
 	<c:url var="getMrnListByMrnId" value="/getMrnListByMrnId"></c:url>
 	<c:url var="getSubDeptList" value="/getSubDeptList"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-<c:url var="editMemoQty" value="/editMemoQty"></c:url>
-<c:url var="qtyValidationFromBatch" value="/qtyValidationFromBatch"></c:url>
+	<c:url var="editMemoQty" value="/editMemoQty"></c:url>
+	<c:url var="qtyValidationFromBatch" value="/qtyValidationFromBatch"></c:url>
 
 	<div class="container" id="main-container">
 
@@ -57,7 +57,8 @@
 						<i class="fa fa-file-o"></i>Edit Rejection Memo
 					</h1>
 				</div>
-			</div> --><br>
+			</div> -->
+			<br>
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -65,9 +66,7 @@
 
 					<div class="box">
 						<div class="box-title">
-							<h3>
-								  BOM Detailed 
-							</h3>
+							<h3>BOM Detailed</h3>
 
 							<%-- <div class="box-tool">
 								<a href="${pageContext.request.contextPath}/listOfRejectionMemo">Rejection
@@ -83,220 +82,227 @@
 							<form id="submitForm"
 								action="${pageContext.request.contextPath}/submitIssueByBomRequest"
 								method="post">
-								
+
 								<c:set var="prod" value="PROD"></c:set>
-														<c:set var="mix" value="MIX"></c:set>
-															<c:choose>
-															 	<c:when test="${billOfMaterialHeader.fromDeptName==prod}">
-															 	<c:set var="depname" value="Production"></c:set>
-															 	
-															 	</c:when>
-															 	<c:when test="${billOfMaterialHeader.fromDeptName==mix}">
-															 	<c:set var="depname" value="Mixing"></c:set>
-															 	
-															 	</c:when>
-															</c:choose>
-															
+								<c:set var="mix" value="MIX"></c:set>
+								<c:choose>
+									<c:when test="${billOfMaterialHeader.fromDeptName==prod}">
+										<c:set var="depname" value="Production"></c:set>
+
+									</c:when>
+									<c:when test="${billOfMaterialHeader.fromDeptName==mix}">
+										<c:set var="depname" value="Mixing"></c:set>
+
+									</c:when>
+								</c:choose>
+
 								<div class="box-content">
-							
-								<div class="col-md-2">Issue No*</div>
+
+									<div class="col-md-2">Issue No*</div>
 									<div class="col-md-3">
-									
-									<input id="issueNo" class="form-control"
-								 placeholder="Issue No" value="1" name="issueNo" type="text" readonly>
-								 
-									 
+
+										<input id="issueNo" class="form-control"
+											placeholder="Issue No" value="1" name="issueNo" type="text"
+											readonly>
+
+
 									</div>
-									
+
 									<div class="col-md-2">Issue Date*</div>
 									<div class="col-md-3">
 										<input id="issueDate" class="form-control"
-								 placeholder="Issue Date"  name="issueDate" type="date" value="${date}" onchange="getInvoiceNo()"  required> 
-								 
-								 
-						<input id="stockDateDDMMYYYY" value="${stockDateDDMMYYYY}" name="stockDateDDMMYYYY" type="hidden"  >
+											placeholder="Issue Date" name="issueDate" type="date"
+											value="${date}" onchange="getInvoiceNo()" required> <input
+											id="stockDateDDMMYYYY" value="${stockDateDDMMYYYY}"
+											name="stockDateDDMMYYYY" type="hidden">
 									</div>
-									 
-				 
-							</div><br>
+
+
+								</div>
+								<br>
 
 								<div class="box-content">
 
 									<div class="col-md-2">Department:</div>
-									<div class="col-md-3"> 
-																	${depname} 
-									</div>
- 
+									<div class="col-md-3">${depname}</div>
+
 								</div>
 								<br>
-								 
-									<c:set var="status" value="-"></c:set>
-									<div class="box-content">
-									
+
+								<c:set var="status" value="-"></c:set>
+								<div class="box-content">
+
 									<div class="col-md-2">Production/Mixing Date:</div>
 									<div class="col-md-3">
-									${billOfMaterialHeader.productionDate}
- 
-									</div>
- 
-										<%-- <div class="col-md-2">Indent No:</div>
+										${billOfMaterialHeader.productionDate}</div>
+
+									<%-- <div class="col-md-2">Indent No:</div>
 									<div class="col-md-3">
 									${poHeaderForApprove.indNo}
  
 									</div> --%>
-									</div>
-									<br>
+								</div>
+								<br>
 
-									  <c:choose>
-													<c:when test="${billOfMaterialHeader.status==0}">
-													<c:set var = "status" value='Pending'/>
-													</c:when>
-													
-													<c:when test="${billOfMaterialHeader.status==1}">
-													  <c:set var = "status" value="Approved"/>
-													
-													</c:when>
-													
-													<c:when test="${billOfMaterialHeader.status==2}">
-													  <c:set var = "status" value="Rejected"/>
-													
-													</c:when>
-													<c:when test="${billOfMaterialHeader.status==3}">
-													  <c:set var = "status" value="Approved Rejected"/>
-													
-													</c:when>
-													 
-													<c:when test="${billOfMaterialHeader.status==4}">
-													  <c:set var = "status" value="Request closed"/>
-													
-													</c:when>
-												</c:choose>
-									 <div class="box-content">
+								<c:choose>
+									<c:when test="${billOfMaterialHeader.status==0}">
+										<c:set var="status" value='Pending' />
+									</c:when>
+
+									<c:when test="${billOfMaterialHeader.status==1}">
+										<c:set var="status" value="Approved" />
+
+									</c:when>
+
+									<c:when test="${billOfMaterialHeader.status==2}">
+										<c:set var="status" value="Rejected" />
+
+									</c:when>
+									<c:when test="${billOfMaterialHeader.status==3}">
+										<c:set var="status" value="Approved Rejected" />
+
+									</c:when>
+
+									<c:when test="${billOfMaterialHeader.status==4}">
+										<c:set var="status" value="Request closed" />
+
+									</c:when>
+								</c:choose>
+								<div class="box-content">
 
 
 
-										<div class="col-md-2">Status:</div>
-										<div class="col-md-3">
-										${status}
-											 
+									<div class="col-md-2">Status:</div>
+									<div class="col-md-3">${status}</div>
 
-										</div>
-										 
-									</div> 
+								</div>
 
-									<br>
-									
-									<div class="box-content">
-								 
-								 <div class="col-md-2" >Select Department</div>
+								<br>
+
+								<div class="box-content">
+
+									<div class="col-md-2">Select Department</div>
 									<div class="col-md-3">
-										<select   class="form-control chosen" name="deptId" onchange="getSubDeptListByDeptId()"  id="deptId"  required>
-											<option   value="">Select Department</option>
-											
-											<c:forEach items="${deparmentList}" var="deparmentList"> 
-														<option value="${deparmentList.deptId}">${deparmentList.deptCode} &nbsp;&nbsp;&nbsp; ${deparmentList.deptDesc} </option>
-											 </c:forEach>
-											</select>
+										<select class="form-control chosen" name="deptId"
+											onchange="getSubDeptListByDeptId()" id="deptId" required>
+											<option value="">Select Department</option>
+
+											<c:forEach items="${deparmentList}" var="deparmentList">
+												<option value="${deparmentList.deptId}">${deparmentList.deptCode}
+													&nbsp;&nbsp;&nbsp; ${deparmentList.deptDesc}</option>
+											</c:forEach>
+										</select>
 									</div>
-									
-									<div class="col-md-2" >Select Sub Department</div>
+
+									<div class="col-md-2">Select Sub Department</div>
 									<div class="col-md-3">
-										<select   class="form-control chosen" name="subDeptId"  id="subDeptId"  required>
-											 
-											</select>
+										<select class="form-control chosen" name="subDeptId"
+											id="subDeptId" required>
+
+										</select>
 									</div>
-									 
-								</div><br> 
-									
-									<br>
-									
-									<div class=" box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%; font-size: 14px;" id="table_grid">
-								<thead>
-									<tr>
-										<th style="width: 2%">Sr.No.</th> 
-										<th>Item Name</th>  
-										<th class="col-md-1"> Requested Qty</th> 
-										<th class="col-md-1"> Remaining Qty</th> 
-										<th class="col-md-4">Select Batch</th> 
-										<th class="col-md-1">Issue Qty</th>
-									 
-									</tr>
-								</thead>
-								<tbody>
-								
-								<c:forEach items="${billOfMaterialHeader.billOfMaterialDetailed}" var="billOfMaterialDetailed"
-																		varStatus="count">
-																		<tr>
-																		 
-																			<td  ><c:out value="${count.index+1}" /></td>
-				 
-																			<td  ><c:out
-																					value="${billOfMaterialDetailed.rmName}" /></td>
-																			<td  align="right"><c:out
-																					value="${billOfMaterialDetailed.rmReqQty}" /></td>
-																			<td  align="right"><c:out
-																					value="${billOfMaterialDetailed.rmReqQty-billOfMaterialDetailed.rmIssueQty}" /></td>
-																		<td  >
-																		
-																		<input type="hidden" name="batchQty${billOfMaterialDetailed.reqDetailId}" id="batchQty${billOfMaterialDetailed.reqDetailId}" />
-																		<select   class="form-control chosen" onchange="qtyValidation(${billOfMaterialDetailed.reqDetailId})" name="batchId${billOfMaterialDetailed.reqDetailId}"  id="batchId${billOfMaterialDetailed.reqDetailId}"  >
-										 <option   value=""  >Select Batch</option> 
-											<c:forEach items="${batchList}" var="batchList"> 
-											<c:choose>
-												<c:when test="${billOfMaterialDetailed.rmId==batchList.itemId && batchList.remainingQty>0}">
-													<option value="${batchList.mrnDetailId}">${batchList.batchNo} &nbsp; ${batchList.remainingQty}</option>
-												</c:when>
-											</c:choose>
-														
-											 </c:forEach>
-											 
-											</select></td>
-																		 <td  ><input style="text-align:right; width:150px" type="text"  name="issueQty${billOfMaterialDetailed.reqDetailId}" id="issueQty${billOfMaterialDetailed.reqDetailId}" class="form-control"
-										value="0" pattern="[+-]?([0-9]*[.])?[0-9]+" onchange="checkQty(${billOfMaterialDetailed.reqDetailId},${billOfMaterialDetailed.rmReqQty-billOfMaterialDetailed.rmIssueQty})" ></td>
-				 
-																		</tr>
+
+								</div>
+								<br> <br>
+
+								<div class=" box-content">
+									<div class="row">
+										<div class="col-md-12 table-responsive">
+											<table class="table table-bordered table-striped fill-head "
+												style="width: 100%; font-size: 14px;" id="table_grid">
+												<thead>
+													<tr>
+														<th style="width: 2%">Sr.No.</th>
+														<th>Item Name</th>
+														<th class="col-md-1">Requested Qty</th>
+														<th class="col-md-1">Remaining Qty</th>
+														<th class="col-md-4">Select Batch</th>
+														<th class="col-md-1">Issue Qty</th>
+
+													</tr>
+												</thead>
+												<tbody>
+
+													<c:forEach
+														items="${billOfMaterialHeader.billOfMaterialDetailed}"
+														var="billOfMaterialDetailed" varStatus="count">
+														<tr>
+
+															<td><c:out value="${count.index+1}" /></td>
+
+															<td><c:out
+																	value="${billOfMaterialDetailed.rmName}" /></td>
+															<td align="right"><c:out
+																	value="${billOfMaterialDetailed.rmReqQty}" /></td>
+															<td align="right"><c:out
+																	value="${billOfMaterialDetailed.rmReqQty-billOfMaterialDetailed.rmIssueQty}" /></td>
+															<td><input type="hidden"
+																name="batchQty${billOfMaterialDetailed.reqDetailId}"
+																id="batchQty${billOfMaterialDetailed.reqDetailId}" /> <select
+																class="form-control chosen"
+																onchange="qtyValidation(${billOfMaterialDetailed.reqDetailId})"
+																name="batchId${billOfMaterialDetailed.reqDetailId}"
+																id="batchId${billOfMaterialDetailed.reqDetailId}">
+																	<option value="">Select Batch</option>
+																	<c:forEach items="${batchList}" var="batchList">
+																		<c:choose>
+																			<c:when
+																				test="${billOfMaterialDetailed.rmId==batchList.itemId && batchList.remainingQty>0}">
+																				<option value="${batchList.mrnDetailId}">${batchList.batchNo}
+																					&nbsp; ${batchList.remainingQty}</option>
+																			</c:when>
+																		</c:choose>
+
 																	</c:forEach>
 
-								</tbody>
-							</table>
-						</div>
-					</div>
-								</div>
-								
-							 
-														 
-										<div class="row">
-												<div class="col-md-12" style="text-align: center">
-											 
-													 <input type="submit" class="btn btn-info" value="Submit"  > 
-						 
-												</div>
+															</select></td>
+															<td><input style="text-align: right; width: 150px"
+																type="text"
+																name="issueQty${billOfMaterialDetailed.reqDetailId}"
+																id="issueQty${billOfMaterialDetailed.reqDetailId}"
+																class="form-control" value="0"
+																pattern="[+-]?([0-9]*[.])?[0-9]+"
+																onchange="checkQty(${billOfMaterialDetailed.reqDetailId},${billOfMaterialDetailed.rmReqQty-billOfMaterialDetailed.rmIssueQty})"></td>
+
+														</tr>
+													</c:forEach>
+
+												</tbody>
+											</table>
 										</div>
-										 
- 
+									</div>
+								</div>
+
+
+
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+
+										<input type="submit" class="btn btn-info" value="Submit">
+
+									</div>
+								</div>
+
+
 							</form>
-							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-			<footer>
-				<p>2019 © MONGINIS</p>
-			</footer>
 		</div>
 
-		<!-- END Main Content -->
+		<footer>
+			<p>2019 © MONGINIS</p>
+		</footer>
+	</div>
+
+	<!-- END Main Content -->
 
 
-		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-			class="fa fa-chevron-up"></i></a>
+	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+		class="fa fa-chevron-up"></i></a>
 
-		<!-- END Content -->
+	<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -357,7 +363,7 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-	  
+
 	<script type="text/javascript">
 	function qtyValidation(reqDetailId) {
 
@@ -466,7 +472,7 @@
 							});
 		}
 	</script>
-	
+
 	<script type="text/javascript">
 	function editMemoQty(memoQty,rejDetailId){
 	

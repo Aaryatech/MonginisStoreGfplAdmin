@@ -1719,7 +1719,7 @@ public class IssueController {
 		}
 
 		try {
-
+			issueDetailList = new ArrayList<IssueDetail>();
 			String issueNo = request.getParameter("issueNo");
 			String issueDate = request.getParameter("issueDate");
 			int deptId = Integer.parseInt(request.getParameter("deptId"));

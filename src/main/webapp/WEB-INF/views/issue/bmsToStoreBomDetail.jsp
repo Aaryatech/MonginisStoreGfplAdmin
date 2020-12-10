@@ -303,8 +303,7 @@
 									</div>
 								</div>
 
-
-
+ 
 								<c:choose>
 
 									<c:when test="${billOfMaterialHeader.status==0}">
