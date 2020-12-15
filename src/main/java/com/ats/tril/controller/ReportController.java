@@ -2646,6 +2646,7 @@ public class ReportController {
 				rowData.add("Remark");
 				rowData.add("Erp Link");
 				rowData.add("Bill No_C");
+				rowData.add("SuppCode-Name");
 				
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -2751,6 +2752,7 @@ public class ReportController {
 					rowData.add(""+mrnExcelListRes.get(i).getBillNo());
 				else
 					rowData.add("");
+				rowData.add("" +mrnExcelListRes.get(i).getSupplierCode()+'-'+mrnExcelListRes.get(i).getSupplierName());//calc
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 					}
