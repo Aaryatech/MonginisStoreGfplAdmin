@@ -3175,6 +3175,8 @@ public class PurchaseOrderController {
 
 						MrnDetail mrnDetail = new MrnDetail();
 
+						mrnDetail.setIsHeaderItem(1);//new Added By Sachin 15 Jan 2021
+						
 						mrnDetail.setMrnId(mrnId);
 						mrnDetail.setIndentQty(1);
 						mrnDetail.setPoQty(1);
