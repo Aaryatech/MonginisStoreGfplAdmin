@@ -1389,7 +1389,7 @@ jQuery(document).ready(function() {
 																							+ itemList.rate
 																							+ '" onchange="checkQty('
 																							+ itemList.indDId
-																							+ ')"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"  required>'));
+																							+ ')"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"  readonly>'));
 															/* tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" id="disc'+itemList.indDId+'" name="disc'+itemList.indDId+'" value="'+itemList.disc+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"  required>')); */
 														} else {
 
@@ -1432,7 +1432,7 @@ jQuery(document).ready(function() {
 																							+ itemList.rate
 																							+ '" onchange="checkQty('
 																							+ itemList.indDId
-																							+ ')"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"   >'));
+																							+ ')"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"   readonly>'));
 															/* tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" id="disc'+itemList.indDId+'" name="disc'+itemList.indDId+'" value="0"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+"   >')); */
 														}
 

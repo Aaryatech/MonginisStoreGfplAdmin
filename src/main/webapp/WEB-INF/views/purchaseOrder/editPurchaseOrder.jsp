@@ -475,7 +475,7 @@ body {
 																var="mrnDetailList">
 
 																<c:if
-																	test="${mrnDetailList.itemId==poDetailList.itemId}">
+																	test="${mrnDetailList.itemId==poDetailList.itemId && mrnDetailList.poDetailId==poDetailList.poDetailId}">
 																	${mrnDetailList.approveQty} 
 																	<c:set var="findItem" value="1"></c:set>
 																	<c:set var="mrnBasicValue"
@@ -492,7 +492,7 @@ body {
 																var="mrnDetailList">
 
 																<c:if
-																	test="${mrnDetailList.itemId==poDetailList.itemId}">
+																	test="${mrnDetailList.itemId==poDetailList.itemId && mrnDetailList.poDetailId==poDetailList.poDetailId}">
 																	${mrnDetailList.approveQty*poDetailList.itemRate} 
 																</c:if>
 
